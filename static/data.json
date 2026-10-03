@@ -15,9 +15,9 @@
     "is_pro": true,
     "plan_name": "Google AI Pro (Google One AI Premium)",
     "monthly_cost": 21.99,
-    "api_value_total": 40.464,
-    "api_value_today": 20.6042,
-    "roi_pct": 184.0
+    "api_value_total": 42.4007,
+    "api_value_today": 22.5409,
+    "roi_pct": 192.8
   },
   "model_info": {
     "name": "Gemini 3.8 Flash (High)",
@@ -36,7 +36,12 @@
     "paid_rpm": 2000,
     "paid_tpm": 4000000,
     "recommended": true,
-    "default_intensity": "high"
+    "default_intensity": "high",
+    "allowed_intensities": [
+      "low",
+      "medium",
+      "high"
+    ]
   },
   "quotas": {
     "rpm_limit": 2000,
@@ -46,74 +51,74 @@
     "is_pro": true
   },
   "totals": {
-    "input_tokens": 291691333,
-    "output_tokens": 334189,
-    "thinking_tokens": 49305,
-    "total_tokens": 292074827,
-    "total_turns": 1455,
+    "input_tokens": 305668471,
+    "output_tokens": 346666,
+    "thinking_tokens": 51109,
+    "total_tokens": 306066246,
+    "total_turns": 1482,
     "cost_usd": 0.0,
     "cost_eur": 0.0,
-    "api_value_usd": 43.9826,
-    "api_value_eur": 40.464
+    "api_value_usd": 46.0877,
+    "api_value_eur": 42.4007
   },
   "today": {
     "date": "2026-10-03",
-    "calls": 597,
-    "input_tokens": 148575571,
-    "output_tokens": 157046,
-    "thinking_tokens": 25527,
-    "total_tokens": 148758144,
+    "calls": 624,
+    "input_tokens": 162552709,
+    "output_tokens": 169523,
+    "thinking_tokens": 27331,
+    "total_tokens": 162749563,
     "cost_usd": 0.0,
     "cost_eur": 0.0,
-    "api_value_usd": 22.3959,
-    "api_value_eur": 20.6042
+    "api_value_usd": 24.501,
+    "api_value_eur": 22.5409
   },
   "quota_5h": {
-    "calls": 597,
+    "calls": 624,
     "max_calls": 250,
-    "tokens": 148758144,
-    "tokens_input": 148575571,
-    "tokens_output": 157046,
-    "tokens_thinking": 25527,
+    "tokens": 162749563,
+    "tokens_input": 162552709,
+    "tokens_output": 169523,
+    "tokens_thinking": 27331,
     "max_tokens": 10000000,
-    "pct_used": 27.1,
-    "remaining_pct": 27.1,
-    "used_pct": 72.9,
-    "reset_in": "dans 2h 8m",
+    "pct_used": 25.8,
+    "remaining_pct": 25.8,
+    "used_pct": 74.2,
+    "reset_in": "dans 1h 33m",
     "reset_date": "Aujourd'hui à 20:06",
-    "reset_seconds": 7703,
+    "reset_seconds": 5639,
     "is_live_rpc": true,
-    "antigravity_desc": "You have used some of your 5-hour limit, it will fully refresh in 2 hours, 9 minutes."
+    "antigravity_desc": "You have used some of your 5-hour limit, it will fully refresh in 1 hour, 36 minutes."
   },
   "quota_weekly": {
-    "calls": 895,
+    "calls": 922,
     "max_calls": 1500,
-    "tokens": 188134221,
-    "tokens_input": 187849971,
-    "tokens_output": 247060,
-    "tokens_thinking": 37190,
+    "tokens": 202125640,
+    "tokens_input": 201827109,
+    "tokens_output": 259537,
+    "tokens_thinking": 38994,
     "max_tokens": 60000000,
-    "pct_used": 87.9,
-    "remaining_pct": 87.9,
-    "used_pct": 12.1,
-    "reset_in": "dans 6j 21h",
+    "pct_used": 87.6,
+    "remaining_pct": 87.6,
+    "used_pct": 12.4,
+    "reset_in": "dans 6j 20h",
     "reset_date": "Samedi 10 oct. à 15:06",
-    "reset_seconds": 594503,
+    "reset_seconds": 592439,
     "is_live_rpc": true,
-    "antigravity_desc": "You have used some of your weekly limit, it will fully refresh in 6 days, 21 hours."
+    "antigravity_desc": "You have used some of your weekly limit, it will fully refresh in 6 days, 20 hours."
   },
   "active_session": {
     "id": "b1ed90f3-d247-45f4-adc3-add19e8ac7ac",
     "title": "Python Gemini Token Tracker",
     "workspace_name": "tracker token price",
     "workspace_path": "/Users/brunoperrin/Documents/antigravity/tracker token price",
-    "last_modified": "2026-10-03 15:57:34.222943+00:00",
-    "turns": 597,
-    "context_tokens": 498368,
-    "api_input_tokens": 148575571,
-    "api_output_tokens": 157046,
-    "thinking_tokens": 25527,
-    "total_tokens": 148758144,
+    "last_modified": "2026-10-03 16:32:22.114453+00:00",
+    "turns": 624,
+    "context_tokens": 533066,
+    "api_input_tokens": 162552709,
+    "api_output_tokens": 169523,
+    "thinking_tokens": 27331,
+    "total_tokens": 162749563,
     "model_used": "gemini-3.8-flash",
     "costs": {
       "mode": "google_ai_pro",
@@ -123,8 +128,8 @@
       "thinking_cost_usd": 0.0,
       "total_cost_usd": 0.0,
       "total_cost_eur": 0.0,
-      "api_value_usd": 22.395879,
-      "api_value_eur": 20.604209,
+      "api_value_usd": 24.501019,
+      "api_value_eur": 22.540937,
       "model_used": "Gemini 3.8 Flash (High)",
       "rate_input_per_m": 0.15,
       "rate_output_per_m": 0.6,
@@ -132,49 +137,49 @@
     },
     "recent_steps": [
       {
-        "step": 1207,
+        "step": 1261,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 116,
+        "output_tokens": 73,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T15:57:51Z"
+        "time": "2026-10-03T16:32:10Z"
       },
       {
-        "step": 1209,
+        "step": 1264,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 112,
+        "output_tokens": 106,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T15:57:59Z"
+        "time": "2026-10-03T16:32:19Z"
       },
       {
-        "step": 1211,
+        "step": 1266,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 126,
+        "output_tokens": 123,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T15:58:03Z"
+        "time": "2026-10-03T16:32:24Z"
       },
       {
-        "step": 1213,
+        "step": 1268,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
         "output_tokens": 92,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T15:58:08Z"
+        "time": "2026-10-03T16:32:31Z"
       },
       {
-        "step": 1215,
+        "step": 1270,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
         "output_tokens": 97,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T15:58:12Z"
+        "time": "2026-10-03T16:32:34Z"
       }
     ],
     "turn_events": [
@@ -3759,14 +3764,176 @@
         "input": 498091,
         "output": 97,
         "thinking": 0
+      },
+      {
+        "time": "2026-10-03T15:58:16Z",
+        "input": 498368,
+        "output": 154,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T15:58:23Z",
+        "input": 499502,
+        "output": 772,
+        "thinking": 43
+      },
+      {
+        "time": "2026-10-03T16:30:02Z",
+        "input": 500499,
+        "output": 85,
+        "thinking": 145
+      },
+      {
+        "time": "2026-10-03T16:30:10Z",
+        "input": 501901,
+        "output": 76,
+        "thinking": 54
+      },
+      {
+        "time": "2026-10-03T16:30:17Z",
+        "input": 503171,
+        "output": 83,
+        "thinking": 51
+      },
+      {
+        "time": "2026-10-03T16:30:23Z",
+        "input": 504628,
+        "output": 73,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:30:26Z",
+        "input": 505524,
+        "output": 77,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:30:31Z",
+        "input": 506509,
+        "output": 1861,
+        "thinking": 232
+      },
+      {
+        "time": "2026-10-03T16:30:41Z",
+        "input": 510478,
+        "output": 77,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:30:44Z",
+        "input": 510555,
+        "output": 1874,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:30:51Z",
+        "input": 514209,
+        "output": 85,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:30:56Z",
+        "input": 514294,
+        "output": 81,
+        "thinking": 182
+      },
+      {
+        "time": "2026-10-03T16:31:04Z",
+        "input": 515764,
+        "output": 79,
+        "thinking": 314
+      },
+      {
+        "time": "2026-10-03T16:31:13Z",
+        "input": 516961,
+        "output": 1493,
+        "thinking": 99
+      },
+      {
+        "time": "2026-10-03T16:31:20Z",
+        "input": 519748,
+        "output": 1847,
+        "thinking": 247
+      },
+      {
+        "time": "2026-10-03T16:31:33Z",
+        "input": 523201,
+        "output": 79,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:31:37Z",
+        "input": 524263,
+        "output": 81,
+        "thinking": 51
+      },
+      {
+        "time": "2026-10-03T16:31:41Z",
+        "input": 525586,
+        "output": 1344,
+        "thinking": 386
+      },
+      {
+        "time": "2026-10-03T16:31:51Z",
+        "input": 527800,
+        "output": 80,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:31:54Z",
+        "input": 529057,
+        "output": 1454,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:32:04Z",
+        "input": 531590,
+        "output": 124,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:32:07Z",
+        "input": 531770,
+        "output": 107,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:32:10Z",
+        "input": 531933,
+        "output": 73,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:32:19Z",
+        "input": 532079,
+        "output": 106,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:32:24Z",
+        "input": 532372,
+        "output": 123,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:32:31Z",
+        "input": 532551,
+        "output": 92,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:32:34Z",
+        "input": 532825,
+        "output": 97,
+        "thinking": 0
       }
     ],
     "daily_activity": {
       "2026-10-03": {
-        "input_tokens": 148575571,
-        "output_tokens": 157046,
-        "thinking_tokens": 25527,
-        "calls": 597
+        "input_tokens": 162552709,
+        "output_tokens": 169523,
+        "thinking_tokens": 27331,
+        "calls": 624
       }
     },
     "hourly_activity": {
@@ -3783,10 +3950,16 @@
         "calls": 107
       },
       "2026-10-03 15:00": {
-        "input_tokens": 73810726,
-        "output_tokens": 40292,
-        "thinking_tokens": 7007,
-        "calls": 175
+        "input_tokens": 74808596,
+        "output_tokens": 41218,
+        "thinking_tokens": 7050,
+        "calls": 177
+      },
+      "2026-10-03 16:00": {
+        "input_tokens": 12979268,
+        "output_tokens": 11551,
+        "thinking_tokens": 1761,
+        "calls": 25
       }
     }
   },
@@ -3796,13 +3969,13 @@
       "title": "Python Gemini Token Tracker",
       "workspace_name": "tracker token price",
       "workspace_path": "/Users/brunoperrin/Documents/antigravity/tracker token price",
-      "last_modified": "2026-10-03 15:57:34.222943+00:00",
-      "turns": 597,
-      "context_tokens": 498368,
-      "api_input_tokens": 148575571,
-      "api_output_tokens": 157046,
-      "thinking_tokens": 25527,
-      "total_tokens": 148758144,
+      "last_modified": "2026-10-03 16:32:22.114453+00:00",
+      "turns": 624,
+      "context_tokens": 533066,
+      "api_input_tokens": 162552709,
+      "api_output_tokens": 169523,
+      "thinking_tokens": 27331,
+      "total_tokens": 162749563,
       "model_used": "gemini-3.8-flash",
       "costs": {
         "mode": "google_ai_pro",
@@ -3812,8 +3985,8 @@
         "thinking_cost_usd": 0.0,
         "total_cost_usd": 0.0,
         "total_cost_eur": 0.0,
-        "api_value_usd": 22.395879,
-        "api_value_eur": 20.604209,
+        "api_value_usd": 24.501019,
+        "api_value_eur": 22.540937,
         "model_used": "Gemini 3.8 Flash (High)",
         "rate_input_per_m": 0.15,
         "rate_output_per_m": 0.6,
@@ -3821,49 +3994,49 @@
       },
       "recent_steps": [
         {
-          "step": 1207,
+          "step": 1261,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 116,
+          "output_tokens": 73,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T15:57:51Z"
+          "time": "2026-10-03T16:32:10Z"
         },
         {
-          "step": 1209,
+          "step": 1264,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 112,
+          "output_tokens": 106,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T15:57:59Z"
+          "time": "2026-10-03T16:32:19Z"
         },
         {
-          "step": 1211,
+          "step": 1266,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 126,
+          "output_tokens": 123,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T15:58:03Z"
+          "time": "2026-10-03T16:32:24Z"
         },
         {
-          "step": 1213,
+          "step": 1268,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
           "output_tokens": 92,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T15:58:08Z"
+          "time": "2026-10-03T16:32:31Z"
         },
         {
-          "step": 1215,
+          "step": 1270,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
           "output_tokens": 97,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T15:58:12Z"
+          "time": "2026-10-03T16:32:34Z"
         }
       ],
       "turn_events": [
@@ -7448,14 +7621,176 @@
           "input": 498091,
           "output": 97,
           "thinking": 0
+        },
+        {
+          "time": "2026-10-03T15:58:16Z",
+          "input": 498368,
+          "output": 154,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T15:58:23Z",
+          "input": 499502,
+          "output": 772,
+          "thinking": 43
+        },
+        {
+          "time": "2026-10-03T16:30:02Z",
+          "input": 500499,
+          "output": 85,
+          "thinking": 145
+        },
+        {
+          "time": "2026-10-03T16:30:10Z",
+          "input": 501901,
+          "output": 76,
+          "thinking": 54
+        },
+        {
+          "time": "2026-10-03T16:30:17Z",
+          "input": 503171,
+          "output": 83,
+          "thinking": 51
+        },
+        {
+          "time": "2026-10-03T16:30:23Z",
+          "input": 504628,
+          "output": 73,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:30:26Z",
+          "input": 505524,
+          "output": 77,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:30:31Z",
+          "input": 506509,
+          "output": 1861,
+          "thinking": 232
+        },
+        {
+          "time": "2026-10-03T16:30:41Z",
+          "input": 510478,
+          "output": 77,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:30:44Z",
+          "input": 510555,
+          "output": 1874,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:30:51Z",
+          "input": 514209,
+          "output": 85,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:30:56Z",
+          "input": 514294,
+          "output": 81,
+          "thinking": 182
+        },
+        {
+          "time": "2026-10-03T16:31:04Z",
+          "input": 515764,
+          "output": 79,
+          "thinking": 314
+        },
+        {
+          "time": "2026-10-03T16:31:13Z",
+          "input": 516961,
+          "output": 1493,
+          "thinking": 99
+        },
+        {
+          "time": "2026-10-03T16:31:20Z",
+          "input": 519748,
+          "output": 1847,
+          "thinking": 247
+        },
+        {
+          "time": "2026-10-03T16:31:33Z",
+          "input": 523201,
+          "output": 79,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:31:37Z",
+          "input": 524263,
+          "output": 81,
+          "thinking": 51
+        },
+        {
+          "time": "2026-10-03T16:31:41Z",
+          "input": 525586,
+          "output": 1344,
+          "thinking": 386
+        },
+        {
+          "time": "2026-10-03T16:31:51Z",
+          "input": 527800,
+          "output": 80,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:31:54Z",
+          "input": 529057,
+          "output": 1454,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:32:04Z",
+          "input": 531590,
+          "output": 124,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:32:07Z",
+          "input": 531770,
+          "output": 107,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:32:10Z",
+          "input": 531933,
+          "output": 73,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:32:19Z",
+          "input": 532079,
+          "output": 106,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:32:24Z",
+          "input": 532372,
+          "output": 123,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:32:31Z",
+          "input": 532551,
+          "output": 92,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:32:34Z",
+          "input": 532825,
+          "output": 97,
+          "thinking": 0
         }
       ],
       "daily_activity": {
         "2026-10-03": {
-          "input_tokens": 148575571,
-          "output_tokens": 157046,
-          "thinking_tokens": 25527,
-          "calls": 597
+          "input_tokens": 162552709,
+          "output_tokens": 169523,
+          "thinking_tokens": 27331,
+          "calls": 624
         }
       },
       "hourly_activity": {
@@ -7472,10 +7807,16 @@
           "calls": 107
         },
         "2026-10-03 15:00": {
-          "input_tokens": 73810726,
-          "output_tokens": 40292,
-          "thinking_tokens": 7007,
-          "calls": 175
+          "input_tokens": 74808596,
+          "output_tokens": 41218,
+          "thinking_tokens": 7050,
+          "calls": 177
+        },
+        "2026-10-03 16:00": {
+          "input_tokens": 12979268,
+          "output_tokens": 11551,
+          "thinking_tokens": 1761,
+          "calls": 25
         }
       }
     },
@@ -13002,14 +13343,14 @@
   ],
   "daily_trends": {
     "2026-10-03": {
-      "input_tokens": 148575571,
-      "output_tokens": 157046,
-      "thinking_tokens": 25527,
-      "calls": 597,
+      "input_tokens": 162552709,
+      "output_tokens": 169523,
+      "thinking_tokens": 27331,
+      "calls": 624,
       "cost_usd": 0.0,
       "cost_eur": 0.0,
-      "api_value_usd": 22.395879,
-      "api_value_eur": 20.604209
+      "api_value_usd": 24.501019,
+      "api_value_eur": 22.540937
     },
     "2026-09-30": {
       "input_tokens": 6920,
@@ -13066,17 +13407,17 @@
     {
       "month_key": "2026-10",
       "month_name": "Octobre 2026",
-      "calls": 597,
-      "input_tokens": 148575571,
-      "output_tokens": 157046,
-      "thinking_tokens": 25527,
-      "total_tokens": 148758144,
+      "calls": 624,
+      "input_tokens": 162552709,
+      "output_tokens": 169523,
+      "thinking_tokens": 27331,
+      "total_tokens": 162749563,
       "cost_usd": 0.0,
       "cost_eur": 0.0,
-      "api_value_usd": 22.3959,
-      "api_value_eur": 20.6042,
+      "api_value_usd": 24.501,
+      "api_value_eur": 22.5409,
       "days_count": 1,
-      "avg_tokens_per_call": 249176
+      "avg_tokens_per_call": 260817
     },
     {
       "month_key": "2026-09",

@@ -268,20 +268,20 @@
           </label>
           <select id="simModelSelect" class="sim-select" title="Choisir le modèle pour la simulation">
             <optgroup label="⚡ Famille Google Gemini (Antigravity)">
-              <option value="gemini-3.8-flash" data-default-intensity="high" selected>⚡ Gemini 3.8 Flash (High / Fast)</option>
-              <option value="gemini-3.7-flash" data-default-intensity="medium">⚡ Gemini 3.7 Flash (Medium / Fast)</option>
-              <option value="gemini-3.6-flash" data-default-intensity="medium">⚡ Gemini 3.6 Flash (Medium / Fast)</option>
-              <option value="gemini-3.1-pro" data-default-intensity="low">🧠 Gemini 3.1 Pro (Low / Deep)</option>
-              <option value="gemini-2.5-flash" data-default-intensity="medium">🚀 Gemini 2.5 Flash</option>
-              <option value="gemini-2.0-flash" data-default-intensity="medium">✨ Gemini 2.0 Flash</option>
-              <option value="gemini-2.0-flash-thinking" data-default-intensity="high">🧠 Gemini 2.0 Flash Thinking</option>
-              <option value="gemini-1.5-pro" data-default-intensity="medium">👑 Gemini 1.5 Pro</option>
-              <option value="gemini-1.5-flash" data-default-intensity="low">💨 Gemini 1.5 Flash</option>
+              <option value="gemini-3.8-flash" data-default-intensity="high" data-allowed-intensities="low,medium,high" selected>⚡ Gemini 3.8 Flash (High / Med / Low)</option>
+              <option value="gemini-3.7-flash" data-default-intensity="medium" data-allowed-intensities="low,medium,high">⚡ Gemini 3.7 Flash (High / Med / Low)</option>
+              <option value="gemini-3.6-flash" data-default-intensity="medium" data-allowed-intensities="low,medium,high">⚡ Gemini 3.6 Flash (High / Med / Low)</option>
+              <option value="gemini-3.1-pro" data-default-intensity="low" data-allowed-intensities="low,high">🧠 Gemini 3.1 Pro (High / Low)</option>
+              <option value="gemini-2.5-flash" data-default-intensity="medium" data-allowed-intensities="low,medium,high">🚀 Gemini 2.5 Flash</option>
+              <option value="gemini-2.0-flash" data-default-intensity="medium" data-allowed-intensities="low,medium,high">✨ Gemini 2.0 Flash</option>
+              <option value="gemini-2.0-flash-thinking" data-default-intensity="high" data-allowed-intensities="low,medium,high">🧠 Gemini 2.0 Flash Thinking</option>
+              <option value="gemini-1.5-pro" data-default-intensity="medium" data-allowed-intensities="low,medium,high">👑 Gemini 1.5 Pro</option>
+              <option value="gemini-1.5-flash" data-default-intensity="low" data-allowed-intensities="low,medium,high">💨 Gemini 1.5 Flash</option>
             </optgroup>
             <optgroup label="🟣 Modèles Partenaires & Multi-Model">
-              <option value="claude-opus-5.5" data-default-intensity="medium">🟣 Claude Opus 5.5 (Medium / New)</option>
-              <option value="claude-sonnet-5.5" data-default-intensity="medium">🔵 Claude Sonnet 5.5 (Medium / New)</option>
-              <option value="gpt-oss-120b" data-default-intensity="medium">🟢 GPT-OSS 120B (Medium)</option>
+              <option value="claude-opus-5.5" data-default-intensity="medium" data-allowed-intensities="low,medium,high">🟣 Claude Opus 5.5 (High / Med / Low)</option>
+              <option value="claude-sonnet-5.5" data-default-intensity="medium" data-allowed-intensities="low,medium,high">🔵 Claude Sonnet 5.5 (High / Med / Low)</option>
+              <option value="gpt-oss-120b" data-default-intensity="medium" data-allowed-intensities="low,medium,high">🟢 GPT-OSS 120B (High / Med / Low)</option>
             </optgroup>
           </select>
         </div>

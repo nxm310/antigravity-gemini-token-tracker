@@ -25,7 +25,8 @@ GEMINI_MODELS: Dict[str, Dict[str, Any]] = {
         "paid_rpm": 2000,
         "paid_tpm": 4_000_000,
         "recommended": True,
-        "default_intensity": "high"
+        "default_intensity": "high",
+        "allowed_intensities": ["low", "medium", "high"]
     },
     "gemini-3.7-flash": {
         "name": "Gemini 3.7 Flash (Medium)",
@@ -44,7 +45,8 @@ GEMINI_MODELS: Dict[str, Dict[str, Any]] = {
         "paid_rpm": 2000,
         "paid_tpm": 4_000_000,
         "recommended": False,
-        "default_intensity": "medium"
+        "default_intensity": "medium",
+        "allowed_intensities": ["low", "medium", "high"]
     },
     "gemini-3.6-flash": {
         "name": "Gemini 3.6 Flash (Medium)",
@@ -63,11 +65,12 @@ GEMINI_MODELS: Dict[str, Dict[str, Any]] = {
         "paid_rpm": 2000,
         "paid_tpm": 4_000_000,
         "recommended": False,
-        "default_intensity": "medium"
+        "default_intensity": "medium",
+        "allowed_intensities": ["low", "medium", "high"]
     },
     "gemini-3.1-pro": {
-        "name": "Gemini 3.1 Pro (Low)",
-        "description": "Modèle expert pour raisonnement complexe, mathématiques et refactorisation",
+        "name": "Gemini 3.1 Pro (Low / High)",
+        "description": "Modèle expert pour raisonnement complexe, mathématiques et refactorisation (Choix High et Low)",
         "input_cost_standard": 1.25,
         "input_cost_large": 2.50,
         "output_cost_standard": 5.00,
@@ -82,7 +85,8 @@ GEMINI_MODELS: Dict[str, Dict[str, Any]] = {
         "paid_rpm": 360,
         "paid_tpm": 2_000_000,
         "recommended": False,
-        "default_intensity": "low"
+        "default_intensity": "low",
+        "allowed_intensities": ["low", "high"]
     },
     "gemini-2.5-flash": {
         "name": "Gemini 2.5 Flash",
@@ -196,7 +200,8 @@ GEMINI_MODELS: Dict[str, Dict[str, Any]] = {
         "paid_rpm": 50,
         "paid_tpm": 500_000,
         "recommended": False,
-        "default_intensity": "medium"
+        "default_intensity": "medium",
+        "allowed_intensities": ["low", "medium", "high"]
     },
     "claude-sonnet-5.5": {
         "name": "Claude Sonnet 5.5 (Medium)",
@@ -215,7 +220,8 @@ GEMINI_MODELS: Dict[str, Dict[str, Any]] = {
         "paid_rpm": 100,
         "paid_tpm": 1_000_000,
         "recommended": False,
-        "default_intensity": "medium"
+        "default_intensity": "medium",
+        "allowed_intensities": ["low", "medium", "high"]
     },
     "gpt-oss-120b": {
         "name": "GPT-OSS 120B (Medium)",
@@ -234,7 +240,8 @@ GEMINI_MODELS: Dict[str, Dict[str, Any]] = {
         "paid_rpm": 500,
         "paid_tpm": 2_000_000,
         "recommended": False,
-        "default_intensity": "medium"
+        "default_intensity": "medium",
+        "allowed_intensities": ["low", "medium", "high"]
     }
 }
 

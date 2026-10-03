@@ -31,8 +31,9 @@ let appState = {
 // --- GRILLE OFFICIELLE DES TARIFS GEMINI & MODÈLES ANTIGRAVITY ---
 const GEMINI_MODELS = {
   "gemini-3.8-flash": {
-    name: "⚡ Gemini 3.8 Flash (High / Fast)",
+    name: "⚡ Gemini 3.8 Flash (High / Med / Low)",
     default_intensity: "high",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 0.075,
     input_cost_large: 0.15,
     output_cost_standard: 0.30,
@@ -40,8 +41,9 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "gemini-3.7-flash": {
-    name: "⚡ Gemini 3.7 Flash (Medium / Fast)",
+    name: "⚡ Gemini 3.7 Flash (High / Med / Low)",
     default_intensity: "medium",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 0.075,
     input_cost_large: 0.15,
     output_cost_standard: 0.30,
@@ -49,8 +51,9 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "gemini-3.6-flash": {
-    name: "⚡ Gemini 3.6 Flash (Medium / Fast)",
+    name: "⚡ Gemini 3.6 Flash (High / Med / Low)",
     default_intensity: "medium",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 0.075,
     input_cost_large: 0.15,
     output_cost_standard: 0.30,
@@ -58,8 +61,9 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "gemini-3.1-pro": {
-    name: "🧠 Gemini 3.1 Pro (Low / Deep)",
+    name: "🧠 Gemini 3.1 Pro (High / Low)",
     default_intensity: "low",
+    allowed_intensities: ["low", "high"],
     input_cost_standard: 1.25,
     input_cost_large: 2.50,
     output_cost_standard: 5.00,
@@ -69,6 +73,7 @@ const GEMINI_MODELS = {
   "gemini-2.5-flash": {
     name: "🚀 Gemini 2.5 Flash",
     default_intensity: "medium",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 0.075,
     input_cost_large: 0.15,
     output_cost_standard: 0.30,
@@ -78,6 +83,7 @@ const GEMINI_MODELS = {
   "gemini-2.0-flash": {
     name: "✨ Gemini 2.0 Flash",
     default_intensity: "medium",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 0.10,
     input_cost_large: 0.10,
     output_cost_standard: 0.40,
@@ -87,6 +93,7 @@ const GEMINI_MODELS = {
   "gemini-2.0-flash-thinking": {
     name: "🧠 Gemini 2.0 Flash Thinking",
     default_intensity: "high",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 0.10,
     input_cost_large: 0.10,
     output_cost_standard: 0.40,
@@ -96,6 +103,7 @@ const GEMINI_MODELS = {
   "gemini-1.5-flash": {
     name: "💨 Gemini 1.5 Flash",
     default_intensity: "low",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 0.075,
     input_cost_large: 0.15,
     output_cost_standard: 0.30,
@@ -105,6 +113,7 @@ const GEMINI_MODELS = {
   "gemini-1.5-pro": {
     name: "👑 Gemini 1.5 Pro",
     default_intensity: "medium",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 1.25,
     input_cost_large: 2.50,
     output_cost_standard: 5.00,
@@ -112,8 +121,9 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "claude-opus-5.5": {
-    name: "🟣 Claude Opus 5.5 (Medium / New)",
+    name: "🟣 Claude Opus 5.5 (High / Med / Low)",
     default_intensity: "medium",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 15.00,
     input_cost_large: 15.00,
     output_cost_standard: 75.00,
@@ -121,8 +131,9 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "claude-sonnet-5.5": {
-    name: "🔵 Claude Sonnet 5.5 (Medium / New)",
+    name: "🔵 Claude Sonnet 5.5 (High / Med / Low)",
     default_intensity: "medium",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 3.00,
     input_cost_large: 3.00,
     output_cost_standard: 15.00,
@@ -130,8 +141,9 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "gpt-oss-120b": {
-    name: "🟢 GPT-OSS 120B (Medium)",
+    name: "🟢 GPT-OSS 120B (High / Med / Low)",
     default_intensity: "medium",
+    allowed_intensities: ["low", "medium", "high"],
     input_cost_standard: 0.15,
     input_cost_large: 0.15,
     output_cost_standard: 0.60,
@@ -261,7 +273,7 @@ function initUIFromConfig() {
   const simModelSelect = document.getElementById("simModelSelect");
   if (simModelSelect) simModelSelect.value = appConfig.default_model;
 
-  updateIntensityButtonsUI(appConfig.sim_intensity);
+  updateIntensityButtonsUI(appConfig.sim_intensity, appConfig.default_model);
 
   const budgetInput = document.getElementById("budgetLimitInput");
   if (budgetInput) budgetInput.value = appConfig.daily_budget_limit;
@@ -291,11 +303,14 @@ function initEventListeners() {
       appConfig.default_model = e.target.value;
       localStorage.setItem("tracker_default_model", appConfig.default_model);
 
-      const selOpt = simModelSelect.options[simModelSelect.selectedIndex];
-      const recIntensity = selOpt?.dataset?.defaultIntensity || GEMINI_MODELS[appConfig.default_model]?.default_intensity;
-      if (recIntensity) {
-        setSimulatorIntensity(recIntensity);
+      const spec = GEMINI_MODELS[appConfig.default_model];
+      const allowed = spec?.allowed_intensities || ["low", "medium", "high"];
+
+      // Si l'intensité actuelle n'est pas supportée par ce modèle (ex: Gemini 3.1 Pro qui ne supporte que High et Low)
+      if (!allowed.includes(appConfig.sim_intensity)) {
+        setSimulatorIntensity(spec?.default_intensity || allowed[0]);
       } else {
+        updateIntensityButtonsUI(appConfig.sim_intensity, appConfig.default_model);
         runMultimodalCalculator();
       }
     });
@@ -1601,16 +1616,44 @@ function clearCalculator() {
 
 function setSimulatorIntensity(level) {
   if (!level) return;
+  const spec = GEMINI_MODELS[appConfig.default_model];
+  const allowed = spec?.allowed_intensities || ["low", "medium", "high"];
+
+  // Si le niveau demandé n'est pas autorisé pour ce modèle (ex: Medium pour Gemini 3.1 Pro)
+  if (!allowed.includes(level)) {
+    level = spec?.default_intensity || allowed[0] || "low";
+  }
+
   appConfig.sim_intensity = level;
   localStorage.setItem("tracker_sim_intensity", level);
-  updateIntensityButtonsUI(level);
+  updateIntensityButtonsUI(level, appConfig.default_model);
   runMultimodalCalculator();
 }
 
-function updateIntensityButtonsUI(level) {
+function updateIntensityButtonsUI(level, modelKey) {
+  const currentModel = modelKey || appConfig.default_model || "gemini-3.8-flash";
+  const spec = GEMINI_MODELS[currentModel];
+  const allowed = spec?.allowed_intensities || ["low", "medium", "high"];
+
+  let effectiveLevel = level || appConfig.sim_intensity || "high";
+  if (!allowed.includes(effectiveLevel)) {
+    effectiveLevel = spec?.default_intensity || allowed[0] || "low";
+    appConfig.sim_intensity = effectiveLevel;
+    localStorage.setItem("tracker_sim_intensity", effectiveLevel);
+  }
+
   const intensityBtns = document.querySelectorAll("#simIntensityGroup .intensity-btn");
   intensityBtns.forEach(btn => {
-    if (btn.dataset.intensity === level) {
+    const btnLevel = btn.dataset.intensity;
+    if (allowed.includes(btnLevel)) {
+      btn.style.display = "inline-flex";
+      btn.disabled = false;
+    } else {
+      btn.style.display = "none";
+      btn.disabled = true;
+    }
+
+    if (btnLevel === effectiveLevel) {
       btn.classList.add("active");
     } else {
       btn.classList.remove("active");
@@ -1625,10 +1668,12 @@ window.selectModelFromComparison = function(key) {
   const simModelSelect = document.getElementById("simModelSelect");
   if (simModelSelect) simModelSelect.value = key;
 
-  const recIntensity = GEMINI_MODELS[key].default_intensity;
-  if (recIntensity) {
-    setSimulatorIntensity(recIntensity);
+  const spec = GEMINI_MODELS[key];
+  const allowed = spec?.allowed_intensities || ["low", "medium", "high"];
+  if (!allowed.includes(appConfig.sim_intensity)) {
+    setSimulatorIntensity(spec?.default_intensity || allowed[0]);
   } else {
+    updateIntensityButtonsUI(appConfig.sim_intensity, key);
     runMultimodalCalculator();
   }
 };
@@ -1643,7 +1688,16 @@ function runMultimodalCalculator() {
   }
 
   const inputTokens = textTokens + filesTokens;
-  const intensity = appConfig.sim_intensity || "high";
+  const spec = GEMINI_MODELS[appConfig.default_model] || GEMINI_MODELS["gemini-3.8-flash"];
+  const allowed = spec.allowed_intensities || ["low", "medium", "high"];
+
+  let intensity = appConfig.sim_intensity || "high";
+  if (!allowed.includes(intensity)) {
+    intensity = spec.default_intensity || allowed[0] || "low";
+    appConfig.sim_intensity = intensity;
+    localStorage.setItem("tracker_sim_intensity", intensity);
+    updateIntensityButtonsUI(intensity, appConfig.default_model);
+  }
 
   // Calcul des tokens de thinking selon l'intensité sélectionnée
   let thinkingTokens = 0;
@@ -1674,10 +1728,7 @@ function runMultimodalCalculator() {
     }
   }
 
-  // Modèle actuellement sélectionné dans le simulateur
-  const spec = GEMINI_MODELS[appConfig.default_model] || GEMINI_MODELS["gemini-3.8-flash"];
   const threshold = spec.threshold_large || 128000;
-
   const rateIn = inputTokens > threshold ? spec.input_cost_large : spec.input_cost_standard;
   const rateOut = (thinkingTokens + estimatedOutputTokens) > threshold ? spec.output_cost_large : spec.output_cost_standard;
 
@@ -1716,13 +1767,31 @@ function renderModelComparison(inputTokens, thinkingTokens, estimatedOutputToken
     return;
   }
 
+  const currentIntensity = appConfig.sim_intensity || "high";
+
   const models = Object.entries(GEMINI_MODELS);
   grid.innerHTML = models.map(([key, spec]) => {
     const threshold = spec.threshold_large || 128000;
-    const rateIn = inputTokens > threshold ? spec.input_cost_large : spec.input_cost_standard;
-    const rateOut = (thinkingTokens + estimatedOutputTokens) > threshold ? spec.output_cost_large : spec.output_cost_standard;
+    const allowed = spec.allowed_intensities || ["low", "medium", "high"];
 
-    const costUsd = (inputTokens / 1000000.0) * rateIn + ((thinkingTokens + estimatedOutputTokens) / 1000000.0) * rateOut;
+    let modelIntensity = currentIntensity;
+    let fallbackTag = "";
+    if (!allowed.includes(modelIntensity)) {
+      modelIntensity = spec.default_intensity || allowed[0] || "low";
+      fallbackTag = ` <span style="font-size:0.7rem; color: #38bdf8; font-weight:600;">(${modelIntensity.toUpperCase()})</span>`;
+    }
+
+    let modelThinkingTokens = 0;
+    if (inputTokens > 0) {
+      if (modelIntensity === "low") modelThinkingTokens = 1024;
+      else if (modelIntensity === "medium") modelThinkingTokens = 4096;
+      else if (modelIntensity === "high") modelThinkingTokens = 16384;
+    }
+
+    const rateIn = inputTokens > threshold ? spec.input_cost_large : spec.input_cost_standard;
+    const rateOut = (modelThinkingTokens + estimatedOutputTokens) > threshold ? spec.output_cost_large : spec.output_cost_standard;
+
+    const costUsd = (inputTokens / 1000000.0) * rateIn + ((modelThinkingTokens + estimatedOutputTokens) / 1000000.0) * rateOut;
     const costEur = costUsd * appConfig.usd_to_eur;
 
     const isSelected = key === appConfig.default_model;
@@ -1730,7 +1799,7 @@ function renderModelComparison(inputTokens, thinkingTokens, estimatedOutputToken
     return `
       <div class="model-comp-item ${isSelected ? "selected-model" : ""}" onclick="selectModelFromComparison('${key}')" title="Cliquer pour choisir ${spec.name}">
         <span class="model-comp-name">
-          ${isSelected ? "👉 " : ""}${spec.name}
+          ${isSelected ? "👉 " : ""}${spec.name}${fallbackTag}
         </span>
         <span class="model-comp-cost">${formatCurrency(costEur, "EUR")}</span>
       </div>
