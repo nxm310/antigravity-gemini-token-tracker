@@ -1278,3 +1278,211 @@ kbd {
   border: 1px solid rgba(16, 185, 129, 0.4);
 }
 
+/* ==========================================================================
+   OPTIMISATIONS RESPONSIVE SMARTPHONES & MOBILES (max-width: 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Conteneur & Marges d'écran réduites pour maximiser l'espace utile */
+  .container {
+    padding: 12px 10px 48px 10px;
+  }
+
+  /* Header compact */
+  .header {
+    padding: 14px 12px;
+    gap: 12px;
+  }
+
+  .header-left {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .logo-text h1 {
+    font-size: 1.1rem;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .ctrl-select, .ctrl-btn {
+    font-size: 0.76rem;
+    padding: 6px 10px;
+  }
+
+  /* Cartes de sections */
+  .section-card {
+    padding: 16px 12px;
+    margin-bottom: 20px;
+    border-radius: var(--radius-md);
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 1rem;
+  }
+
+  .search-input {
+    width: 100% !important;
+    font-size: 0.85rem;
+  }
+
+  /* Hero Live Session */
+  .hero-session {
+    padding: 16px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .hero-stats {
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .stat-item {
+    text-align: left;
+  }
+
+  /* Transformation du Tableau Sessions Antigravity en Cartes Tactiles */
+  .table-wrapper {
+    overflow-x: visible;
+  }
+
+  .table-wrapper table,
+  .table-wrapper tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .table-wrapper thead {
+    display: none; /* Cache les en-têtes tabulaires classiques sur smartphone */
+  }
+
+  .table-wrapper tbody tr.session-row {
+    display: block;
+    background: rgba(22, 27, 34, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .table-wrapper tbody tr.session-row:hover,
+  .table-wrapper tbody tr.session-row:active {
+    border-color: var(--accent-cyan);
+    background: rgba(30, 41, 59, 0.95);
+  }
+
+  /* Cellule 1 : Titre et Modèle en en-tête de carte */
+  .table-wrapper td.cell-title {
+    display: block;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 8px;
+  }
+
+  .table-wrapper td.cell-title .session-title-text {
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .table-wrapper td.cell-title .session-model-text {
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .table-wrapper td.cell-title .session-model-tag {
+    font-size: 0.72rem;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  /* Autres lignes de métriques dans la carte */
+  .table-wrapper td:not(.cell-title) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 0.85rem;
+  }
+
+  .table-wrapper td::before {
+    content: attr(data-label);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+
+  .table-wrapper td.cell-title::before {
+    display: none;
+  }
+
+  /* Workspace avec badge tronqué proprement */
+  .table-wrapper td.cell-workspace .session-workspace-badge {
+    max-width: 65%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  /* Coût Total mis en valeur en grand en bas de carte */
+  .table-wrapper td.cell-cost {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    border-radius: var(--radius-sm);
+    padding: 8px 12px !important;
+    margin-top: 8px;
+    border-bottom: none !important;
+  }
+
+  .table-wrapper td.cell-cost::before {
+    color: #34d399;
+    font-weight: 700;
+  }
+
+  .table-wrapper td.cell-cost .session-val-cost {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #34d399;
+  }
+
+  /* État vide sans sessions */
+  .table-wrapper td[colspan] {
+    display: block !important;
+    text-align: center !important;
+    padding: 24px 10px !important;
+    border: none !important;
+  }
+
+  .table-wrapper td[colspan]::before {
+    display: none !important;
+  }
+}
+
+

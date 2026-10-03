@@ -1250,19 +1250,31 @@ function renderSessionsTable(sessions) {
     const costVal = appConfig.currency === "EUR" ? (cost.total_cost_eur || cost.api_value_eur) : (cost.total_cost_usd || cost.api_value_usd);
 
     return `
-      <tr>
-        <td>
-          <div style="font-weight: 600; color: #f9fafb;">${escapeHtml(s.title || "Sans titre")}</div>
-          <div style="font-size: 0.75rem; color: var(--text-muted);">${escapeHtml(s.model_used || "gemini-3.8-flash")}</div>
+      <tr class="session-row">
+        <td class="cell-title" data-label="Titre / Projet">
+          <div class="session-title-text">${escapeHtml(s.title || "Sans titre")}</div>
+          <div class="session-model-text">
+            <span class="badge-tag session-model-tag">⚡ ${escapeHtml(s.model_used || "gemini-3.8-flash")}</span>
+          </div>
         </td>
-        <td>
-          <span class="badge-tag">${escapeHtml(s.workspace_name || "Sans workspace")}</span>
+        <td class="cell-workspace" data-label="Workspace">
+          <span class="badge-tag session-workspace-badge">📁 ${escapeHtml(s.workspace_name || "Sans workspace")}</span>
         </td>
-        <td style="font-size: 0.82rem; color: var(--text-secondary);">${escapeHtml(s.last_modified || "-")}</td>
-        <td style="font-weight: 600;">${formatNumber(s.turns || 0)}</td>
-        <td style="color: var(--accent-cyan);">${formatNumber(s.api_input_tokens || 0)}</td>
-        <td style="color: var(--accent-purple);">${formatNumber(s.api_output_tokens || 0)}</td>
-        <td style="font-weight: 700; color: #34d399;">${formatCurrency(costVal, appConfig.currency)}</td>
+        <td class="cell-date" data-label="Dernière Action">
+          <span class="session-date-val">${escapeHtml(s.last_modified || "-")}</span>
+        </td>
+        <td class="cell-turns" data-label="Tours API">
+          <span class="session-val-turns">${formatNumber(s.turns || 0)} tours</span>
+        </td>
+        <td class="cell-input" data-label="Tokens Entrée">
+          <span class="session-val-input" style="color: var(--accent-cyan); font-weight: 600;">${formatNumber(s.api_input_tokens || 0)}</span>
+        </td>
+        <td class="cell-output" data-label="Tokens Sortie">
+          <span class="session-val-output" style="color: var(--accent-purple); font-weight: 600;">${formatNumber(s.api_output_tokens || 0)}</span>
+        </td>
+        <td class="cell-cost" data-label="Coût Total">
+          <span class="session-val-cost" style="font-weight: 800; color: #34d399;">${formatCurrency(costVal, appConfig.currency)}</span>
+        </td>
       </tr>
     `;
   }).join("");
