@@ -3,9 +3,10 @@
 
 // --- CONFIGURATION & ÉTAT GLOBAL ---
 let appConfig = {
-  currency: localStorage.getItem("tracker_currency") || "EUR",
+  currency: "EUR",
   pricing_mode: localStorage.getItem("tracker_pricing_mode") || "google_ai_pro",
   default_model: localStorage.getItem("tracker_default_model") || "gemini-3.8-flash",
+  sim_intensity: localStorage.getItem("tracker_sim_intensity") || "high",
   api_key: localStorage.getItem("gemini_api_key") || "",
   daily_budget_limit: parseFloat(localStorage.getItem("tracker_budget_limit") || "5.0"),
   pro_monthly_cost: parseFloat(localStorage.getItem("tracker_pro_cost") || "21.99"),
@@ -27,18 +28,47 @@ let appState = {
   pwaDeferredPrompt: null
 };
 
-// --- GRILLE OFFICIELLE DES TARIFS GEMINI ---
+// --- GRILLE OFFICIELLE DES TARIFS GEMINI & MODÈLES ANTIGRAVITY ---
 const GEMINI_MODELS = {
   "gemini-3.8-flash": {
-    name: "Gemini 3.8 Flash (High)",
+    name: "⚡ Gemini 3.8 Flash (High / Fast)",
+    default_intensity: "high",
     input_cost_standard: 0.075,
     input_cost_large: 0.15,
     output_cost_standard: 0.30,
     output_cost_large: 0.60,
     threshold_large: 128000
   },
+  "gemini-3.7-flash": {
+    name: "⚡ Gemini 3.7 Flash (Medium / Fast)",
+    default_intensity: "medium",
+    input_cost_standard: 0.075,
+    input_cost_large: 0.15,
+    output_cost_standard: 0.30,
+    output_cost_large: 0.60,
+    threshold_large: 128000
+  },
+  "gemini-3.6-flash": {
+    name: "⚡ Gemini 3.6 Flash (Medium / Fast)",
+    default_intensity: "medium",
+    input_cost_standard: 0.075,
+    input_cost_large: 0.15,
+    output_cost_standard: 0.30,
+    output_cost_large: 0.60,
+    threshold_large: 128000
+  },
+  "gemini-3.1-pro": {
+    name: "🧠 Gemini 3.1 Pro (Low / Deep)",
+    default_intensity: "low",
+    input_cost_standard: 1.25,
+    input_cost_large: 2.50,
+    output_cost_standard: 5.00,
+    output_cost_large: 10.00,
+    threshold_large: 128000
+  },
   "gemini-2.5-flash": {
-    name: "Gemini 2.5 Flash",
+    name: "🚀 Gemini 2.5 Flash",
+    default_intensity: "medium",
     input_cost_standard: 0.075,
     input_cost_large: 0.15,
     output_cost_standard: 0.30,
@@ -46,7 +76,8 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "gemini-2.0-flash": {
-    name: "Gemini 2.0 Flash",
+    name: "✨ Gemini 2.0 Flash",
+    default_intensity: "medium",
     input_cost_standard: 0.10,
     input_cost_large: 0.10,
     output_cost_standard: 0.40,
@@ -54,7 +85,8 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "gemini-2.0-flash-thinking": {
-    name: "Gemini 2.0 Flash Thinking",
+    name: "🧠 Gemini 2.0 Flash Thinking",
+    default_intensity: "high",
     input_cost_standard: 0.10,
     input_cost_large: 0.10,
     output_cost_standard: 0.40,
@@ -62,7 +94,8 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "gemini-1.5-flash": {
-    name: "Gemini 1.5 Flash",
+    name: "💨 Gemini 1.5 Flash",
+    default_intensity: "low",
     input_cost_standard: 0.075,
     input_cost_large: 0.15,
     output_cost_standard: 0.30,
@@ -70,11 +103,39 @@ const GEMINI_MODELS = {
     threshold_large: 128000
   },
   "gemini-1.5-pro": {
-    name: "Gemini 1.5 Pro",
+    name: "👑 Gemini 1.5 Pro",
+    default_intensity: "medium",
     input_cost_standard: 1.25,
     input_cost_large: 2.50,
     output_cost_standard: 5.00,
     output_cost_large: 10.00,
+    threshold_large: 128000
+  },
+  "claude-opus-5.5": {
+    name: "🟣 Claude Opus 5.5 (Medium / New)",
+    default_intensity: "medium",
+    input_cost_standard: 15.00,
+    input_cost_large: 15.00,
+    output_cost_standard: 75.00,
+    output_cost_large: 75.00,
+    threshold_large: 128000
+  },
+  "claude-sonnet-5.5": {
+    name: "🔵 Claude Sonnet 5.5 (Medium / New)",
+    default_intensity: "medium",
+    input_cost_standard: 3.00,
+    input_cost_large: 3.00,
+    output_cost_standard: 15.00,
+    output_cost_large: 15.00,
+    threshold_large: 128000
+  },
+  "gpt-oss-120b": {
+    name: "🟢 GPT-OSS 120B (Medium)",
+    default_intensity: "medium",
+    input_cost_standard: 0.15,
+    input_cost_large: 0.15,
+    output_cost_standard: 0.60,
+    output_cost_large: 0.60,
     threshold_large: 128000
   }
 };
@@ -194,14 +255,13 @@ function initPWA() {
 
 // --- INITIALISATION UI & CONFIG ---
 function initUIFromConfig() {
-  const currencySelect = document.getElementById("currencySelect");
-  if (currencySelect) currencySelect.value = appConfig.currency;
-
   const modeSelect = document.getElementById("modeSelect");
   if (modeSelect) modeSelect.value = appConfig.pricing_mode;
 
-  const modelSelect = document.getElementById("modelSelect");
-  if (modelSelect) modelSelect.value = appConfig.default_model;
+  const simModelSelect = document.getElementById("simModelSelect");
+  if (simModelSelect) simModelSelect.value = appConfig.default_model;
+
+  updateIntensityButtonsUI(appConfig.sim_intensity);
 
   const budgetInput = document.getElementById("budgetLimitInput");
   if (budgetInput) budgetInput.value = appConfig.daily_budget_limit;
@@ -217,23 +277,37 @@ function initUIFromConfig() {
 
 // --- ÉCOUTEURS D'ÉVÉNEMENTS ---
 function initEventListeners() {
-  // Sélecteurs d'en-tête
-  document.getElementById("currencySelect")?.addEventListener("change", (e) => {
-    appConfig.currency = e.target.value;
-    localStorage.setItem("tracker_currency", appConfig.currency);
-    recomputeAll();
-  });
-
+  // Mode de tarification
   document.getElementById("modeSelect")?.addEventListener("change", (e) => {
     appConfig.pricing_mode = e.target.value;
     localStorage.setItem("tracker_pricing_mode", appConfig.pricing_mode);
     recomputeAll();
   });
 
-  document.getElementById("modelSelect")?.addEventListener("change", (e) => {
-    appConfig.default_model = e.target.value;
-    localStorage.setItem("tracker_default_model", appConfig.default_model);
-    recomputeAll();
+  // Sélecteur de modèle Antigravity (Simulateur)
+  const simModelSelect = document.getElementById("simModelSelect");
+  if (simModelSelect) {
+    simModelSelect.addEventListener("change", (e) => {
+      appConfig.default_model = e.target.value;
+      localStorage.setItem("tracker_default_model", appConfig.default_model);
+
+      const selOpt = simModelSelect.options[simModelSelect.selectedIndex];
+      const recIntensity = selOpt?.dataset?.defaultIntensity || GEMINI_MODELS[appConfig.default_model]?.default_intensity;
+      if (recIntensity) {
+        setSimulatorIntensity(recIntensity);
+      } else {
+        runMultimodalCalculator();
+      }
+    });
+  }
+
+  // Boutons d'intensité de réflexion (Low, Medium, High)
+  const intensityBtns = document.querySelectorAll("#simIntensityGroup .intensity-btn");
+  intensityBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const level = btn.dataset.intensity;
+      setSimulatorIntensity(level);
+    });
   });
 
   // Bouton dossier local (File System Access API)
@@ -631,11 +705,18 @@ function parseTranscriptText(text, fileModifiedTime, path = "") {
     }
 
     // Détection du modèle
-    if (content.includes("Gemini 3.8 Flash")) detectedModel = "gemini-3.8-flash";
-    else if (content.includes("Gemini 2.5 Flash")) detectedModel = "gemini-2.5-flash";
-    else if (content.includes("Gemini 2.0 Flash")) detectedModel = "gemini-2.0-flash";
-    else if (content.includes("Gemini 1.5 Pro")) detectedModel = "gemini-1.5-pro";
-    else if (content.includes("Gemini 1.5 Flash")) detectedModel = "gemini-1.5-flash";
+    if (content.includes("Gemini 3.8 Flash") || content.includes("gemini-3.8-flash")) detectedModel = "gemini-3.8-flash";
+    else if (content.includes("Gemini 3.7 Flash") || content.includes("gemini-3.7-flash")) detectedModel = "gemini-3.7-flash";
+    else if (content.includes("Gemini 3.6 Flash") || content.includes("gemini-3.6-flash")) detectedModel = "gemini-3.6-flash";
+    else if (content.includes("Gemini 3.1 Pro") || content.includes("gemini-3.1-pro")) detectedModel = "gemini-3.1-pro";
+    else if (content.includes("Claude Opus 5.5") || content.includes("claude-opus-5.5")) detectedModel = "claude-opus-5.5";
+    else if (content.includes("Claude Sonnet 5.5") || content.includes("claude-sonnet-5.5")) detectedModel = "claude-sonnet-5.5";
+    else if (content.includes("GPT-OSS 120B") || content.includes("gpt-oss-120b")) detectedModel = "gpt-oss-120b";
+    else if (content.includes("Gemini 2.5 Flash") || content.includes("gemini-2.5-flash")) detectedModel = "gemini-2.5-flash";
+    else if (content.includes("Gemini 2.0 Flash Thinking") || content.includes("gemini-2.0-flash-thinking")) detectedModel = "gemini-2.0-flash-thinking";
+    else if (content.includes("Gemini 2.0 Flash") || content.includes("gemini-2.0-flash")) detectedModel = "gemini-2.0-flash";
+    else if (content.includes("Gemini 1.5 Pro") || content.includes("gemini-1.5-pro")) detectedModel = "gemini-1.5-pro";
+    else if (content.includes("Gemini 1.5 Flash") || content.includes("gemini-1.5-flash")) detectedModel = "gemini-1.5-flash";
 
     // Date
     let dateStr = "";
@@ -1518,6 +1599,40 @@ function clearCalculator() {
   runMultimodalCalculator();
 }
 
+function setSimulatorIntensity(level) {
+  if (!level) return;
+  appConfig.sim_intensity = level;
+  localStorage.setItem("tracker_sim_intensity", level);
+  updateIntensityButtonsUI(level);
+  runMultimodalCalculator();
+}
+
+function updateIntensityButtonsUI(level) {
+  const intensityBtns = document.querySelectorAll("#simIntensityGroup .intensity-btn");
+  intensityBtns.forEach(btn => {
+    if (btn.dataset.intensity === level) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+}
+
+window.selectModelFromComparison = function(key) {
+  if (!key || !GEMINI_MODELS[key]) return;
+  appConfig.default_model = key;
+  localStorage.setItem("tracker_default_model", key);
+  const simModelSelect = document.getElementById("simModelSelect");
+  if (simModelSelect) simModelSelect.value = key;
+
+  const recIntensity = GEMINI_MODELS[key].default_intensity;
+  if (recIntensity) {
+    setSimulatorIntensity(recIntensity);
+  } else {
+    runMultimodalCalculator();
+  }
+};
+
 function runMultimodalCalculator() {
   const text = document.getElementById("calcInput")?.value || "";
   const textTokens = estimateTokensFast(text);
@@ -1527,36 +1642,72 @@ function runMultimodalCalculator() {
     filesTokens += f.tokens;
   }
 
-  const totalTokens = textTokens + filesTokens;
+  const inputTokens = textTokens + filesTokens;
+  const intensity = appConfig.sim_intensity || "high";
+
+  // Calcul des tokens de thinking selon l'intensité sélectionnée
+  let thinkingTokens = 0;
+  let estimatedOutputTokens = 0;
+
+  if (inputTokens > 0) {
+    if (intensity === "low") {
+      thinkingTokens = 1024;
+    } else if (intensity === "medium") {
+      thinkingTokens = 4096;
+    } else if (intensity === "high") {
+      thinkingTokens = 16384;
+    }
+    estimatedOutputTokens = 500;
+  }
+
+  const totalTokens = inputTokens + thinkingTokens + estimatedOutputTokens;
 
   const countElem = document.getElementById("calcTokensCount");
   if (countElem) countElem.textContent = `${formatNumber(totalTokens)} tokens`;
 
   const breakdownElem = document.getElementById("calcBreakdownPill");
   if (breakdownElem) {
-    breakdownElem.textContent = `Texte: ${formatNumber(textTokens)} tok • Fichiers: ${formatNumber(filesTokens)} tok`;
+    if (inputTokens === 0) {
+      breakdownElem.textContent = `Prompt: 0 tok • Fichiers: 0 tok • Thinking: 0 tok`;
+    } else {
+      breakdownElem.textContent = `Prompt: ${formatNumber(textTokens)} tok • Fichiers: ${formatNumber(filesTokens)} tok • Thinking [${intensity.toUpperCase()}]: ${formatNumber(thinkingTokens)} tok`;
+    }
   }
 
-  // Estimation du coût unitaire
+  // Modèle actuellement sélectionné dans le simulateur
   const spec = GEMINI_MODELS[appConfig.default_model] || GEMINI_MODELS["gemini-3.8-flash"];
-  const rateIn = totalTokens > (spec.threshold_large || 128000) ? spec.input_cost_large : spec.input_cost_standard;
-  const costUsd = (totalTokens / 1000000.0) * rateIn;
-  const costEur = costUsd * appConfig.usd_to_eur;
+  const threshold = spec.threshold_large || 128000;
+
+  const rateIn = inputTokens > threshold ? spec.input_cost_large : spec.input_cost_standard;
+  const rateOut = (thinkingTokens + estimatedOutputTokens) > threshold ? spec.output_cost_large : spec.output_cost_standard;
+
+  const inputCostUsd = (inputTokens / 1000000.0) * rateIn;
+  const outputCostUsd = ((thinkingTokens + estimatedOutputTokens) / 1000000.0) * rateOut;
+  const totalCostUsd = inputCostUsd + outputCostUsd;
+
+  const inputCostEur = inputCostUsd * appConfig.usd_to_eur;
+  const outputCostEur = outputCostUsd * appConfig.usd_to_eur;
+  const totalCostEur = totalCostUsd * appConfig.usd_to_eur;
 
   const estElem = document.getElementById("calcCostEstimate");
   if (estElem) {
-    estElem.textContent = formatCurrency(appConfig.currency === "EUR" ? costEur : costUsd, appConfig.currency);
+    estElem.textContent = formatCurrency(totalCostEur, "EUR");
+  }
+
+  const detailElem = document.getElementById("calcCostDetail");
+  if (detailElem) {
+    detailElem.textContent = `Entrée : ${formatCurrency(inputCostEur, "EUR")} • Thinking & Réponse : ${formatCurrency(outputCostEur, "EUR")}`;
   }
 
   // Grille de comparaison des modèles
-  renderModelComparison(totalTokens);
+  renderModelComparison(inputTokens, thinkingTokens, estimatedOutputTokens);
 }
 
-function renderModelComparison(totalTokens) {
+function renderModelComparison(inputTokens, thinkingTokens, estimatedOutputTokens) {
   const grid = document.getElementById("modelComparisonGrid");
   if (!grid) return;
 
-  if (totalTokens === 0) {
+  if (inputTokens === 0) {
     grid.innerHTML = `
       <div style="color: var(--text-muted); font-size: 0.78rem; padding: 6px 0;">
         Ajoutez du texte, une image ou un PDF pour voir le coût comparé.
@@ -1567,15 +1718,21 @@ function renderModelComparison(totalTokens) {
 
   const models = Object.entries(GEMINI_MODELS);
   grid.innerHTML = models.map(([key, spec]) => {
-    const rateIn = totalTokens > (spec.threshold_large || 128000) ? spec.input_cost_large : spec.input_cost_standard;
-    const costUsd = (totalTokens / 1000000.0) * rateIn;
+    const threshold = spec.threshold_large || 128000;
+    const rateIn = inputTokens > threshold ? spec.input_cost_large : spec.input_cost_standard;
+    const rateOut = (thinkingTokens + estimatedOutputTokens) > threshold ? spec.output_cost_large : spec.output_cost_standard;
+
+    const costUsd = (inputTokens / 1000000.0) * rateIn + ((thinkingTokens + estimatedOutputTokens) / 1000000.0) * rateOut;
     const costEur = costUsd * appConfig.usd_to_eur;
-    const costVal = appConfig.currency === "EUR" ? costEur : costUsd;
+
+    const isSelected = key === appConfig.default_model;
 
     return `
-      <div class="model-comp-item ${key === appConfig.default_model ? "selected-model" : ""}">
-        <span class="model-comp-name">${spec.name}</span>
-        <span class="model-comp-cost">${formatCurrency(costVal, appConfig.currency)}</span>
+      <div class="model-comp-item ${isSelected ? "selected-model" : ""}" onclick="selectModelFromComparison('${key}')" title="Cliquer pour choisir ${spec.name}">
+        <span class="model-comp-name">
+          ${isSelected ? "👉 " : ""}${spec.name}
+        </span>
+        <span class="model-comp-cost">${formatCurrency(costEur, "EUR")}</span>
       </div>
     `;
   }).join("");
@@ -1802,7 +1959,7 @@ function renderMonthlyRecapModal(data) {
 }
 
 // --- GESTION DU CHANGELOG & NOUVEAUTÉS ---
-const CURRENT_APP_VERSION = "1.4.0";
+const CURRENT_APP_VERSION = "1.5.0";
 
 function openChangelogModal() {
   const modal = document.getElementById("changelogModal");

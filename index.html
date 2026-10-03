@@ -52,27 +52,11 @@
           👑 Google AI Pro
         </div>
 
-        <!-- Devise -->
-        <select id="currencySelect" class="ctrl-select" title="Changer de devise">
-          <option value="EUR">🇪🇺 EUR (€)</option>
-          <option value="USD">🇺🇸 USD ($)</option>
-        </select>
-
         <!-- Mode Tarification -->
         <select id="modeSelect" class="ctrl-select" title="Mode de calcul">
           <option value="google_ai_pro" selected>👑 Google AI Pro (Abonnement)</option>
           <option value="pay_as_you_go">💳 Pay-as-you-go</option>
           <option value="free_tier">🎁 Free Tier ($0)</option>
-        </select>
-
-        <!-- Modèle par défaut -->
-        <select id="modelSelect" class="ctrl-select" title="Modèle Gemini par défaut">
-          <option value="gemini-3.8-flash">⚡ Gemini 3.8 Flash (High)</option>
-          <option value="gemini-2.5-flash">🚀 Gemini 2.5 Flash</option>
-          <option value="gemini-2.0-flash">✨ Gemini 2.0 Flash</option>
-          <option value="gemini-2.0-flash-thinking">🧠 Gemini 2.0 Flash Thinking</option>
-          <option value="gemini-1.5-flash">💨 Gemini 1.5 Flash</option>
-          <option value="gemini-1.5-pro">👑 Gemini 1.5 Pro</option>
         </select>
 
         <!-- Bouton Clé API -->
@@ -87,7 +71,7 @@
 
         <!-- Bouton Pop-up Nouveautés & Changelog -->
         <button id="btnChangelog" class="ctrl-btn" title="Historique des versions et changements récents">
-          ✨ Nouveautés <span class="version-tag">v1.4</span>
+          ✨ Nouveautés <span class="version-tag">v1.5</span>
         </button>
       </div>
     </header>
@@ -275,6 +259,52 @@
         </button>
       </div>
 
+      <!-- BARRE DE CONFIGURATION DU MODÈLE ET DE L'INTENSITÉ (ANTIGRAVITY) -->
+      <div class="sim-toolbar">
+        <!-- Choix du Modèle -->
+        <div class="sim-toolbar-group">
+          <label for="simModelSelect" class="sim-toolbar-label">
+            <span class="sim-icon">🤖</span> Modèle Antigravity :
+          </label>
+          <select id="simModelSelect" class="sim-select" title="Choisir le modèle pour la simulation">
+            <optgroup label="⚡ Famille Google Gemini (Antigravity)">
+              <option value="gemini-3.8-flash" data-default-intensity="high" selected>⚡ Gemini 3.8 Flash (High / Fast)</option>
+              <option value="gemini-3.7-flash" data-default-intensity="medium">⚡ Gemini 3.7 Flash (Medium / Fast)</option>
+              <option value="gemini-3.6-flash" data-default-intensity="medium">⚡ Gemini 3.6 Flash (Medium / Fast)</option>
+              <option value="gemini-3.1-pro" data-default-intensity="low">🧠 Gemini 3.1 Pro (Low / Deep)</option>
+              <option value="gemini-2.5-flash" data-default-intensity="medium">🚀 Gemini 2.5 Flash</option>
+              <option value="gemini-2.0-flash" data-default-intensity="medium">✨ Gemini 2.0 Flash</option>
+              <option value="gemini-2.0-flash-thinking" data-default-intensity="high">🧠 Gemini 2.0 Flash Thinking</option>
+              <option value="gemini-1.5-pro" data-default-intensity="medium">👑 Gemini 1.5 Pro</option>
+              <option value="gemini-1.5-flash" data-default-intensity="low">💨 Gemini 1.5 Flash</option>
+            </optgroup>
+            <optgroup label="🟣 Modèles Partenaires & Multi-Model">
+              <option value="claude-opus-5.5" data-default-intensity="medium">🟣 Claude Opus 5.5 (Medium / New)</option>
+              <option value="claude-sonnet-5.5" data-default-intensity="medium">🔵 Claude Sonnet 5.5 (Medium / New)</option>
+              <option value="gpt-oss-120b" data-default-intensity="medium">🟢 GPT-OSS 120B (Medium)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- Choix de l'Intensité de Réflexion (Thinking / Reasoning) -->
+        <div class="sim-toolbar-group">
+          <label class="sim-toolbar-label">
+            <span class="sim-icon">🧠</span> Intensité de Réflexion (Thinking) :
+          </label>
+          <div class="intensity-control" id="simIntensityGroup">
+            <button type="button" class="intensity-btn" data-intensity="low" title="Faible réflexion / ultra rapide (budget ~1 024 tokens de thinking)">
+              <span class="intensity-dot dot-low"></span> Low <span class="intensity-val">1k</span>
+            </button>
+            <button type="button" class="intensity-btn" data-intensity="medium" title="Réflexion équilibrée standard (budget ~4 096 tokens de thinking)">
+              <span class="intensity-dot dot-medium"></span> Medium <span class="intensity-val">4k</span>
+            </button>
+            <button type="button" class="intensity-btn active" data-intensity="high" title="Réflexion approfondie et complexe (budget ~16 384 tokens de thinking)">
+              <span class="intensity-dot dot-high"></span> High <span class="intensity-val">16k</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="calc-grid">
         <!-- Colonne de Gauche : Saisie Texte & Dropzone -->
         <div class="calc-input-col">
@@ -297,24 +327,27 @@
         <!-- Colonne de Droite : Résultats Détaillés & Comparatif Modèles -->
         <div class="calc-results-col">
           <div class="calc-hero-badge">
-            <div class="calc-hero-title">Volume Total des Tokens (Prompt + Fichiers)</div>
+            <div class="calc-hero-title">Volume Total Estimé (Prompt + Fichiers + Thinking)</div>
             <div id="calcTokensCount" class="calc-hero-val">0 tokens</div>
-            <div id="calcBreakdownPill" class="calc-breakdown-pill">Texte: 0 tok • Fichiers: 0 tok</div>
+            <div id="calcBreakdownPill" class="calc-breakdown-pill">Prompt: 0 tok • Fichiers: 0 tok • Thinking: 0 tok</div>
           </div>
 
           <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
             <div>
-              <div class="calc-subtitle">Coût unitaire estimé (Entrée) :</div>
+              <div class="calc-subtitle">Coût estimé pour cet appel :</div>
               <div id="calcCostEstimate" class="calc-cost-primary">0,000000 €</div>
+              <div id="calcCostDetail" style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">
+                Entrée : 0,0000 € • Thinking & Réponse : 0,0000 €
+              </div>
             </div>
             <button id="btnCountOfficialApi" class="action-btn" style="font-size: 0.78rem; padding: 6px 12px;" title="Vérifier le comptage exact via l'API officielle Google AI Studio">
               ⚡ Compter via API Gemini
             </button>
           </div>
 
-          <!-- Comparatif des Modèles Gemini -->
+          <!-- Comparatif des Modèles Gemini & Partenaires -->
           <div class="model-comparison-box">
-            <div class="calc-subtitle">Comparatif selon les modèles Gemini :</div>
+            <div class="calc-subtitle">Comparatif des modèles Antigravity (Prompt + Thinking) :</div>
             <div id="modelComparisonGrid" class="model-comp-grid">
               <div style="color: var(--text-muted); font-size: 0.78rem; padding: 6px 0;">
                 Ajoutez du texte, une image ou un PDF pour voir le coût comparé.
@@ -514,7 +547,7 @@
           <div>
             <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
               Nouveautés & Historique des Versions
-              <span class="version-tag">v1.4.0</span>
+              <span class="version-tag">v1.5.0</span>
             </h3>
             <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Journal des changements, améliorations et évolutions d'Antigravity Gemini Tracker</p>
           </div>
@@ -523,9 +556,22 @@
       </div>
 
       <div class="changelog-timeline" style="max-height: 58vh; overflow-y: auto; padding-right: 8px;">
-        <!-- Version 1.4.0 (Actuelle) -->
+        <!-- Version 1.5.0 (Actuelle) -->
         <div class="changelog-item">
-          <div class="changelog-badge current">v1.4.0 • Actuelle (03 Octobre 2026)</div>
+          <div class="changelog-badge current">v1.5.0 • Actuelle (03 Octobre 2026)</div>
+          <h4 class="changelog-title">Épuration En-tête, Sélecteur de Modèle dans le Simulateur & Niveaux d'Intensité Antigravity</h4>
+          <ul class="changelog-list">
+            <li><strong>🧹 En-tête épuré à 100% :</strong> Retrait du sélecteur de devise (fixée en Euros €) et du sélecteur de modèle du haut. Plus d'espace et lisibilité maximale.</li>
+            <li><strong>🧮 Modèles déplacés dans le Simulateur :</strong> Choix direct du modèle Antigravity (Gemini 3.8 Flash, Gemini 3.7 Flash, Gemini 3.6 Flash, Gemini 3.1 Pro, Claude Opus, Sonnet, GPT-OSS) au cœur du simulateur.</li>
+            <li><strong>🧠 Niveaux d'Intensité de Réflexion (Thinking) :</strong> Sélection interactive du budget de thinking (<code>Low 1k</code>, <code>Medium 4k</code>, <code>High 16k</code>) fidèle à l'interface Antigravity.</li>
+            <li><strong>⚡ Calcul temps réel des Thinking Tokens :</strong> Le simulateur estime automatiquement les tokens de réflexion et le coût exact selon l'intensité choisie.</li>
+            <li><strong>📊 Grille comparative actualisée :</strong> Comparatif instantané de tous les modèles avec le prompt et l'intensité active.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.4.0 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.4.0 (03 Octobre 2026)</div>
           <h4 class="changelog-title">Récapitulatif Mensuel, Pop-up Nouveautés & Disposition Sommet</h4>
           <ul class="changelog-list">
             <li><strong>📊 Bouton Récapitulatif Mensuel :</strong> Intégré directement dans le menu du haut avec l'historique complet mois par mois (Septembre, Octobre...) détaillant tokens totaux, nombre d'appels, valeur API et quotas restants.</li>

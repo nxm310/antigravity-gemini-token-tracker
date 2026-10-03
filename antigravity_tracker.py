@@ -143,16 +143,30 @@ def analyze_transcript_file(transcript_path: str, default_model: str = DEFAULT_M
             step_idx = step.get("step_index", 0)
 
             # Détection de changement de modèle dans les paramètres
-            if "Model Selection" in content:
-                if "Gemini 3.8 Flash" in content:
+            if "Model Selection" in content or "model" in content.lower():
+                if "Gemini 3.8 Flash" in content or "gemini-3.8-flash" in content:
                     detected_model = "gemini-3.8-flash"
-                elif "Gemini 2.5 Flash" in content:
+                elif "Gemini 3.7 Flash" in content or "gemini-3.7-flash" in content:
+                    detected_model = "gemini-3.7-flash"
+                elif "Gemini 3.6 Flash" in content or "gemini-3.6-flash" in content:
+                    detected_model = "gemini-3.6-flash"
+                elif "Gemini 3.1 Pro" in content or "gemini-3.1-pro" in content:
+                    detected_model = "gemini-3.1-pro"
+                elif "Claude Opus 5.5" in content or "claude-opus-5.5" in content:
+                    detected_model = "claude-opus-5.5"
+                elif "Claude Sonnet 5.5" in content or "claude-sonnet-5.5" in content:
+                    detected_model = "claude-sonnet-5.5"
+                elif "GPT-OSS 120B" in content or "gpt-oss-120b" in content:
+                    detected_model = "gpt-oss-120b"
+                elif "Gemini 2.5 Flash" in content or "gemini-2.5-flash" in content:
                     detected_model = "gemini-2.5-flash"
-                elif "Gemini 2.0 Flash" in content:
+                elif "Gemini 2.0 Flash Thinking" in content or "gemini-2.0-flash-thinking" in content:
+                    detected_model = "gemini-2.0-flash-thinking"
+                elif "Gemini 2.0 Flash" in content or "gemini-2.0-flash" in content:
                     detected_model = "gemini-2.0-flash"
-                elif "Gemini 1.5 Pro" in content:
+                elif "Gemini 1.5 Pro" in content or "gemini-1.5-pro" in content:
                     detected_model = "gemini-1.5-pro"
-                elif "Gemini 1.5 Flash" in content:
+                elif "Gemini 1.5 Flash" in content or "gemini-1.5-flash" in content:
                     detected_model = "gemini-1.5-flash"
 
             # Date pour l'agrégation

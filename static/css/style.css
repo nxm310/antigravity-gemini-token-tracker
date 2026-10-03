@@ -599,6 +599,162 @@ tbody td {
   color: #ffffff;
 }
 
+/* --- BARRE DE CONFIGURATION SIMULATEUR (MODÈLE & INTENSITÉ) --- */
+.sim-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(17, 24, 39, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.sim-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sim-toolbar-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sim-select {
+  background: rgba(31, 41, 55, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-sm);
+  color: #f3f4f6;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 250px;
+}
+
+.sim-select:focus, .sim-select:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+}
+
+.sim-select optgroup {
+  font-weight: 700;
+  color: #94a3b8;
+  background: #111827;
+}
+
+.sim-select option {
+  font-weight: 500;
+  color: #f3f4f6;
+  background: #1f2937;
+  padding: 6px 10px;
+}
+
+/* Groupe de boutons d'intensité (Thinking) */
+.intensity-control {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(31, 41, 55, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 4px;
+}
+
+.intensity-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.intensity-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.intensity-btn.active {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(59, 130, 246, 0.25));
+  border: 1px solid rgba(6, 182, 212, 0.45);
+  color: #38bdf8;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.2);
+}
+
+.intensity-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.intensity-dot.dot-low {
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+.intensity-dot.dot-medium {
+  background: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+}
+
+.intensity-dot.dot-high {
+  background: #a855f7;
+  box-shadow: 0 0 6px rgba(168, 85, 247, 0.6);
+}
+
+.intensity-val {
+  font-size: 0.7rem;
+  opacity: 0.75;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  .sim-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .sim-toolbar-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .sim-select {
+    min-width: 100%;
+    width: 100%;
+  }
+  .intensity-control {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .intensity-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
 /* --- TOKEN CALCULATOR SANDBOX MULTIMODAL --- */
 .calc-grid {
   display: grid;
@@ -848,20 +1004,42 @@ tbody td {
   margin-top: 8px;
 }
 
-.model-comp-card {
+.model-comp-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 7px 10px;
-  background: rgba(31, 41, 55, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 8px 12px;
+  background: rgba(31, 41, 55, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-sm);
   font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.model-comp-item:hover {
+  background: rgba(31, 41, 55, 0.8);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(2px);
+}
+
+.model-comp-item.selected-model {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.15);
+}
+
+.model-comp-item.selected-model .model-comp-name {
+  color: #38bdf8;
+  font-weight: 700;
 }
 
 .model-comp-name {
   font-weight: 600;
   color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .model-comp-cost {
