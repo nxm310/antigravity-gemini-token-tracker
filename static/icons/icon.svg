@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0a0e17" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="50%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Rect -->
+  <rect width="512" height="512" rx="112" fill="#0a0e17"/>
+  <rect width="512" height="512" rx="112" fill="url(#bgGlow)"/>
+  <rect x="40" y="40" width="432" height="432" rx="96" fill="url(#cardGrad)" stroke="#38bdf8" stroke-width="4" stroke-opacity="0.4"/>
+  
+  <!-- Antigravity / Gemini Layers Prism -->
+  <g transform="translate(256, 256)">
+    <!-- Top Layer -->
+    <path d="M0 -140 L120 -80 L0 -20 L-120 -80 Z" fill="#06b6d4" opacity="0.95" stroke="#38bdf8" stroke-width="6"/>
+    <!-- Middle Layer -->
+    <path d="M-120 -20 L0 40 L120 -20 L80 0 L0 60 L-80 0 Z" fill="#6366f1" opacity="0.9" stroke="#818cf8" stroke-width="6"/>
+    <!-- Bottom Layer -->
+    <path d="M-120 40 L0 100 L120 40 L80 60 L0 140 L-80 60 Z" fill="#8b5cf6" opacity="0.95" stroke="#a78bfa" stroke-width="6"/>
+    
+    <!-- Central Spark -->
+    <circle cx="0" cy="-20" r="16" fill="#fbbf24"/>
+  </g>
+</svg>

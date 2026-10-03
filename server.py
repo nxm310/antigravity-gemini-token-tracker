@@ -45,8 +45,13 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
 
+    def do_HEAD(self):
+        """Gère les requêtes HEAD (pour vérification d'état et mise en cache)."""
+        self.do_GET()
+
     def do_GET(self):
         """Route les requêtes GET (API ou fichiers statiques)."""
+
         parsed_url = urlparse(self.path)
         path = parsed_url.path
 
@@ -287,19 +292,29 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
     # --- FICHIERS STATIQUES ---
 
     def serve_static_file(self, path: str):
-        """Sert les fichiers statiques (HTML, CSS, JS, icônes)."""
-        if path in ("", "/"):
-            file_path = os.path.join(STATIC_DIR, "index.html")
-        else:
-            clean_path = path.lstrip("/")
-            file_path = os.path.join(STATIC_DIR, clean_path)
+        """Sert les fichiers statiques (HTML, CSS, JS, icônes) depuis la racine ou static/."""
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        clean_path = path.lstrip("/")
 
-        if not os.path.exists(file_path) or os.path.isdir(file_path):
-            file_path = os.path.join(STATIC_DIR, "index.html")
+        if path in ("", "/"):
+            file_path = os.path.join(base_dir, "index.html")
+        else:
+            # Vérifie d'abord à la racine du projet
+            root_candidate = os.path.join(base_dir, clean_path)
+            # Puis dans static/
+            static_candidate = os.path.join(STATIC_DIR, clean_path)
+
+            if os.path.exists(root_candidate) and not os.path.isdir(root_candidate):
+                file_path = root_candidate
+            elif os.path.exists(static_candidate) and not os.path.isdir(static_candidate):
+                file_path = static_candidate
+            else:
+                file_path = os.path.join(base_dir, "index.html")
 
         mime_type, _ = mimetypes.guess_type(file_path)
         if not mime_type:
             mime_type = "application/octet-stream"
+
 
         try:
             with open(file_path, "rb") as f:
