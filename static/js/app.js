@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initPWA();
   initDropzoneEvents();
   initGlobalDragAndDrop();
+  startLiveCountdownTicker();
 
   // 1. Test si un serveur Python tourne en local
   const hasLocalServer = await checkLocalServer();
@@ -111,6 +112,49 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 });
+
+// --- COMPTE À REBOURS DYNAMIQUE EN TEMPS RÉEL (1s) ---
+function startLiveCountdownTicker() {
+  if (window._countdownTickerStarted) return;
+  window._countdownTickerStarted = true;
+
+  setInterval(() => {
+    const now = Date.now();
+    const kpi5Reset = document.getElementById("kpi5hReset");
+    const kpiWReset = document.getElementById("kpiWeeklyReset");
+
+    if (appState.resetTime5h && kpi5Reset) {
+      const diff5 = Math.max(0, Math.floor((appState.resetTime5h - now) / 1000));
+      if (diff5 > 0) {
+        const h = Math.floor(diff5 / 3600);
+        const m = Math.floor((diff5 % 3600) / 60);
+        const s = diff5 % 60;
+        kpi5Reset.textContent = h > 0 ? `⏱️ dans ${h}h ${m}m ${s}s` : `⏱️ dans ${m}m ${s}s`;
+      } else {
+        kpi5Reset.textContent = "⏱️ Prêt";
+      }
+    }
+
+    if (appState.resetTime7d && kpiWReset) {
+      const diff7 = Math.max(0, Math.floor((appState.resetTime7d - now) / 1000));
+      if (diff7 > 0) {
+        const d = Math.floor(diff7 / 86400);
+        const h = Math.floor((diff7 % 86400) / 3600);
+        const m = Math.floor((diff7 % 3600) / 60);
+        const s = diff7 % 60;
+        if (d > 0) {
+          kpiWReset.textContent = `⏱️ dans ${d}j ${h}h ${m}m`;
+        } else if (h > 0) {
+          kpiWReset.textContent = `⏱️ dans ${h}h ${m}m ${s}s`;
+        } else {
+          kpiWReset.textContent = `⏱️ dans ${m}m ${s}s`;
+        }
+      } else {
+        kpiWReset.textContent = "⏱️ Prêt";
+      }
+    }
+  }, 1000);
+}
 
 // --- ENREGISTREMENT PWA SERVICE WORKER & DOCK INSTALL ---
 function initPWA() {
@@ -751,8 +795,11 @@ function recomputeAll() {
   const maxCalls5h = isPro ? 250 : (isFree ? 50 : 500);
   const maxCalls7d = isPro ? 1500 : (isFree ? 300 : 3000);
 
-  const pct5h = Math.min(100.0, parseFloat(((calls5h / maxCalls5h) * 100).toFixed(1)));
-  const pct7d = Math.min(100.0, parseFloat(((calls7d / maxCalls7d) * 100).toFixed(1)));
+  const used5h = Math.min(100.0, parseFloat(((calls5h / maxCalls5h) * 100).toFixed(1)));
+  const rem5h = Math.max(0.0, parseFloat((100.0 - used5h).toFixed(1)));
+
+  const used7d = Math.min(100.0, parseFloat(((calls7d / maxCalls7d) * 100).toFixed(1)));
+  const rem7d = Math.max(0.0, parseFloat((100.0 - used7d).toFixed(1)));
 
   const JOURS_FR = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
   const MOIS_FR = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
@@ -826,19 +873,25 @@ function recomputeAll() {
       calls: calls5h,
       max_calls: maxCalls5h,
       tokens: tokens5h,
-      pct_used: pct5h,
+      pct_used: rem5h,
+      remaining_pct: rem5h,
+      used_pct: used5h,
       reset_in: reset5hStr,
       reset_date: reset5hDate,
-      reset_seconds: diffSec5h
+      reset_seconds: diffSec5h,
+      is_live_rpc: false
     },
     quota_weekly: {
       calls: calls7d,
       max_calls: maxCalls7d,
       tokens: tokens7d,
-      pct_used: pct7d,
+      pct_used: rem7d,
+      remaining_pct: rem7d,
+      used_pct: used7d,
       reset_in: reset7dStr,
       reset_date: reset7dDate,
-      reset_seconds: diffSec7d
+      reset_seconds: diffSec7d,
+      is_live_rpc: false
     },
     active_session: appState.activeSession,
     sessions: sessions,
@@ -993,6 +1046,19 @@ function renderKPIs(data) {
   if (kpiOutTokens) kpiOutTokens.textContent = `${formatNumber(totals.output_tokens)} sortie`;
   if (kpiThinkingTokens) kpiThinkingTokens.textContent = `${formatNumber(totals.thinking_tokens)} thinking`;
 
+  // Enregistrement des cibles de réinitialisation pour le compte à rebours dynamique
+  if (q5h.reset_seconds !== undefined && q5h.reset_seconds > 0) {
+    appState.resetTime5h = Date.now() + (q5h.reset_seconds * 1000);
+  } else if (!q5h.reset_seconds) {
+    appState.resetTime5h = null;
+  }
+
+  if (q7d.reset_seconds !== undefined && q7d.reset_seconds > 0) {
+    appState.resetTime7d = Date.now() + (q7d.reset_seconds * 1000);
+  } else if (!q7d.reset_seconds) {
+    appState.resetTime7d = null;
+  }
+
   // KPI 3 : Limite 5 heures (%)
   const kpi5hVal = document.getElementById("kpi5hVal");
   const kpi5hBar = document.getElementById("kpi5hBar");
@@ -1001,18 +1067,26 @@ function renderKPIs(data) {
   const kpi5hCalls = document.getElementById("kpi5hCallsText");
   const kpi5hTokens = document.getElementById("kpi5hTokens");
 
-  const pct5 = q5h.pct_used || 0;
+  const rem5 = q5h.remaining_pct !== undefined ? q5h.remaining_pct : (100 - (q5h.pct_used || 0));
+  const used5 = q5h.used_pct !== undefined ? q5h.used_pct : (q5h.pct_used || 0);
+
   if (kpi5hVal) {
-    kpi5hVal.textContent = `${pct5}%`;
-    kpi5hVal.style.color = pct5 > 80 ? "#f43f5e" : (pct5 > 50 ? "#f59e0b" : "#38bdf8");
+    kpi5hVal.innerHTML = `${rem5}% <span style="font-size: 0.5em; font-weight: normal; opacity: 0.85;">restant</span>`;
+    kpi5hVal.style.color = rem5 < 20 ? "#f43f5e" : (rem5 < 50 ? "#f59e0b" : "#38bdf8");
   }
   if (kpi5hBar) {
-    kpi5hBar.style.width = `${Math.max(2, pct5)}%`;
-    kpi5hBar.className = `progress-bar-fill ${pct5 > 80 ? "bg-rose" : (pct5 > 50 ? "bg-amber" : "bg-cyan")}`;
+    kpi5hBar.style.width = `${Math.min(100, Math.max(2, rem5))}%`;
+    kpi5hBar.className = `progress-bar-fill ${rem5 < 20 ? "bg-rose" : (rem5 < 50 ? "bg-amber" : "bg-cyan")}`;
   }
   if (kpi5hReset) kpi5hReset.textContent = `⏱️ ${q5h.reset_in || "Prêt"}`;
   if (kpi5hExactDate) kpi5hExactDate.textContent = `📅 Reset : ${q5h.reset_date || "Prêt"}`;
-  if (kpi5hCalls) kpi5hCalls.textContent = `${formatNumber(q5h.calls || 0)} / ${formatNumber(q5h.max_calls || 250)} appels`;
+  if (kpi5hCalls) {
+    if (q5h.is_live_rpc) {
+      kpi5hCalls.textContent = `${used5}% consommé (${formatNumber(q5h.calls || 0)} appels)`;
+    } else {
+      kpi5hCalls.textContent = `${used5}% consommé • ${formatNumber(q5h.calls || 0)} / ${formatNumber(q5h.max_calls || 250)} appels`;
+    }
+  }
   if (kpi5hTokens) kpi5hTokens.textContent = `${formatNumber(q5h.tokens || 0)} tokens`;
 
   // KPI 4 : Limite sur la semaine (%)
@@ -1024,22 +1098,30 @@ function renderKPIs(data) {
   const kpiWeeklyTokens = document.getElementById("kpiWeeklyTokens");
   const kpiWeeklyStatus = document.getElementById("kpiWeeklyStatus");
 
-  const pct7 = q7d.pct_used || 0;
+  const rem7 = q7d.remaining_pct !== undefined ? q7d.remaining_pct : (100 - (q7d.pct_used || 0));
+  const used7 = q7d.used_pct !== undefined ? q7d.used_pct : (q7d.pct_used || 0);
+
   if (kpiWeeklyVal) {
-    kpiWeeklyVal.textContent = `${pct7}%`;
-    kpiWeeklyVal.style.color = pct7 > 80 ? "#f43f5e" : (pct7 > 50 ? "#f59e0b" : "#34d399");
+    kpiWeeklyVal.innerHTML = `${rem7}% <span style="font-size: 0.5em; font-weight: normal; opacity: 0.85;">restant</span>`;
+    kpiWeeklyVal.style.color = rem7 < 20 ? "#f43f5e" : (rem7 < 50 ? "#f59e0b" : "#34d399");
   }
   if (kpiWeeklyBar) {
-    kpiWeeklyBar.style.width = `${Math.max(2, pct7)}%`;
-    kpiWeeklyBar.className = `progress-bar-fill ${pct7 > 80 ? "bg-rose" : (pct7 > 50 ? "bg-amber" : "bg-emerald")}`;
+    kpiWeeklyBar.style.width = `${Math.min(100, Math.max(2, rem7))}%`;
+    kpiWeeklyBar.className = `progress-bar-fill ${rem7 < 20 ? "bg-rose" : (rem7 < 50 ? "bg-amber" : "bg-emerald")}`;
   }
   if (kpiWeeklyReset) kpiWeeklyReset.textContent = `⏱️ ${q7d.reset_in || "Prêt"}`;
   if (kpiWeeklyExactDate) kpiWeeklyExactDate.textContent = `📅 Remise à 0 : ${q7d.reset_date || "Prêt"}`;
-  if (kpiWeeklyCalls) kpiWeeklyCalls.textContent = `${formatNumber(q7d.calls || 0)} / ${formatNumber(q7d.max_calls || 1500)} appels`;
+  if (kpiWeeklyCalls) {
+    if (q7d.is_live_rpc) {
+      kpiWeeklyCalls.textContent = `${used7}% consommé (${formatNumber(q7d.calls || 0)} appels)`;
+    } else {
+      kpiWeeklyCalls.textContent = `${used7}% consommé • ${formatNumber(q7d.calls || 0)} / ${formatNumber(q7d.max_calls || 1500)} appels`;
+    }
+  }
   if (kpiWeeklyTokens) kpiWeeklyTokens.textContent = `${formatNumber(q7d.tokens || 0)} tokens sur 7j`;
   if (kpiWeeklyStatus) {
-    kpiWeeklyStatus.textContent = pct7 > 80 ? "Quota critique" : (pct7 > 50 ? "Utilisation modérée" : "Quota optimal");
-    kpiWeeklyStatus.style.color = pct7 > 80 ? "#f43f5e" : "#34d399";
+    kpiWeeklyStatus.textContent = rem7 < 20 ? "Quota critique" : (rem7 < 50 ? "Utilisation modérée" : "Quota optimal");
+    kpiWeeklyStatus.style.color = rem7 < 20 ? "#f43f5e" : (rem7 < 50 ? "#f59e0b" : "#34d399");
   }
 }
 

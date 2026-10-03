@@ -8,11 +8,62 @@ import os
 import json
 import sqlite3
 import urllib.parse
-from datetime import datetime, timezone
+import urllib.request
+import subprocess
+import ssl
+import re
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Any, Optional
 
 from pricing import calculate_cost, get_model_spec, DEFAULT_MODEL
 from gemini_api import estimate_tokens_fast
+
+def fetch_live_antigravity_rpc_quota() -> Optional[Dict[str, Any]]:
+    """
+    Interroge le language_server local d'Antigravity en temps réel via l'API interne
+    /exa.language_server_pb.LanguageServerService/RetrieveUserQuotaSummary
+    pour obtenir les métriques exactes affichées dans Antigravity IDE (Settings > Models).
+    """
+    try:
+        ps_out = subprocess.check_output(['ps', 'aux'], text=True)
+        token = None
+        for line in ps_out.splitlines():
+            if 'language_server' in line and '--csrf_token' in line:
+                m = re.search(r'--csrf_token\s+([a-f0-9-]+)', line)
+                if m:
+                    token = m.group(1)
+                break
+        if not token:
+            return None
+
+        lsof_out = subprocess.check_output(['lsof', '-iTCP', '-sTCP:LISTEN', '-P', '-n'], text=True)
+        ports = []
+        for line in lsof_out.splitlines():
+            if 'language_' in line:
+                m = re.search(r':(\d+)\s+\(LISTEN\)', line)
+                if m:
+                    ports.append(int(m.group(1)))
+
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+
+        for port in ports:
+            url = f'https://127.0.0.1:{port}/exa.language_server_pb.LanguageServerService/RetrieveUserQuotaSummary'
+            req = urllib.request.Request(
+                url,
+                headers={'X-Codeium-Csrf-Token': token, 'Content-Type': 'application/json'},
+                data=b'{}'
+            )
+            try:
+                with urllib.request.urlopen(req, context=ctx, timeout=1.5) as r:
+                    if r.status == 200:
+                        return json.loads(r.read().decode('utf-8'))
+            except Exception:
+                continue
+    except Exception:
+        pass
+    return None
 
 # Cache en mémoire des calculs par conversation basé sur le mtime du fichier
 _SESSION_CACHE: Dict[str, Dict[str, Any]] = {}
@@ -522,9 +573,12 @@ def scan_all_sessions(
         "tokens_thinking": tokens_5h_think,
         "max_tokens": max_tokens_5h,
         "pct_used": pct_5h,
+        "remaining_pct": max(0.0, round(100.0 - pct_5h, 1)),
+        "used_pct": pct_5h,
         "reset_in": reset_str,
         "reset_date": reset_5h_date,
-        "reset_seconds": diff_sec
+        "reset_seconds": diff_sec,
+        "is_live_rpc": False
     }
 
     quota_weekly = {
@@ -536,10 +590,75 @@ def scan_all_sessions(
         "tokens_thinking": tokens_7d_think,
         "max_tokens": max_tokens_7d,
         "pct_used": pct_7d,
+        "remaining_pct": max(0.0, round(100.0 - pct_7d, 1)),
+        "used_pct": pct_7d,
         "reset_in": reset_7d_str,
         "reset_date": reset_7d_date,
-        "reset_seconds": diff_sec_7d
+        "reset_seconds": diff_sec_7d,
+        "is_live_rpc": False
     }
+
+    # Interrogation en direct de l'API interne d'Antigravity IDE (Settings > Models)
+    try:
+        live_rpc = fetch_live_antigravity_rpc_quota()
+        if live_rpc:
+            groups = live_rpc.get('response', {}).get('groups', [])
+            gemini_group = next((g for g in groups if g.get('displayName') == 'Gemini Models'), None)
+            if gemini_group:
+                for b in gemini_group.get('buckets', []):
+                    bid = b.get('bucketId')
+                    rem_frac = b.get('remainingFraction', 1.0)
+                    rem_pct = round(rem_frac * 100, 1)
+                    used_pct = round((1.0 - rem_frac) * 100, 1)
+                    reset_iso = b.get('resetTime', '')
+
+                    diff_sec = 0
+                    r_str = ""
+                    r_date_str = ""
+                    if reset_iso:
+                        dt = datetime.fromisoformat(reset_iso.replace('Z', '+00:00'))
+                        diff_sec = max(0, int((dt - now).total_seconds()))
+                        dt_local = dt.astimezone(local_tz)
+
+                        d_cnt = diff_sec // 86400
+                        h_cnt = (diff_sec % 86400) // 3600
+                        m_cnt = (diff_sec % 3600) // 60
+
+                        if d_cnt > 0:
+                            r_str = f"dans {d_cnt}j {h_cnt}h"
+                        elif h_cnt > 0:
+                            r_str = f"dans {h_cnt}h {m_cnt}m"
+                        else:
+                            r_str = f"dans {m_cnt} min"
+
+                        if dt_local.date() == datetime.now().date():
+                            r_date_str = f"Aujourd'hui à {dt_local.strftime('%H:%M')}"
+                        else:
+                            j_nom = JOURS_FR[dt_local.weekday()]
+                            m_nom = MOIS_FR[dt_local.month - 1]
+                            r_date_str = f"{j_nom} {dt_local.day} {m_nom} à {dt_local.strftime('%H:%M')}"
+
+                    if bid == 'gemini-5h':
+                        quota_5h['remaining_pct'] = rem_pct
+                        quota_5h['used_pct'] = used_pct
+                        quota_5h['pct_used'] = rem_pct  # Pourcentage affiché aligné sur Antigravity IDE (ex: 65%)
+                        quota_5h['reset_in'] = r_str
+                        quota_5h['reset_date'] = r_date_str
+                        quota_5h['reset_seconds'] = diff_sec
+                        quota_5h['is_live_rpc'] = True
+                        quota_5h['antigravity_desc'] = b.get('description', '')
+
+                    elif bid == 'gemini-weekly':
+                        quota_weekly['remaining_pct'] = rem_pct
+                        quota_weekly['used_pct'] = used_pct
+                        quota_weekly['pct_used'] = rem_pct  # Pourcentage affiché aligné sur Antigravity IDE (ex: 94%)
+                        quota_weekly['reset_in'] = r_str
+                        quota_weekly['reset_date'] = r_date_str
+                        quota_weekly['reset_seconds'] = diff_sec
+                        quota_weekly['is_live_rpc'] = True
+                        quota_weekly['antigravity_desc'] = b.get('description', '')
+    except Exception:
+        pass
 
     # La session active est la première (la plus récemment modifiée)
     active_session = sessions[0] if sessions else None

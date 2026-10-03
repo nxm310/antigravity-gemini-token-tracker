@@ -15,9 +15,9 @@
     "is_pro": true,
     "plan_name": "Google AI Pro (Google One AI Premium)",
     "monthly_cost": 21.99,
-    "api_value_total": 25.2786,
-    "api_value_today": 5.4189,
-    "roi_pct": 115.0
+    "api_value_total": 28.4732,
+    "api_value_today": 8.6135,
+    "roi_pct": 129.5
   },
   "model_info": {
     "name": "Gemini 3.8 Flash (High)",
@@ -45,66 +45,74 @@
     "is_pro": true
   },
   "totals": {
-    "input_tokens": 181960324,
-    "output_tokens": 269575,
-    "thinking_tokens": 36979,
-    "total_tokens": 182266878,
-    "total_turns": 1162,
+    "input_tokens": 205026282,
+    "output_tokens": 287326,
+    "thinking_tokens": 40056,
+    "total_tokens": 205353664,
+    "total_turns": 1242,
     "cost_usd": 0.0,
     "cost_eur": 0.0,
-    "api_value_usd": 27.4768,
-    "api_value_eur": 25.2786
+    "api_value_usd": 30.9491,
+    "api_value_eur": 28.4732
   },
   "today": {
     "date": "2026-10-03",
-    "calls": 304,
-    "input_tokens": 38844562,
-    "output_tokens": 92432,
-    "thinking_tokens": 13201,
-    "total_tokens": 38950195,
+    "calls": 384,
+    "input_tokens": 61910520,
+    "output_tokens": 110183,
+    "thinking_tokens": 16278,
+    "total_tokens": 62036981,
     "cost_usd": 0.0,
     "cost_eur": 0.0,
-    "api_value_usd": 5.8901,
-    "api_value_eur": 5.4189
+    "api_value_usd": 9.3625,
+    "api_value_eur": 8.6135
   },
   "quota_5h": {
-    "calls": 304,
+    "calls": 384,
     "max_calls": 250,
-    "tokens": 38950195,
-    "tokens_input": 38844562,
-    "tokens_output": 92432,
-    "tokens_thinking": 13201,
+    "tokens": 62036981,
+    "tokens_input": 61910520,
+    "tokens_output": 110183,
+    "tokens_thinking": 16278,
     "max_tokens": 10000000,
-    "pct_used": 100.0,
-    "reset_in": "dans 4h 11m",
+    "pct_used": 54.6,
+    "remaining_pct": 54.6,
+    "used_pct": 45.4,
+    "reset_in": "dans 3h 59m",
     "reset_date": "Aujourd'hui à 20:06",
-    "reset_seconds": 15094
+    "reset_seconds": 14380,
+    "is_live_rpc": true,
+    "antigravity_desc": "You have used some of your 5-hour limit, it will fully refresh in 4 hours."
   },
   "quota_weekly": {
-    "calls": 602,
+    "calls": 682,
     "max_calls": 1500,
-    "tokens": 78326272,
-    "tokens_input": 78118962,
-    "tokens_output": 182446,
-    "tokens_thinking": 24864,
+    "tokens": 101413058,
+    "tokens_input": 101184920,
+    "tokens_output": 200197,
+    "tokens_thinking": 27941,
     "max_tokens": 60000000,
-    "pct_used": 40.1,
-    "reset_in": "dans 1j 3h",
-    "reset_date": "Dimanche 4 oct. à 19:33",
-    "reset_seconds": 99490
+    "pct_used": 92.4,
+    "remaining_pct": 92.4,
+    "used_pct": 7.6,
+    "reset_in": "dans 6j 22h",
+    "reset_date": "Samedi 10 oct. à 15:06",
+    "reset_seconds": 601180,
+    "is_live_rpc": true,
+    "antigravity_desc": "You have used some of your weekly limit, it will fully refresh in 6 days, 23 hours."
   },
   "active_session": {
     "id": "b1ed90f3-d247-45f4-adc3-add19e8ac7ac",
     "title": "Python Gemini Token Tracker",
     "workspace_name": "tracker token price",
     "workspace_path": "/Users/brunoperrin/Documents/antigravity/tracker token price",
-    "last_modified": "2026-10-03 13:53:12.033684+00:00",
-    "turns": 304,
-    "context_tokens": 256916,
-    "api_input_tokens": 38844562,
-    "api_output_tokens": 92432,
-    "thinking_tokens": 13201,
-    "total_tokens": 38950195,
+    "last_modified": "2026-10-03 14:06:34.736964+00:00",
+    "turns": 384,
+    "context_tokens": 324470,
+    "api_input_tokens": 61910520,
+    "api_output_tokens": 110183,
+    "thinking_tokens": 16278,
+    "total_tokens": 62036981,
     "model_used": "gemini-3.8-flash",
     "costs": {
       "mode": "google_ai_pro",
@@ -114,8 +122,8 @@
       "thinking_cost_usd": 0.0,
       "total_cost_usd": 0.0,
       "total_cost_eur": 0.0,
-      "api_value_usd": 5.890064,
-      "api_value_eur": 5.418859,
+      "api_value_usd": 9.362455,
+      "api_value_eur": 8.613458,
       "model_used": "Gemini 3.8 Flash (High)",
       "rate_input_per_m": 0.15,
       "rate_output_per_m": 0.6,
@@ -123,49 +131,49 @@
     },
     "recent_steps": [
       {
-        "step": 610,
+        "step": 775,
         "type": "PLANNER_RESPONSE",
-        "preview": "...",
-        "output_tokens": 86,
-        "thinking_tokens": 0,
+        "preview": "Verifying `index.html` to identify any required updates based on the modified da...",
+        "output_tokens": 79,
+        "thinking_tokens": 56,
         "tools_count": 1,
-        "time": "2026-10-03T13:54:43Z"
+        "time": "2026-10-03T14:06:41Z"
       },
       {
-        "step": 612,
+        "step": 777,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 77,
+        "output_tokens": 396,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T13:54:48Z"
+        "time": "2026-10-03T14:06:45Z"
       },
       {
-        "step": 614,
+        "step": 779,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 261,
+        "output_tokens": 88,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T13:54:52Z"
+        "time": "2026-10-03T14:06:49Z"
       },
       {
-        "step": 616,
+        "step": 781,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 86,
+        "output_tokens": 105,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T13:54:56Z"
+        "time": "2026-10-03T14:06:51Z"
       },
       {
-        "step": 618,
+        "step": 783,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 80,
+        "output_tokens": 122,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T13:54:59Z"
+        "time": "2026-10-03T14:06:57Z"
       }
     ],
     "turn_events": [
@@ -1992,22 +2000,508 @@
         "input": 256735,
         "output": 80,
         "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:55:02Z",
+        "input": 256916,
+        "output": 109,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:55:11Z",
+        "input": 257141,
+        "output": 82,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:55:15Z",
+        "input": 258064,
+        "output": 97,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:55:24Z",
+        "input": 258658,
+        "output": 104,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:55:38Z",
+        "input": 258962,
+        "output": 144,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:55:45Z",
+        "input": 259603,
+        "output": 98,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:55:50Z",
+        "input": 260199,
+        "output": 185,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:55:54Z",
+        "input": 260698,
+        "output": 122,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:56:01Z",
+        "input": 261036,
+        "output": 127,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T13:56:05Z",
+        "input": 261342,
+        "output": 965,
+        "thinking": 37
+      },
+      {
+        "time": "2026-10-03T13:59:55Z",
+        "input": 262466,
+        "output": 115,
+        "thinking": 129
+      },
+      {
+        "time": "2026-10-03T14:00:06Z",
+        "input": 263772,
+        "output": 97,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:00:16Z",
+        "input": 265123,
+        "output": 127,
+        "thinking": 72
+      },
+      {
+        "time": "2026-10-03T14:00:31Z",
+        "input": 265378,
+        "output": 205,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:00:35Z",
+        "input": 265639,
+        "output": 209,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:00:39Z",
+        "input": 265904,
+        "output": 93,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:00:46Z",
+        "input": 267208,
+        "output": 112,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:00:57Z",
+        "input": 267383,
+        "output": 100,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:01:02Z",
+        "input": 268476,
+        "output": 137,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:01:12Z",
+        "input": 268841,
+        "output": 104,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:01:15Z",
+        "input": 269074,
+        "output": 71,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:01:19Z",
+        "input": 269217,
+        "output": 265,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:01:27Z",
+        "input": 270042,
+        "output": 384,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:01:31Z",
+        "input": 270733,
+        "output": 258,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:01:35Z",
+        "input": 271152,
+        "output": 337,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:01:40Z",
+        "input": 271559,
+        "output": 183,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:01:50Z",
+        "input": 272010,
+        "output": 192,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:02:00Z",
+        "input": 272355,
+        "output": 335,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:02:08Z",
+        "input": 273114,
+        "output": 148,
+        "thinking": 172
+      },
+      {
+        "time": "2026-10-03T14:02:18Z",
+        "input": 274816,
+        "output": 590,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:02:26Z",
+        "input": 275944,
+        "output": 659,
+        "thinking": 114
+      },
+      {
+        "time": "2026-10-03T14:02:39Z",
+        "input": 276893,
+        "output": 93,
+        "thinking": 50
+      },
+      {
+        "time": "2026-10-03T14:02:43Z",
+        "input": 278459,
+        "output": 91,
+        "thinking": 49
+      },
+      {
+        "time": "2026-10-03T14:02:51Z",
+        "input": 279158,
+        "output": 781,
+        "thinking": 244
+      },
+      {
+        "time": "2026-10-03T14:03:07Z",
+        "input": 280944,
+        "output": 92,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:03:11Z",
+        "input": 282071,
+        "output": 1196,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:03:34Z",
+        "input": 284356,
+        "output": 70,
+        "thinking": 61
+      },
+      {
+        "time": "2026-10-03T14:03:40Z",
+        "input": 284559,
+        "output": 78,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:03:43Z",
+        "input": 284790,
+        "output": 87,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:03:45Z",
+        "input": 285933,
+        "output": 78,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:03:47Z",
+        "input": 287033,
+        "output": 78,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:03:51Z",
+        "input": 288451,
+        "output": 78,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:03:55Z",
+        "input": 289738,
+        "output": 77,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:03:57Z",
+        "input": 291049,
+        "output": 77,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:04:00Z",
+        "input": 292345,
+        "output": 121,
+        "thinking": 168
+      },
+      {
+        "time": "2026-10-03T14:04:07Z",
+        "input": 293172,
+        "output": 139,
+        "thinking": 45
+      },
+      {
+        "time": "2026-10-03T14:04:11Z",
+        "input": 293449,
+        "output": 155,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:04:13Z",
+        "input": 294035,
+        "output": 77,
+        "thinking": 206
+      },
+      {
+        "time": "2026-10-03T14:04:20Z",
+        "input": 295590,
+        "output": 76,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:04:23Z",
+        "input": 296659,
+        "output": 75,
+        "thinking": 321
+      },
+      {
+        "time": "2026-10-03T14:04:32Z",
+        "input": 298120,
+        "output": 75,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:04:41Z",
+        "input": 298876,
+        "output": 100,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:04:43Z",
+        "input": 299032,
+        "output": 94,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:04:45Z",
+        "input": 299182,
+        "output": 96,
+        "thinking": 267
+      },
+      {
+        "time": "2026-10-03T14:04:51Z",
+        "input": 299619,
+        "output": 86,
+        "thinking": 89
+      },
+      {
+        "time": "2026-10-03T14:04:58Z",
+        "input": 301047,
+        "output": 83,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:05:01Z",
+        "input": 302072,
+        "output": 79,
+        "thinking": 391
+      },
+      {
+        "time": "2026-10-03T14:05:10Z",
+        "input": 303933,
+        "output": 76,
+        "thinking": 125
+      },
+      {
+        "time": "2026-10-03T14:05:16Z",
+        "input": 304935,
+        "output": 95,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:05:18Z",
+        "input": 305088,
+        "output": 75,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:05:20Z",
+        "input": 305689,
+        "output": 84,
+        "thinking": 406
+      },
+      {
+        "time": "2026-10-03T14:05:29Z",
+        "input": 307438,
+        "output": 80,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:05:33Z",
+        "input": 308912,
+        "output": 1974,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:05:42Z",
+        "input": 311620,
+        "output": 81,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:05:45Z",
+        "input": 312983,
+        "output": 1818,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:05:56Z",
+        "input": 316210,
+        "output": 80,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:05:58Z",
+        "input": 316934,
+        "output": 210,
+        "thinking": 75
+      },
+      {
+        "time": "2026-10-03T14:06:12Z",
+        "input": 317437,
+        "output": 80,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:14Z",
+        "input": 317809,
+        "output": 818,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:22Z",
+        "input": 319370,
+        "output": 92,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:25Z",
+        "input": 319518,
+        "output": 116,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:28Z",
+        "input": 319723,
+        "output": 72,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:30Z",
+        "input": 320661,
+        "output": 90,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:36Z",
+        "input": 320936,
+        "output": 156,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:39Z",
+        "input": 321526,
+        "output": 78,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:41Z",
+        "input": 321774,
+        "output": 79,
+        "thinking": 56
+      },
+      {
+        "time": "2026-10-03T14:06:45Z",
+        "input": 322810,
+        "output": 396,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:49Z",
+        "input": 323539,
+        "output": 88,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:51Z",
+        "input": 323683,
+        "output": 105,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T14:06:57Z",
+        "input": 323973,
+        "output": 122,
+        "thinking": 0
       }
     ],
     "daily_activity": {
       "2026-10-03": {
-        "input_tokens": 38844562,
-        "output_tokens": 92432,
-        "thinking_tokens": 13201,
-        "calls": 304
+        "input_tokens": 61910520,
+        "output_tokens": 110183,
+        "thinking_tokens": 16278,
+        "calls": 384
       }
     },
     "hourly_activity": {
       "2026-10-03 13:00": {
-        "input_tokens": 38844562,
-        "output_tokens": 92432,
-        "thinking_tokens": 13201,
-        "calls": 304
+        "input_tokens": 41699647,
+        "output_tokens": 94580,
+        "thinking_tokens": 13367,
+        "calls": 315
+      },
+      "2026-10-03 14:00": {
+        "input_tokens": 20210873,
+        "output_tokens": 15603,
+        "thinking_tokens": 2911,
+        "calls": 69
       }
     }
   },
@@ -2017,13 +2511,13 @@
       "title": "Python Gemini Token Tracker",
       "workspace_name": "tracker token price",
       "workspace_path": "/Users/brunoperrin/Documents/antigravity/tracker token price",
-      "last_modified": "2026-10-03 13:53:12.033684+00:00",
-      "turns": 304,
-      "context_tokens": 256916,
-      "api_input_tokens": 38844562,
-      "api_output_tokens": 92432,
-      "thinking_tokens": 13201,
-      "total_tokens": 38950195,
+      "last_modified": "2026-10-03 14:06:34.736964+00:00",
+      "turns": 384,
+      "context_tokens": 324470,
+      "api_input_tokens": 61910520,
+      "api_output_tokens": 110183,
+      "thinking_tokens": 16278,
+      "total_tokens": 62036981,
       "model_used": "gemini-3.8-flash",
       "costs": {
         "mode": "google_ai_pro",
@@ -2033,8 +2527,8 @@
         "thinking_cost_usd": 0.0,
         "total_cost_usd": 0.0,
         "total_cost_eur": 0.0,
-        "api_value_usd": 5.890064,
-        "api_value_eur": 5.418859,
+        "api_value_usd": 9.362455,
+        "api_value_eur": 8.613458,
         "model_used": "Gemini 3.8 Flash (High)",
         "rate_input_per_m": 0.15,
         "rate_output_per_m": 0.6,
@@ -2042,49 +2536,49 @@
       },
       "recent_steps": [
         {
-          "step": 610,
+          "step": 775,
           "type": "PLANNER_RESPONSE",
-          "preview": "...",
-          "output_tokens": 86,
-          "thinking_tokens": 0,
+          "preview": "Verifying `index.html` to identify any required updates based on the modified da...",
+          "output_tokens": 79,
+          "thinking_tokens": 56,
           "tools_count": 1,
-          "time": "2026-10-03T13:54:43Z"
+          "time": "2026-10-03T14:06:41Z"
         },
         {
-          "step": 612,
+          "step": 777,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 77,
+          "output_tokens": 396,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T13:54:48Z"
+          "time": "2026-10-03T14:06:45Z"
         },
         {
-          "step": 614,
+          "step": 779,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 261,
+          "output_tokens": 88,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T13:54:52Z"
+          "time": "2026-10-03T14:06:49Z"
         },
         {
-          "step": 616,
+          "step": 781,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 86,
+          "output_tokens": 105,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T13:54:56Z"
+          "time": "2026-10-03T14:06:51Z"
         },
         {
-          "step": 618,
+          "step": 783,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 80,
+          "output_tokens": 122,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T13:54:59Z"
+          "time": "2026-10-03T14:06:57Z"
         }
       ],
       "turn_events": [
@@ -3911,22 +4405,508 @@
           "input": 256735,
           "output": 80,
           "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:55:02Z",
+          "input": 256916,
+          "output": 109,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:55:11Z",
+          "input": 257141,
+          "output": 82,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:55:15Z",
+          "input": 258064,
+          "output": 97,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:55:24Z",
+          "input": 258658,
+          "output": 104,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:55:38Z",
+          "input": 258962,
+          "output": 144,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:55:45Z",
+          "input": 259603,
+          "output": 98,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:55:50Z",
+          "input": 260199,
+          "output": 185,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:55:54Z",
+          "input": 260698,
+          "output": 122,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:56:01Z",
+          "input": 261036,
+          "output": 127,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T13:56:05Z",
+          "input": 261342,
+          "output": 965,
+          "thinking": 37
+        },
+        {
+          "time": "2026-10-03T13:59:55Z",
+          "input": 262466,
+          "output": 115,
+          "thinking": 129
+        },
+        {
+          "time": "2026-10-03T14:00:06Z",
+          "input": 263772,
+          "output": 97,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:00:16Z",
+          "input": 265123,
+          "output": 127,
+          "thinking": 72
+        },
+        {
+          "time": "2026-10-03T14:00:31Z",
+          "input": 265378,
+          "output": 205,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:00:35Z",
+          "input": 265639,
+          "output": 209,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:00:39Z",
+          "input": 265904,
+          "output": 93,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:00:46Z",
+          "input": 267208,
+          "output": 112,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:00:57Z",
+          "input": 267383,
+          "output": 100,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:01:02Z",
+          "input": 268476,
+          "output": 137,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:01:12Z",
+          "input": 268841,
+          "output": 104,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:01:15Z",
+          "input": 269074,
+          "output": 71,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:01:19Z",
+          "input": 269217,
+          "output": 265,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:01:27Z",
+          "input": 270042,
+          "output": 384,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:01:31Z",
+          "input": 270733,
+          "output": 258,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:01:35Z",
+          "input": 271152,
+          "output": 337,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:01:40Z",
+          "input": 271559,
+          "output": 183,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:01:50Z",
+          "input": 272010,
+          "output": 192,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:02:00Z",
+          "input": 272355,
+          "output": 335,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:02:08Z",
+          "input": 273114,
+          "output": 148,
+          "thinking": 172
+        },
+        {
+          "time": "2026-10-03T14:02:18Z",
+          "input": 274816,
+          "output": 590,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:02:26Z",
+          "input": 275944,
+          "output": 659,
+          "thinking": 114
+        },
+        {
+          "time": "2026-10-03T14:02:39Z",
+          "input": 276893,
+          "output": 93,
+          "thinking": 50
+        },
+        {
+          "time": "2026-10-03T14:02:43Z",
+          "input": 278459,
+          "output": 91,
+          "thinking": 49
+        },
+        {
+          "time": "2026-10-03T14:02:51Z",
+          "input": 279158,
+          "output": 781,
+          "thinking": 244
+        },
+        {
+          "time": "2026-10-03T14:03:07Z",
+          "input": 280944,
+          "output": 92,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:03:11Z",
+          "input": 282071,
+          "output": 1196,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:03:34Z",
+          "input": 284356,
+          "output": 70,
+          "thinking": 61
+        },
+        {
+          "time": "2026-10-03T14:03:40Z",
+          "input": 284559,
+          "output": 78,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:03:43Z",
+          "input": 284790,
+          "output": 87,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:03:45Z",
+          "input": 285933,
+          "output": 78,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:03:47Z",
+          "input": 287033,
+          "output": 78,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:03:51Z",
+          "input": 288451,
+          "output": 78,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:03:55Z",
+          "input": 289738,
+          "output": 77,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:03:57Z",
+          "input": 291049,
+          "output": 77,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:04:00Z",
+          "input": 292345,
+          "output": 121,
+          "thinking": 168
+        },
+        {
+          "time": "2026-10-03T14:04:07Z",
+          "input": 293172,
+          "output": 139,
+          "thinking": 45
+        },
+        {
+          "time": "2026-10-03T14:04:11Z",
+          "input": 293449,
+          "output": 155,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:04:13Z",
+          "input": 294035,
+          "output": 77,
+          "thinking": 206
+        },
+        {
+          "time": "2026-10-03T14:04:20Z",
+          "input": 295590,
+          "output": 76,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:04:23Z",
+          "input": 296659,
+          "output": 75,
+          "thinking": 321
+        },
+        {
+          "time": "2026-10-03T14:04:32Z",
+          "input": 298120,
+          "output": 75,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:04:41Z",
+          "input": 298876,
+          "output": 100,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:04:43Z",
+          "input": 299032,
+          "output": 94,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:04:45Z",
+          "input": 299182,
+          "output": 96,
+          "thinking": 267
+        },
+        {
+          "time": "2026-10-03T14:04:51Z",
+          "input": 299619,
+          "output": 86,
+          "thinking": 89
+        },
+        {
+          "time": "2026-10-03T14:04:58Z",
+          "input": 301047,
+          "output": 83,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:05:01Z",
+          "input": 302072,
+          "output": 79,
+          "thinking": 391
+        },
+        {
+          "time": "2026-10-03T14:05:10Z",
+          "input": 303933,
+          "output": 76,
+          "thinking": 125
+        },
+        {
+          "time": "2026-10-03T14:05:16Z",
+          "input": 304935,
+          "output": 95,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:05:18Z",
+          "input": 305088,
+          "output": 75,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:05:20Z",
+          "input": 305689,
+          "output": 84,
+          "thinking": 406
+        },
+        {
+          "time": "2026-10-03T14:05:29Z",
+          "input": 307438,
+          "output": 80,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:05:33Z",
+          "input": 308912,
+          "output": 1974,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:05:42Z",
+          "input": 311620,
+          "output": 81,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:05:45Z",
+          "input": 312983,
+          "output": 1818,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:05:56Z",
+          "input": 316210,
+          "output": 80,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:05:58Z",
+          "input": 316934,
+          "output": 210,
+          "thinking": 75
+        },
+        {
+          "time": "2026-10-03T14:06:12Z",
+          "input": 317437,
+          "output": 80,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:14Z",
+          "input": 317809,
+          "output": 818,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:22Z",
+          "input": 319370,
+          "output": 92,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:25Z",
+          "input": 319518,
+          "output": 116,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:28Z",
+          "input": 319723,
+          "output": 72,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:30Z",
+          "input": 320661,
+          "output": 90,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:36Z",
+          "input": 320936,
+          "output": 156,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:39Z",
+          "input": 321526,
+          "output": 78,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:41Z",
+          "input": 321774,
+          "output": 79,
+          "thinking": 56
+        },
+        {
+          "time": "2026-10-03T14:06:45Z",
+          "input": 322810,
+          "output": 396,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:49Z",
+          "input": 323539,
+          "output": 88,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:51Z",
+          "input": 323683,
+          "output": 105,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T14:06:57Z",
+          "input": 323973,
+          "output": 122,
+          "thinking": 0
         }
       ],
       "daily_activity": {
         "2026-10-03": {
-          "input_tokens": 38844562,
-          "output_tokens": 92432,
-          "thinking_tokens": 13201,
-          "calls": 304
+          "input_tokens": 61910520,
+          "output_tokens": 110183,
+          "thinking_tokens": 16278,
+          "calls": 384
         }
       },
       "hourly_activity": {
         "2026-10-03 13:00": {
-          "input_tokens": 38844562,
-          "output_tokens": 92432,
-          "thinking_tokens": 13201,
-          "calls": 304
+          "input_tokens": 41699647,
+          "output_tokens": 94580,
+          "thinking_tokens": 13367,
+          "calls": 315
+        },
+        "2026-10-03 14:00": {
+          "input_tokens": 20210873,
+          "output_tokens": 15603,
+          "thinking_tokens": 2911,
+          "calls": 69
         }
       }
     },
@@ -9453,10 +10433,10 @@
   ],
   "daily_trends": {
     "2026-10-03": {
-      "input_tokens": 38844562,
-      "output_tokens": 92432,
-      "thinking_tokens": 13201,
-      "calls": 304,
+      "input_tokens": 61910520,
+      "output_tokens": 110183,
+      "thinking_tokens": 16278,
+      "calls": 384,
       "cost_usd": 0.0,
       "cost_eur": 0.0
     },
