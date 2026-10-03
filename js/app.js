@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initDropzoneEvents();
   initGlobalDragAndDrop();
 
-  // Test si un serveur Python tourne en local
+  // 1. Test si un serveur Python tourne en local
   const hasLocalServer = await checkLocalServer();
   if (hasLocalServer) {
     appState.mode = "server";
@@ -99,11 +99,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     setInterval(fetchServerDashboard, 3500);
   } else {
     appState.mode = "browser";
-    // Tenter de restaurer la connexion IndexedDB au dossier Antigravity
+    // 2. Tenter de restaurer la connexion IndexedDB au dossier Antigravity
     const restored = await tryRestoreDirectoryAccess();
     if (!restored) {
-      // Charger les données de démonstration pour que l'interface soit immédiatement visuelle
-      loadDemoData();
+      // 3. Charger le snapshot réel data.json s'il existe !
+      const loadedRealSnapshot = await tryLoadDataJsonSnapshot();
+      if (!loadedRealSnapshot) {
+        // En dernier recours, données d'exemple
+        loadDemoData();
+      }
     }
   }
 });
@@ -238,25 +242,64 @@ function initEventListeners() {
   });
 }
 
-// --- DÉTECTION SERVEUR PYTHON LOCAL ---
+// --- DÉTECTION SERVEUR PYTHON LOCAL & SNAPSHOT DATA.JSON ---
 async function checkLocalServer() {
   try {
     const res = await fetch("/api/status", { signal: AbortSignal.timeout(1000) });
-    return res.ok;
-  } catch (e) {
-    return false;
+    if (res.ok) {
+      appState.serverUrl = "";
+      return true;
+    }
+  } catch (e) {}
+
+  // Si on est sur https:// ou un autre domaine, tenter la connexion à l'instance locale
+  if (window.location.hostname !== "127.0.0.1" && window.location.hostname !== "localhost") {
+    try {
+      const res = await fetch("http://127.0.0.1:5050/api/status", {
+        signal: AbortSignal.timeout(1200),
+        mode: "cors"
+      });
+      if (res.ok) {
+        appState.serverUrl = "http://127.0.0.1:5050";
+        return true;
+      }
+    } catch (e) {}
   }
+  return false;
 }
 
 async function fetchServerDashboard() {
   try {
-    const res = await fetch("/api/status");
+    const baseUrl = appState.serverUrl || "";
+    const res = await fetch(`${baseUrl}/api/status`);
     if (!res.ok) return;
     const data = await res.json();
     renderAll(data);
   } catch (err) {
     console.warn("Échec refresh serveur:", err);
   }
+}
+
+// Chargement automatique du snapshot data.json contenant les métriques réelles d'Antigravity
+async function tryLoadDataJsonSnapshot() {
+  try {
+    const res = await fetch("./data.json", { cache: "no-cache" });
+    if (!res.ok) return false;
+    const data = await res.json();
+    if (data && data.quota_5h && data.totals) {
+      if (data.config) {
+        appConfig = { ...appConfig, ...data.config };
+        initUIFromConfig();
+      }
+      renderAll(data);
+      updateLiveBadge("Données Antigravity Réelles", "#10b981");
+      updateConnectBannerStatus(true, "Synchronisé avec vos métriques réelles Antigravity");
+      return true;
+    }
+  } catch (e) {
+    console.warn("Snapshot data.json non disponible:", e);
+  }
+  return false;
 }
 
 // --- GESTION DU DOSSIER LOCAL ANTIGRAVITY (FILE SYSTEM ACCESS API) ---
@@ -694,6 +737,9 @@ function recomputeAll() {
       if (evTime >= sevenDaysAgo) {
         calls7d++;
         tokens7d += evTokens;
+        if (oldest7dTime === null || evTime < oldest7dTime) {
+          oldest7dTime = evTime;
+        }
       }
     }
   }
@@ -708,13 +754,54 @@ function recomputeAll() {
   const pct5h = Math.min(100.0, parseFloat(((calls5h / maxCalls5h) * 100).toFixed(1)));
   const pct7d = Math.min(100.0, parseFloat(((calls7d / maxCalls7d) * 100).toFixed(1)));
 
-  let resetStr = "Prêt (aucun appel actif)";
+  const JOURS_FR = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+  const MOIS_FR = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+
+  // Calcul décompte et date exacte de reset pour 5 heures
+  let reset5hStr = "Prêt (aucun appel actif)";
+  let reset5hDate = "Prêt";
+  let diffSec5h = 0;
   if (oldest5hTime) {
     const resetTime = oldest5hTime + 5 * 3600 * 1000;
-    const diffSec = Math.max(0, Math.floor((resetTime - now) / 1000));
-    const h = Math.floor(diffSec / 3600);
-    const m = Math.floor((diffSec % 3600) / 60);
-    resetStr = h > 0 ? `dans ${h}h ${m}m` : `dans ${m} min`;
+    diffSec5h = Math.max(0, Math.floor((resetTime - now) / 1000));
+    const h = Math.floor(diffSec5h / 3600);
+    const m = Math.floor((diffSec5h % 3600) / 60);
+    reset5hStr = h > 0 ? `dans ${h}h ${m}m` : `dans ${m} min`;
+
+    const d5 = new Date(resetTime);
+    const isToday = d5.toDateString() === new Date().toDateString();
+    if (isToday) {
+      reset5hDate = `Aujourd'hui à ${String(d5.getHours()).padStart(2, '0')}:${String(d5.getMinutes()).padStart(2, '0')}`;
+    } else {
+      const jNom = JOURS_FR[d5.getDay() === 0 ? 6 : d5.getDay() - 1];
+      const mNom = MOIS_FR[d5.getMonth()];
+      reset5hDate = `${jNom} ${d5.getDate()} ${mNom} à ${String(d5.getHours()).padStart(2, '0')}:${String(d5.getMinutes()).padStart(2, '0')}`;
+    }
+  }
+
+  // Calcul décompte et jour exact de remise à 0 pour 7 jours
+  let reset7dStr = "Prêt (aucun appel actif)";
+  let reset7dDate = "Prêt";
+  let diffSec7d = 0;
+  if (oldest7dTime) {
+    const resetTime7d = oldest7dTime + 7 * 24 * 3600 * 1000;
+    diffSec7d = Math.max(0, Math.floor((resetTime7d - now) / 1000));
+    const d7 = Math.floor(diffSec7d / 86400);
+    const h7 = Math.floor((diffSec7d % 86400) / 3600);
+    const m7 = Math.floor((diffSec7d % 3600) / 60);
+
+    if (d7 > 0) {
+      reset7dStr = `dans ${d7}j ${h7}h`;
+    } else if (h7 > 0) {
+      reset7dStr = `dans ${h7}h ${m7}m`;
+    } else {
+      reset7dStr = `dans ${m7} min`;
+    }
+
+    const d7Obj = new Date(resetTime7d);
+    const j7Nom = JOURS_FR[d7Obj.getDay() === 0 ? 6 : d7Obj.getDay() - 1];
+    const m7Nom = MOIS_FR[d7Obj.getMonth()];
+    reset7dDate = `${j7Nom} ${d7Obj.getDate()} ${m7Nom} à ${String(d7Obj.getHours()).padStart(2, '0')}:${String(d7Obj.getMinutes()).padStart(2, '0')}`;
   }
 
   const renderData = {
@@ -740,13 +827,18 @@ function recomputeAll() {
       max_calls: maxCalls5h,
       tokens: tokens5h,
       pct_used: pct5h,
-      reset_in: resetStr
+      reset_in: reset5hStr,
+      reset_date: reset5hDate,
+      reset_seconds: diffSec5h
     },
     quota_weekly: {
       calls: calls7d,
       max_calls: maxCalls7d,
       tokens: tokens7d,
-      pct_used: pct7d
+      pct_used: pct7d,
+      reset_in: reset7dStr,
+      reset_date: reset7dDate,
+      reset_seconds: diffSec7d
     },
     active_session: appState.activeSession,
     sessions: sessions,
@@ -905,6 +997,7 @@ function renderKPIs(data) {
   const kpi5hVal = document.getElementById("kpi5hVal");
   const kpi5hBar = document.getElementById("kpi5hBar");
   const kpi5hReset = document.getElementById("kpi5hReset");
+  const kpi5hExactDate = document.getElementById("kpi5hExactDate");
   const kpi5hCalls = document.getElementById("kpi5hCallsText");
   const kpi5hTokens = document.getElementById("kpi5hTokens");
 
@@ -918,12 +1011,15 @@ function renderKPIs(data) {
     kpi5hBar.className = `progress-bar-fill ${pct5 > 80 ? "bg-rose" : (pct5 > 50 ? "bg-amber" : "bg-cyan")}`;
   }
   if (kpi5hReset) kpi5hReset.textContent = `⏱️ ${q5h.reset_in || "Prêt"}`;
+  if (kpi5hExactDate) kpi5hExactDate.textContent = `📅 Reset : ${q5h.reset_date || "Prêt"}`;
   if (kpi5hCalls) kpi5hCalls.textContent = `${formatNumber(q5h.calls || 0)} / ${formatNumber(q5h.max_calls || 250)} appels`;
   if (kpi5hTokens) kpi5hTokens.textContent = `${formatNumber(q5h.tokens || 0)} tokens`;
 
   // KPI 4 : Limite sur la semaine (%)
   const kpiWeeklyVal = document.getElementById("kpiWeeklyVal");
   const kpiWeeklyBar = document.getElementById("kpiWeeklyBar");
+  const kpiWeeklyReset = document.getElementById("kpiWeeklyReset");
+  const kpiWeeklyExactDate = document.getElementById("kpiWeeklyExactDate");
   const kpiWeeklyCalls = document.getElementById("kpiWeeklyCallsText");
   const kpiWeeklyTokens = document.getElementById("kpiWeeklyTokens");
   const kpiWeeklyStatus = document.getElementById("kpiWeeklyStatus");
@@ -937,6 +1033,8 @@ function renderKPIs(data) {
     kpiWeeklyBar.style.width = `${Math.max(2, pct7)}%`;
     kpiWeeklyBar.className = `progress-bar-fill ${pct7 > 80 ? "bg-rose" : (pct7 > 50 ? "bg-amber" : "bg-emerald")}`;
   }
+  if (kpiWeeklyReset) kpiWeeklyReset.textContent = `⏱️ ${q7d.reset_in || "Prêt"}`;
+  if (kpiWeeklyExactDate) kpiWeeklyExactDate.textContent = `📅 Remise à 0 : ${q7d.reset_date || "Prêt"}`;
   if (kpiWeeklyCalls) kpiWeeklyCalls.textContent = `${formatNumber(q7d.calls || 0)} / ${formatNumber(q7d.max_calls || 1500)} appels`;
   if (kpiWeeklyTokens) kpiWeeklyTokens.textContent = `${formatNumber(q7d.tokens || 0)} tokens sur 7j`;
   if (kpiWeeklyStatus) {

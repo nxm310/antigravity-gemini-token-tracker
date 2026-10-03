@@ -418,6 +418,7 @@ def scan_all_sessions(
     tokens_7d_in = 0
     tokens_7d_out = 0
     tokens_7d_think = 0
+    oldest_in_7d = None
 
     for s in sessions:
         for te in s.get("turn_events", []):
@@ -446,6 +447,8 @@ def scan_all_sessions(
                 tokens_7d_in += in_t
                 tokens_7d_out += out_t
                 tokens_7d_think += th_t
+                if oldest_in_7d is None or dt < oldest_in_7d:
+                    oldest_in_7d = dt
 
     # Limites selon le statut (Abonnement Pro / Pay-as-you-go vs Free Tier)
     is_pro = (pricing_mode == "google_ai_pro")
@@ -455,6 +458,11 @@ def scan_all_sessions(
     max_calls_7d = 1500 if is_pro else (300 if pricing_mode == "free_tier" else 3000)
     max_tokens_7d = 60_000_000 if is_pro else (12_000_000 if pricing_mode == "free_tier" else 120_000_000)
 
+    # Fuseau horaire local et noms de jours/mois en français
+    local_tz = datetime.now().astimezone().tzinfo
+    JOURS_FR = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+    MOIS_FR = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."]
+
     # Réinitialisation de la fenêtre de 5 heures
     if oldest_in_5h:
         reset_dt = oldest_in_5h + timedelta(hours=5)
@@ -462,9 +470,42 @@ def scan_all_sessions(
         h = diff_sec // 3600
         m = (diff_sec % 3600) // 60
         reset_str = f"dans {h}h {m}m" if h > 0 else f"dans {m} min"
+
+        reset_dt_local = reset_dt.astimezone(local_tz)
+        if reset_dt_local.date() == datetime.now().date():
+            reset_5h_date = f"Aujourd'hui à {reset_dt_local.strftime('%H:%M')}"
+        else:
+            j_nom = JOURS_FR[reset_dt_local.weekday()]
+            m_nom = MOIS_FR[reset_dt_local.month - 1]
+            reset_5h_date = f"{j_nom} {reset_dt_local.day} {m_nom} à {reset_dt_local.strftime('%H:%M')}"
     else:
         reset_str = "Prêt (aucun appel actif)"
+        reset_5h_date = "Prêt"
         diff_sec = 0
+
+    # Réinitialisation de la fenêtre hebdomadaire de 7 jours (compte à rebours + jour exact de remise à 0)
+    if oldest_in_7d:
+        reset_dt_7d = oldest_in_7d + timedelta(days=7)
+        diff_sec_7d = max(0, int((reset_dt_7d - now).total_seconds()))
+        d_7d = diff_sec_7d // 86400
+        h_7d = (diff_sec_7d % 86400) // 3600
+        m_7d = (diff_sec_7d % 3600) // 60
+
+        if d_7d > 0:
+            reset_7d_str = f"dans {d_7d}j {h_7d}h"
+        elif h_7d > 0:
+            reset_7d_str = f"dans {h_7d}h {m_7d}m"
+        else:
+            reset_7d_str = f"dans {m_7d} min"
+
+        reset_7d_local = reset_dt_7d.astimezone(local_tz)
+        j7_nom = JOURS_FR[reset_7d_local.weekday()]
+        m7_nom = MOIS_FR[reset_7d_local.month - 1]
+        reset_7d_date = f"{j7_nom} {reset_7d_local.day} {m7_nom} à {reset_7d_local.strftime('%H:%M')}"
+    else:
+        reset_7d_str = "Prêt (aucun appel actif)"
+        reset_7d_date = "Prêt"
+        diff_sec_7d = 0
 
     tot_tokens_5h = tokens_5h_in + tokens_5h_out + tokens_5h_think
     tot_tokens_7d = tokens_7d_in + tokens_7d_out + tokens_7d_think
@@ -482,6 +523,7 @@ def scan_all_sessions(
         "max_tokens": max_tokens_5h,
         "pct_used": pct_5h,
         "reset_in": reset_str,
+        "reset_date": reset_5h_date,
         "reset_seconds": diff_sec
     }
 
@@ -493,7 +535,10 @@ def scan_all_sessions(
         "tokens_output": tokens_7d_out,
         "tokens_thinking": tokens_7d_think,
         "max_tokens": max_tokens_7d,
-        "pct_used": pct_7d
+        "pct_used": pct_7d,
+        "reset_in": reset_7d_str,
+        "reset_date": reset_7d_date,
+        "reset_seconds": diff_sec_7d
     }
 
     # La session active est la première (la plus récemment modifiée)

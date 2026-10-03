@@ -36,8 +36,8 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Ignorer les requêtes externes API (Google AI Studio, etc.) et requêtes non-GET
-  if (event.request.method !== 'GET' || event.request.url.includes('generativelanguage.googleapis.com')) {
+  // Ignorer les requêtes externes API (Google AI Studio, etc.), les snapshots data.json et requêtes non-GET
+  if (event.request.method !== 'GET' || event.request.url.includes('generativelanguage.googleapis.com') || event.request.url.includes('data.json')) {
     return;
   }
 

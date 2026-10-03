@@ -25,7 +25,7 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
         pass
 
     def send_json(self, data: Any, status: int = 200):
-        """Envoie une réponse JSON avec en-têtes CORS."""
+        """Envoie une réponse JSON avec en-têtes CORS et Private Network Access."""
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -33,16 +33,18 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Private-Network", "true")
         self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.end_headers()
         self.wfile.write(body)
 
     def do_OPTIONS(self):
-        """Gère les requêtes préliminaires CORS."""
+        """Gère les requêtes préliminaires CORS et Private Network Access."""
         self.send_response(204)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Private-Network", "true")
         self.end_headers()
 
     def do_HEAD(self):
@@ -149,7 +151,7 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             quota_tpm = model_spec["paid_tpm"]
             quota_rpd = 50_000
 
-        self.send_json({
+        resp_data = {
             "status": "online",
             "has_api_key": has_api_key,
             "api_key_masked": api_key_masked,
@@ -183,8 +185,24 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             "quota_5h": scan.get("quota_5h", {}),
             "quota_weekly": scan.get("quota_weekly", {}),
             "active_session": scan["active_session"],
+            "sessions": scan.get("sessions", [])[:15],
+            "daily_trends": scan.get("daily_trends", {}),
             "alerts": alerts
-        })
+        }
+
+        # Sauvegarde automatique du snapshot dans data.json pour la version web statique
+        try:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            json_path = os.path.join(base_dir, "data.json")
+            with open(json_path, "w", encoding="utf-8") as jf:
+                json.dump(resp_data, jf, ensure_ascii=False, indent=2)
+            static_json_path = os.path.join(base_dir, "static", "data.json")
+            with open(static_json_path, "w", encoding="utf-8") as sjf:
+                json.dump(resp_data, sjf, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+
+        self.send_json(resp_data)
 
     def handle_api_sessions(self):
         """Retourne la liste de toutes les sessions avec métriques."""
