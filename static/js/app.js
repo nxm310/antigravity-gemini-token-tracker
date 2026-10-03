@@ -198,33 +198,59 @@ function startLiveCountdownTicker() {
     const kpiWReset = document.getElementById("kpiWeeklyReset");
 
     if (appState.resetTime5h && kpi5Reset) {
-      const diff5 = Math.max(0, Math.floor((appState.resetTime5h - now) / 1000));
+      const diff5 = Math.floor((appState.resetTime5h - now) / 1000);
       if (diff5 > 0) {
         const h = Math.floor(diff5 / 3600);
         const m = Math.floor((diff5 % 3600) / 60);
         const s = diff5 % 60;
         kpi5Reset.textContent = h > 0 ? `⏱️ dans ${h}h ${m}m ${s}s` : `⏱️ dans ${m}m ${s}s`;
       } else {
-        kpi5Reset.textContent = "⏱️ Prêt";
+        kpi5Reset.textContent = "⏱️ Prêt (Rechargé à 100%)";
+        const kpi5Date = document.getElementById("kpi5hExactDate");
+        if (kpi5Date) kpi5Date.textContent = "📅 Reset : Prêt";
+        const kpi5Val = document.getElementById("kpi5hVal");
+        if (kpi5Val && !kpi5Val.textContent.includes("100%")) {
+          kpi5Val.innerHTML = '100% <span style="font-size: 0.5em; font-weight: normal; opacity: 0.85;">restant</span>';
+          kpi5Val.style.color = "#38bdf8";
+        }
+        const kpi5Bar = document.getElementById("kpi5hBar");
+        if (kpi5Bar) {
+          kpi5Bar.style.width = "100%";
+          kpi5Bar.className = "progress-bar-fill bg-cyan";
+        }
+        appState.resetTime5h = null;
       }
     }
 
     if (appState.resetTime7d && kpiWReset) {
-      const diff7 = Math.max(0, Math.floor((appState.resetTime7d - now) / 1000));
+      const diff7 = Math.floor((appState.resetTime7d - now) / 1000);
       if (diff7 > 0) {
         const d = Math.floor(diff7 / 86400);
         const h = Math.floor((diff7 % 86400) / 3600);
         const m = Math.floor((diff7 % 3600) / 60);
         const s = diff7 % 60;
         if (d > 0) {
-          kpiWReset.textContent = `⏱️ dans ${d}j ${h}h ${m}m`;
+          kpiWReset.textContent = `⏱️ dans ${d}j ${h}h ${m}m ${s}s`;
         } else if (h > 0) {
           kpiWReset.textContent = `⏱️ dans ${h}h ${m}m ${s}s`;
         } else {
           kpiWReset.textContent = `⏱️ dans ${m}m ${s}s`;
         }
       } else {
-        kpiWReset.textContent = "⏱️ Prêt";
+        kpiWReset.textContent = "⏱️ Prêt (Rechargé à 100%)";
+        const kpiWDate = document.getElementById("kpiWeeklyExactDate");
+        if (kpiWDate) kpiWDate.textContent = "📅 Remise à 0 : Prêt";
+        const kpiWVal = document.getElementById("kpiWeeklyVal");
+        if (kpiWVal && !kpiWVal.textContent.includes("100%")) {
+          kpiWVal.innerHTML = '100% <span style="font-size: 0.5em; font-weight: normal; opacity: 0.85;">restant</span>';
+          kpiWVal.style.color = "#34d399";
+        }
+        const kpiWBar = document.getElementById("kpiWeeklyBar");
+        if (kpiWBar) {
+          kpiWBar.style.width = "100%";
+          kpiWBar.className = "progress-bar-fill bg-emerald";
+        }
+        appState.resetTime7d = null;
       }
     }
   }, 1000);
@@ -433,7 +459,7 @@ async function fetchServerDashboard() {
 // Chargement automatique du snapshot data.json contenant les métriques réelles d'Antigravity
 async function tryLoadDataJsonSnapshot() {
   try {
-    const res = await fetch("./data.json", { cache: "no-cache" });
+    const res = await fetch("./data.json?t=" + Date.now(), { cache: "no-store" });
     if (!res.ok) return false;
     const data = await res.json();
     if (data && data.quota_5h && data.totals) {
@@ -921,21 +947,33 @@ function recomputeAll() {
   let reset5hStr = "Prêt (aucun appel actif)";
   let reset5hDate = "Prêt";
   let diffSec5h = 0;
+  let reset5hIso = "";
   if (oldest5hTime) {
     const resetTime = oldest5hTime + 5 * 3600 * 1000;
     diffSec5h = Math.max(0, Math.floor((resetTime - now) / 1000));
-    const h = Math.floor(diffSec5h / 3600);
-    const m = Math.floor((diffSec5h % 3600) / 60);
-    reset5hStr = h > 0 ? `dans ${h}h ${m}m` : `dans ${m} min`;
+    reset5hIso = new Date(resetTime).toISOString();
 
-    const d5 = new Date(resetTime);
-    const isToday = d5.toDateString() === new Date().toDateString();
-    if (isToday) {
-      reset5hDate = `Aujourd'hui à ${String(d5.getHours()).padStart(2, '0')}:${String(d5.getMinutes()).padStart(2, '0')}`;
+    if (diffSec5h <= 0) {
+      reset5hStr = "Prêt (100% disponible)";
+      reset5hDate = "Prêt";
+      calls5h = 0;
+      tokens5h = 0;
+      rem5h = 100;
+      used5h = 0;
     } else {
-      const jNom = JOURS_FR[d5.getDay() === 0 ? 6 : d5.getDay() - 1];
-      const mNom = MOIS_FR[d5.getMonth()];
-      reset5hDate = `${jNom} ${d5.getDate()} ${mNom} à ${String(d5.getHours()).padStart(2, '0')}:${String(d5.getMinutes()).padStart(2, '0')}`;
+      const h = Math.floor(diffSec5h / 3600);
+      const m = Math.floor((diffSec5h % 3600) / 60);
+      reset5hStr = h > 0 ? `dans ${h}h ${m}m` : `dans ${m} min`;
+
+      const d5 = new Date(resetTime);
+      const isToday = d5.toDateString() === new Date().toDateString();
+      if (isToday) {
+        reset5hDate = `Aujourd'hui à ${String(d5.getHours()).padStart(2, '0')}:${String(d5.getMinutes()).padStart(2, '0')}`;
+      } else {
+        const jNom = JOURS_FR[d5.getDay() === 0 ? 6 : d5.getDay() - 1];
+        const mNom = MOIS_FR[d5.getMonth()];
+        reset5hDate = `${jNom} ${d5.getDate()} ${mNom} à ${String(d5.getHours()).padStart(2, '0')}:${String(d5.getMinutes()).padStart(2, '0')}`;
+      }
     }
   }
 
@@ -943,25 +981,37 @@ function recomputeAll() {
   let reset7dStr = "Prêt (aucun appel actif)";
   let reset7dDate = "Prêt";
   let diffSec7d = 0;
+  let reset7dIso = "";
   if (oldest7dTime) {
     const resetTime7d = oldest7dTime + 7 * 24 * 3600 * 1000;
     diffSec7d = Math.max(0, Math.floor((resetTime7d - now) / 1000));
-    const d7 = Math.floor(diffSec7d / 86400);
-    const h7 = Math.floor((diffSec7d % 86400) / 3600);
-    const m7 = Math.floor((diffSec7d % 3600) / 60);
+    reset7dIso = new Date(resetTime7d).toISOString();
 
-    if (d7 > 0) {
-      reset7dStr = `dans ${d7}j ${h7}h`;
-    } else if (h7 > 0) {
-      reset7dStr = `dans ${h7}h ${m7}m`;
+    if (diffSec7d <= 0) {
+      reset7dStr = "Prêt (100% disponible)";
+      reset7dDate = "Prêt";
+      calls7d = 0;
+      tokens7d = 0;
+      rem7d = 100;
+      used7d = 0;
     } else {
-      reset7dStr = `dans ${m7} min`;
-    }
+      const d7 = Math.floor(diffSec7d / 86400);
+      const h7 = Math.floor((diffSec7d % 86400) / 3600);
+      const m7 = Math.floor((diffSec7d % 3600) / 60);
 
-    const d7Obj = new Date(resetTime7d);
-    const j7Nom = JOURS_FR[d7Obj.getDay() === 0 ? 6 : d7Obj.getDay() - 1];
-    const m7Nom = MOIS_FR[d7Obj.getMonth()];
-    reset7dDate = `${j7Nom} ${d7Obj.getDate()} ${m7Nom} à ${String(d7Obj.getHours()).padStart(2, '0')}:${String(d7Obj.getMinutes()).padStart(2, '0')}`;
+      if (d7 > 0) {
+        reset7dStr = `dans ${d7}j ${h7}h`;
+      } else if (h7 > 0) {
+        reset7dStr = `dans ${h7}h ${m7}m`;
+      } else {
+        reset7dStr = `dans ${m7} min`;
+      }
+
+      const d7Obj = new Date(resetTime7d);
+      const j7Nom = JOURS_FR[d7Obj.getDay() === 0 ? 6 : d7Obj.getDay() - 1];
+      const m7Nom = MOIS_FR[d7Obj.getMonth()];
+      reset7dDate = `${j7Nom} ${d7Obj.getDate()} ${m7Nom} à ${String(d7Obj.getHours()).padStart(2, '0')}:${String(d7Obj.getMinutes()).padStart(2, '0')}`;
+    }
   }
 
   const renderData = {
@@ -992,6 +1042,7 @@ function recomputeAll() {
       reset_in: reset5hStr,
       reset_date: reset5hDate,
       reset_seconds: diffSec5h,
+      reset_time_iso: reset5hIso,
       is_live_rpc: false
     },
     quota_weekly: {
@@ -1004,6 +1055,7 @@ function recomputeAll() {
       reset_in: reset7dStr,
       reset_date: reset7dDate,
       reset_seconds: diffSec7d,
+      reset_time_iso: reset7dIso,
       is_live_rpc: false
     },
     active_session: appState.activeSession,
@@ -1144,6 +1196,29 @@ function formatDateTime(d) {
   }
 }
 
+function formatResetDateFromIso(isoString, fallbackStr) {
+  if (!isoString) return fallbackStr || "Prêt";
+  const d = new Date(isoString);
+  if (isNaN(d.getTime())) return fallbackStr || "Prêt";
+  const now = new Date();
+  if (d.getTime() <= now.getTime()) return "Prêt";
+
+  const isToday = d.toDateString() === now.toDateString();
+  const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  const isTomorrow = d.toDateString() === tomorrow.toDateString();
+  const timeStr = d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+
+  if (isToday) {
+    return `Aujourd'hui à ${timeStr}`;
+  } else if (isTomorrow) {
+    return `Demain à ${timeStr}`;
+  } else {
+    const dayName = d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "short" });
+    const capDayName = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+    return `${capDayName} à ${timeStr}`;
+  }
+}
+
 // --- AFFICHAGE & RENDU DU DASHBOARD ---
 function renderAll(data) {
   appState.latestData = data;
@@ -1223,15 +1298,58 @@ function renderKPIs(data) {
   if (kpiThinkingTokens) kpiThinkingTokens.textContent = `${formatNumber(totals.thinking_tokens)} thinking`;
 
   // Enregistrement des cibles de réinitialisation pour le compte à rebours dynamique
-  if (q5h.reset_seconds !== undefined && q5h.reset_seconds > 0) {
+  let resetDate5hStr = q5h.reset_date || "Prêt";
+  if (q5h.reset_time_iso) {
+    const target5 = new Date(q5h.reset_time_iso).getTime();
+    if (!isNaN(target5) && target5 > Date.now()) {
+      appState.resetTime5h = target5;
+      resetDate5hStr = formatResetDateFromIso(q5h.reset_time_iso, q5h.reset_date);
+      const diff5 = Math.floor((target5 - Date.now()) / 1000);
+      const h5 = Math.floor(diff5 / 3600);
+      const m5 = Math.floor((diff5 % 3600) / 60);
+      const s5 = diff5 % 60;
+      q5h.reset_in = h5 > 0 ? `dans ${h5}h ${m5}m ${s5}s` : `dans ${m5}m ${s5}s`;
+    } else {
+      appState.resetTime5h = null;
+      resetDate5hStr = "Prêt";
+      q5h.reset_in = "Prêt (100% disponible)";
+      q5h.remaining_pct = 100;
+      q5h.used_pct = 0;
+    }
+  } else if (q5h.reset_seconds !== undefined && q5h.reset_seconds > 0) {
     appState.resetTime5h = Date.now() + (q5h.reset_seconds * 1000);
-  } else if (!q5h.reset_seconds) {
+  } else {
     appState.resetTime5h = null;
   }
 
-  if (q7d.reset_seconds !== undefined && q7d.reset_seconds > 0) {
+  let resetDate7dStr = q7d.reset_date || "Prêt";
+  if (q7d.reset_time_iso) {
+    const target7 = new Date(q7d.reset_time_iso).getTime();
+    if (!isNaN(target7) && target7 > Date.now()) {
+      appState.resetTime7d = target7;
+      resetDate7dStr = formatResetDateFromIso(q7d.reset_time_iso, q7d.reset_date);
+      const diff7 = Math.floor((target7 - Date.now()) / 1000);
+      const d7 = Math.floor(diff7 / 86400);
+      const h7 = Math.floor((diff7 % 86400) / 3600);
+      const m7 = Math.floor((diff7 % 3600) / 60);
+      const s7 = diff7 % 60;
+      if (d7 > 0) {
+        q7d.reset_in = `dans ${d7}j ${h7}h ${m7}m ${s7}s`;
+      } else if (h7 > 0) {
+        q7d.reset_in = `dans ${h7}h ${m7}m ${s7}s`;
+      } else {
+        q7d.reset_in = `dans ${m7}m ${s7}s`;
+      }
+    } else {
+      appState.resetTime7d = null;
+      resetDate7dStr = "Prêt";
+      q7d.reset_in = "Prêt (100% disponible)";
+      q7d.remaining_pct = 100;
+      q7d.used_pct = 0;
+    }
+  } else if (q7d.reset_seconds !== undefined && q7d.reset_seconds > 0) {
     appState.resetTime7d = Date.now() + (q7d.reset_seconds * 1000);
-  } else if (!q7d.reset_seconds) {
+  } else {
     appState.resetTime7d = null;
   }
 
@@ -1255,7 +1373,7 @@ function renderKPIs(data) {
     kpi5hBar.className = `progress-bar-fill ${rem5 < 20 ? "bg-rose" : (rem5 < 50 ? "bg-amber" : "bg-cyan")}`;
   }
   if (kpi5hReset) kpi5hReset.textContent = `⏱️ ${q5h.reset_in || "Prêt"}`;
-  if (kpi5hExactDate) kpi5hExactDate.textContent = `📅 Reset : ${q5h.reset_date || "Prêt"}`;
+  if (kpi5hExactDate) kpi5hExactDate.textContent = `📅 Reset : ${resetDate5hStr}`;
   if (kpi5hCalls) {
     if (q5h.is_live_rpc) {
       kpi5hCalls.textContent = `${used5}% consommé (${formatNumber(q5h.calls || 0)} appels)`;
@@ -1286,7 +1404,7 @@ function renderKPIs(data) {
     kpiWeeklyBar.className = `progress-bar-fill ${rem7 < 20 ? "bg-rose" : (rem7 < 50 ? "bg-amber" : "bg-emerald")}`;
   }
   if (kpiWeeklyReset) kpiWeeklyReset.textContent = `⏱️ ${q7d.reset_in || "Prêt"}`;
-  if (kpiWeeklyExactDate) kpiWeeklyExactDate.textContent = `📅 Remise à 0 : ${q7d.reset_date || "Prêt"}`;
+  if (kpiWeeklyExactDate) kpiWeeklyExactDate.textContent = `📅 Remise à 0 : ${resetDate7dStr}`;
   if (kpiWeeklyCalls) {
     if (q7d.is_live_rpc) {
       kpiWeeklyCalls.textContent = `${used7}% consommé (${formatNumber(q7d.calls || 0)} appels)`;
@@ -2028,7 +2146,7 @@ function renderMonthlyRecapModal(data) {
 }
 
 // --- GESTION DU CHANGELOG & NOUVEAUTÉS ---
-const CURRENT_APP_VERSION = "1.5.0";
+const CURRENT_APP_VERSION = "1.5.1";
 
 function openChangelogModal() {
   const modal = document.getElementById("changelogModal");

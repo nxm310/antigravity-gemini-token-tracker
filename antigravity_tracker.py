@@ -538,19 +538,29 @@ def scan_all_sessions(
         diff_sec = max(0, int((reset_dt - now).total_seconds()))
         h = diff_sec // 3600
         m = (diff_sec % 3600) // 60
-        reset_str = f"dans {h}h {m}m" if h > 0 else f"dans {m} min"
+        reset_5h_iso = reset_dt.isoformat()
 
-        reset_dt_local = reset_dt.astimezone(local_tz)
-        if reset_dt_local.date() == datetime.now().date():
-            reset_5h_date = f"Aujourd'hui à {reset_dt_local.strftime('%H:%M')}"
+        if diff_sec <= 0:
+            reset_str = "Prêt (100% disponible)"
+            reset_5h_date = "Prêt (Rechargé)"
+            calls_5h = 0
+            tokens_5h_in = 0
+            tokens_5h_out = 0
+            tokens_5h_think = 0
         else:
-            j_nom = JOURS_FR[reset_dt_local.weekday()]
-            m_nom = MOIS_FR[reset_dt_local.month - 1]
-            reset_5h_date = f"{j_nom} {reset_dt_local.day} {m_nom} à {reset_dt_local.strftime('%H:%M')}"
+            reset_str = f"dans {h}h {m}m" if h > 0 else f"dans {m} min"
+            reset_dt_local = reset_dt.astimezone(local_tz)
+            if reset_dt_local.date() == datetime.now().date():
+                reset_5h_date = f"Aujourd'hui à {reset_dt_local.strftime('%H:%M')}"
+            else:
+                j_nom = JOURS_FR[reset_dt_local.weekday()]
+                m_nom = MOIS_FR[reset_dt_local.month - 1]
+                reset_5h_date = f"{j_nom} {reset_dt_local.day} {m_nom} à {reset_dt_local.strftime('%H:%M')}"
     else:
         reset_str = "Prêt (aucun appel actif)"
         reset_5h_date = "Prêt"
         diff_sec = 0
+        reset_5h_iso = ""
 
     # Réinitialisation de la fenêtre hebdomadaire de 7 jours (compte à rebours + jour exact de remise à 0)
     if oldest_in_7d:
@@ -559,22 +569,32 @@ def scan_all_sessions(
         d_7d = diff_sec_7d // 86400
         h_7d = (diff_sec_7d % 86400) // 3600
         m_7d = (diff_sec_7d % 3600) // 60
+        reset_7d_iso = reset_dt_7d.isoformat()
 
-        if d_7d > 0:
-            reset_7d_str = f"dans {d_7d}j {h_7d}h"
-        elif h_7d > 0:
-            reset_7d_str = f"dans {h_7d}h {m_7d}m"
+        if diff_sec_7d <= 0:
+            reset_7d_str = "Prêt (100% disponible)"
+            reset_7d_date = "Prêt (Rechargé)"
+            calls_7d = 0
+            tokens_7d_in = 0
+            tokens_7d_out = 0
+            tokens_7d_think = 0
         else:
-            reset_7d_str = f"dans {m_7d} min"
+            if d_7d > 0:
+                reset_7d_str = f"dans {d_7d}j {h_7d}h"
+            elif h_7d > 0:
+                reset_7d_str = f"dans {h_7d}h {m_7d}m"
+            else:
+                reset_7d_str = f"dans {m_7d} min"
 
-        reset_7d_local = reset_dt_7d.astimezone(local_tz)
-        j7_nom = JOURS_FR[reset_7d_local.weekday()]
-        m7_nom = MOIS_FR[reset_7d_local.month - 1]
-        reset_7d_date = f"{j7_nom} {reset_7d_local.day} {m7_nom} à {reset_7d_local.strftime('%H:%M')}"
+            reset_7d_local = reset_dt_7d.astimezone(local_tz)
+            j7_nom = JOURS_FR[reset_7d_local.weekday()]
+            m7_nom = MOIS_FR[reset_7d_local.month - 1]
+            reset_7d_date = f"{j7_nom} {reset_7d_local.day} {m7_nom} à {reset_7d_local.strftime('%H:%M')}"
     else:
         reset_7d_str = "Prêt (aucun appel actif)"
         reset_7d_date = "Prêt"
         diff_sec_7d = 0
+        reset_7d_iso = ""
 
     tot_tokens_5h = tokens_5h_in + tokens_5h_out + tokens_5h_think
     tot_tokens_7d = tokens_7d_in + tokens_7d_out + tokens_7d_think
@@ -596,6 +616,7 @@ def scan_all_sessions(
         "reset_in": reset_str,
         "reset_date": reset_5h_date,
         "reset_seconds": diff_sec,
+        "reset_time_iso": reset_5h_iso,
         "is_live_rpc": False
     }
 
@@ -613,6 +634,7 @@ def scan_all_sessions(
         "reset_in": reset_7d_str,
         "reset_date": reset_7d_date,
         "reset_seconds": diff_sec_7d,
+        "reset_time_iso": reset_7d_iso,
         "is_live_rpc": False
     }
 
@@ -642,19 +664,23 @@ def scan_all_sessions(
                         h_cnt = (diff_sec % 86400) // 3600
                         m_cnt = (diff_sec % 3600) // 60
 
-                        if d_cnt > 0:
+                        if diff_sec <= 0 or rem_pct >= 100.0:
+                            r_str = "Prêt (100% disponible)"
+                            r_date_str = "Prêt"
+                        elif d_cnt > 0:
                             r_str = f"dans {d_cnt}j {h_cnt}h"
                         elif h_cnt > 0:
                             r_str = f"dans {h_cnt}h {m_cnt}m"
                         else:
                             r_str = f"dans {m_cnt} min"
 
-                        if dt_local.date() == datetime.now().date():
-                            r_date_str = f"Aujourd'hui à {dt_local.strftime('%H:%M')}"
-                        else:
-                            j_nom = JOURS_FR[dt_local.weekday()]
-                            m_nom = MOIS_FR[dt_local.month - 1]
-                            r_date_str = f"{j_nom} {dt_local.day} {m_nom} à {dt_local.strftime('%H:%M')}"
+                        if diff_sec > 0 and rem_pct < 100.0:
+                            if dt_local.date() == datetime.now().date():
+                                r_date_str = f"Aujourd'hui à {dt_local.strftime('%H:%M')}"
+                            else:
+                                j_nom = JOURS_FR[dt_local.weekday()]
+                                m_nom = MOIS_FR[dt_local.month - 1]
+                                r_date_str = f"{j_nom} {dt_local.day} {m_nom} à {dt_local.strftime('%H:%M')}"
 
                     if bid == 'gemini-5h':
                         quota_5h['remaining_pct'] = rem_pct
@@ -663,6 +689,7 @@ def scan_all_sessions(
                         quota_5h['reset_in'] = r_str
                         quota_5h['reset_date'] = r_date_str
                         quota_5h['reset_seconds'] = diff_sec
+                        quota_5h['reset_time_iso'] = reset_iso
                         quota_5h['is_live_rpc'] = True
                         quota_5h['antigravity_desc'] = b.get('description', '')
 
@@ -673,6 +700,7 @@ def scan_all_sessions(
                         quota_weekly['reset_in'] = r_str
                         quota_weekly['reset_date'] = r_date_str
                         quota_weekly['reset_seconds'] = diff_sec
+                        quota_weekly['reset_time_iso'] = reset_iso
                         quota_weekly['is_live_rpc'] = True
                         quota_weekly['antigravity_desc'] = b.get('description', '')
     except Exception:

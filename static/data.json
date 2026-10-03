@@ -15,9 +15,9 @@
     "is_pro": true,
     "plan_name": "Google AI Pro (Google One AI Premium)",
     "monthly_cost": 21.99,
-    "api_value_total": 42.4007,
-    "api_value_today": 22.5409,
-    "roi_pct": 192.8
+    "api_value_total": 50.3733,
+    "api_value_today": 30.5135,
+    "roi_pct": 229.1
   },
   "model_info": {
     "name": "Gemini 3.8 Flash (High)",
@@ -51,74 +51,76 @@
     "is_pro": true
   },
   "totals": {
-    "input_tokens": 305668471,
-    "output_tokens": 346666,
-    "thinking_tokens": 51109,
-    "total_tokens": 306066246,
-    "total_turns": 1482,
+    "input_tokens": 363338420,
+    "output_tokens": 367633,
+    "thinking_tokens": 55780,
+    "total_tokens": 363761833,
+    "total_turns": 1582,
     "cost_usd": 0.0,
     "cost_eur": 0.0,
-    "api_value_usd": 46.0877,
-    "api_value_eur": 42.4007
+    "api_value_usd": 54.7536,
+    "api_value_eur": 50.3733
   },
   "today": {
     "date": "2026-10-03",
-    "calls": 624,
-    "input_tokens": 162552709,
-    "output_tokens": 169523,
-    "thinking_tokens": 27331,
-    "total_tokens": 162749563,
+    "calls": 724,
+    "input_tokens": 220222658,
+    "output_tokens": 190490,
+    "thinking_tokens": 32002,
+    "total_tokens": 220445150,
     "cost_usd": 0.0,
     "cost_eur": 0.0,
-    "api_value_usd": 24.501,
-    "api_value_eur": 22.5409
+    "api_value_usd": 33.1669,
+    "api_value_eur": 30.5135
   },
   "quota_5h": {
-    "calls": 624,
+    "calls": 335,
     "max_calls": 250,
-    "tokens": 162749563,
-    "tokens_input": 162552709,
-    "tokens_output": 169523,
-    "tokens_thinking": 27331,
+    "tokens": 156780240,
+    "tokens_input": 156685330,
+    "tokens_output": 79225,
+    "tokens_thinking": 15685,
     "max_tokens": 10000000,
-    "pct_used": 25.8,
-    "remaining_pct": 25.8,
-    "used_pct": 74.2,
-    "reset_in": "dans 1h 33m",
-    "reset_date": "Aujourd'hui à 20:06",
-    "reset_seconds": 5639,
+    "pct_used": 87.1,
+    "remaining_pct": 87.1,
+    "used_pct": 12.9,
+    "reset_in": "dans 4h 52m",
+    "reset_date": "Dimanche 4 oct. à 02:17",
+    "reset_seconds": 17559,
+    "reset_time_iso": "2026-10-04T00:17:06Z",
     "is_live_rpc": true,
-    "antigravity_desc": "You have used some of your 5-hour limit, it will fully refresh in 1 hour, 36 minutes."
+    "antigravity_desc": "You have used some of your 5-hour limit, it will fully refresh in 4 hours, 53 minutes."
   },
   "quota_weekly": {
-    "calls": 922,
+    "calls": 1022,
     "max_calls": 1500,
-    "tokens": 202125640,
-    "tokens_input": 201827109,
-    "tokens_output": 259537,
-    "tokens_thinking": 38994,
+    "tokens": 259821227,
+    "tokens_input": 259497058,
+    "tokens_output": 280504,
+    "tokens_thinking": 43665,
     "max_tokens": 60000000,
-    "pct_used": 87.6,
-    "remaining_pct": 87.6,
-    "used_pct": 12.4,
-    "reset_in": "dans 6j 20h",
+    "pct_used": 84.8,
+    "remaining_pct": 84.8,
+    "used_pct": 15.2,
+    "reset_in": "dans 6j 17h",
     "reset_date": "Samedi 10 oct. à 15:06",
-    "reset_seconds": 592439,
+    "reset_seconds": 582137,
+    "reset_time_iso": "2026-10-10T13:06:44Z",
     "is_live_rpc": true,
-    "antigravity_desc": "You have used some of your weekly limit, it will fully refresh in 6 days, 20 hours."
+    "antigravity_desc": "You have used some of your weekly limit, it will fully refresh in 6 days, 17 hours."
   },
   "active_session": {
     "id": "b1ed90f3-d247-45f4-adc3-add19e8ac7ac",
     "title": "Python Gemini Token Tracker",
     "workspace_name": "tracker token price",
     "workspace_path": "/Users/brunoperrin/Documents/antigravity/tracker token price",
-    "last_modified": "2026-10-03 16:32:22.114453+00:00",
-    "turns": 624,
-    "context_tokens": 533066,
-    "api_input_tokens": 162552709,
-    "api_output_tokens": 169523,
-    "thinking_tokens": 27331,
-    "total_tokens": 162749563,
+    "last_modified": "2026-10-03 19:21:46.040681+00:00",
+    "turns": 724,
+    "context_tokens": 622817,
+    "api_input_tokens": 220222658,
+    "api_output_tokens": 190490,
+    "thinking_tokens": 32002,
+    "total_tokens": 220445150,
     "model_used": "gemini-3.8-flash",
     "costs": {
       "mode": "google_ai_pro",
@@ -128,8 +130,8 @@
       "thinking_cost_usd": 0.0,
       "total_cost_usd": 0.0,
       "total_cost_eur": 0.0,
-      "api_value_usd": 24.501019,
-      "api_value_eur": 22.540937,
+      "api_value_usd": 33.166894,
+      "api_value_eur": 30.513542,
       "model_used": "Gemini 3.8 Flash (High)",
       "rate_input_per_m": 0.15,
       "rate_output_per_m": 0.6,
@@ -137,49 +139,49 @@
     },
     "recent_steps": [
       {
-        "step": 1261,
+        "step": 1465,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 73,
+        "output_tokens": 157,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T16:32:10Z"
+        "time": "2026-10-03T19:24:05Z"
       },
       {
-        "step": 1264,
+        "step": 1467,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 106,
+        "output_tokens": 193,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T16:32:19Z"
+        "time": "2026-10-03T19:24:08Z"
       },
       {
-        "step": 1266,
+        "step": 1469,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 123,
+        "output_tokens": 91,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T16:32:24Z"
+        "time": "2026-10-03T19:24:14Z"
       },
       {
-        "step": 1268,
+        "step": 1471,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 92,
+        "output_tokens": 90,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T16:32:31Z"
+        "time": "2026-10-03T19:24:17Z"
       },
       {
-        "step": 1270,
+        "step": 1473,
         "type": "PLANNER_RESPONSE",
         "preview": "...",
-        "output_tokens": 97,
+        "output_tokens": 429,
         "thinking_tokens": 0,
         "tools_count": 1,
-        "time": "2026-10-03T16:32:34Z"
+        "time": "2026-10-03T19:24:20Z"
       }
     ],
     "turn_events": [
@@ -3926,14 +3928,614 @@
         "input": 532825,
         "output": 97,
         "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:32:39Z",
+        "input": 533066,
+        "output": 160,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T16:32:46Z",
+        "input": 534029,
+        "output": 355,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:05Z",
+        "input": 534541,
+        "output": 118,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:11Z",
+        "input": 534798,
+        "output": 105,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:14Z",
+        "input": 535090,
+        "output": 91,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:17Z",
+        "input": 536418,
+        "output": 90,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:20Z",
+        "input": 537867,
+        "output": 74,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:27Z",
+        "input": 538793,
+        "output": 120,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:33Z",
+        "input": 540616,
+        "output": 86,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:39Z",
+        "input": 540702,
+        "output": 85,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:44Z",
+        "input": 541776,
+        "output": 81,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:49Z",
+        "input": 542406,
+        "output": 131,
+        "thinking": 51
+      },
+      {
+        "time": "2026-10-03T19:17:53Z",
+        "input": 543655,
+        "output": 136,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:17:58Z",
+        "input": 544329,
+        "output": 87,
+        "thinking": 70
+      },
+      {
+        "time": "2026-10-03T19:18:05Z",
+        "input": 545109,
+        "output": 119,
+        "thinking": 72
+      },
+      {
+        "time": "2026-10-03T19:18:09Z",
+        "input": 545356,
+        "output": 131,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:18:13Z",
+        "input": 546028,
+        "output": 119,
+        "thinking": 75
+      },
+      {
+        "time": "2026-10-03T19:18:22Z",
+        "input": 546805,
+        "output": 177,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:18:28Z",
+        "input": 547047,
+        "output": 115,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:18:33Z",
+        "input": 548218,
+        "output": 80,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:18:35Z",
+        "input": 549379,
+        "output": 118,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:18:38Z",
+        "input": 550382,
+        "output": 86,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:18:41Z",
+        "input": 551671,
+        "output": 176,
+        "thinking": 99
+      },
+      {
+        "time": "2026-10-03T19:18:48Z",
+        "input": 552371,
+        "output": 88,
+        "thinking": 746
+      },
+      {
+        "time": "2026-10-03T19:19:01Z",
+        "input": 554226,
+        "output": 70,
+        "thinking": 151
+      },
+      {
+        "time": "2026-10-03T19:19:06Z",
+        "input": 554658,
+        "output": 70,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:19:09Z",
+        "input": 555793,
+        "output": 114,
+        "thinking": 85
+      },
+      {
+        "time": "2026-10-03T19:19:13Z",
+        "input": 556484,
+        "output": 143,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:19:17Z",
+        "input": 556683,
+        "output": 226,
+        "thinking": 61
+      },
+      {
+        "time": "2026-10-03T19:19:21Z",
+        "input": 557210,
+        "output": 199,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:19:27Z",
+        "input": 557613,
+        "output": 119,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:19:38Z",
+        "input": 559087,
+        "output": 559,
+        "thinking": 51
+      },
+      {
+        "time": "2026-10-03T19:19:45Z",
+        "input": 559870,
+        "output": 111,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:19:49Z",
+        "input": 560291,
+        "output": 177,
+        "thinking": 166
+      },
+      {
+        "time": "2026-10-03T19:19:56Z",
+        "input": 560696,
+        "output": 161,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:20:00Z",
+        "input": 561482,
+        "output": 75,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:20:06Z",
+        "input": 561557,
+        "output": 121,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:20:09Z",
+        "input": 561986,
+        "output": 89,
+        "thinking": 783
+      },
+      {
+        "time": "2026-10-03T19:20:24Z",
+        "input": 563879,
+        "output": 89,
+        "thinking": 331
+      },
+      {
+        "time": "2026-10-03T19:20:37Z",
+        "input": 565582,
+        "output": 1786,
+        "thinking": 128
+      },
+      {
+        "time": "2026-10-03T19:20:51Z",
+        "input": 569466,
+        "output": 81,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:20:54Z",
+        "input": 569547,
+        "output": 84,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:20:57Z",
+        "input": 571849,
+        "output": 84,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:08Z",
+        "input": 571933,
+        "output": 73,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:10Z",
+        "input": 572074,
+        "output": 76,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:12Z",
+        "input": 573268,
+        "output": 84,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:13Z",
+        "input": 574541,
+        "output": 89,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:16Z",
+        "input": 575709,
+        "output": 98,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:18Z",
+        "input": 576281,
+        "output": 82,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:20Z",
+        "input": 577424,
+        "output": 91,
+        "thinking": 234
+      },
+      {
+        "time": "2026-10-03T19:21:26Z",
+        "input": 578304,
+        "output": 81,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:31Z",
+        "input": 578892,
+        "output": 85,
+        "thinking": 52
+      },
+      {
+        "time": "2026-10-03T19:21:34Z",
+        "input": 579903,
+        "output": 99,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:36Z",
+        "input": 580689,
+        "output": 106,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:39Z",
+        "input": 581263,
+        "output": 161,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:42Z",
+        "input": 581849,
+        "output": 70,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:44Z",
+        "input": 581992,
+        "output": 86,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:48Z",
+        "input": 582265,
+        "output": 165,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:21:50Z",
+        "input": 582897,
+        "output": 90,
+        "thinking": 120
+      },
+      {
+        "time": "2026-10-03T19:21:55Z",
+        "input": 584518,
+        "output": 90,
+        "thinking": 378
+      },
+      {
+        "time": "2026-10-03T19:22:03Z",
+        "input": 585269,
+        "output": 91,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:22:06Z",
+        "input": 585903,
+        "output": 82,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:22:07Z",
+        "input": 587190,
+        "output": 91,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:22:11Z",
+        "input": 587711,
+        "output": 152,
+        "thinking": 90
+      },
+      {
+        "time": "2026-10-03T19:22:15Z",
+        "input": 588012,
+        "output": 209,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:22:18Z",
+        "input": 588294,
+        "output": 85,
+        "thinking": 145
+      },
+      {
+        "time": "2026-10-03T19:22:23Z",
+        "input": 589050,
+        "output": 91,
+        "thinking": 113
+      },
+      {
+        "time": "2026-10-03T19:22:27Z",
+        "input": 589393,
+        "output": 91,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:22:29Z",
+        "input": 589695,
+        "output": 87,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:22:31Z",
+        "input": 590881,
+        "output": 83,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:22:35Z",
+        "input": 591516,
+        "output": 86,
+        "thinking": 157
+      },
+      {
+        "time": "2026-10-03T19:22:41Z",
+        "input": 592600,
+        "output": 83,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:22:43Z",
+        "input": 593480,
+        "output": 91,
+        "thinking": 229
+      },
+      {
+        "time": "2026-10-03T19:22:49Z",
+        "input": 595174,
+        "output": 1577,
+        "thinking": 77
+      },
+      {
+        "time": "2026-10-03T19:22:55Z",
+        "input": 597931,
+        "output": 86,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:22:58Z",
+        "input": 598514,
+        "output": 308,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:00Z",
+        "input": 599099,
+        "output": 93,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:02Z",
+        "input": 600611,
+        "output": 92,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:05Z",
+        "input": 601139,
+        "output": 1918,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:11Z",
+        "input": 604490,
+        "output": 91,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:13Z",
+        "input": 605105,
+        "output": 86,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:17Z",
+        "input": 605661,
+        "output": 688,
+        "thinking": 69
+      },
+      {
+        "time": "2026-10-03T19:23:21Z",
+        "input": 606895,
+        "output": 88,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:24Z",
+        "input": 608348,
+        "output": 92,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:28Z",
+        "input": 609554,
+        "output": 1807,
+        "thinking": 138
+      },
+      {
+        "time": "2026-10-03T19:23:38Z",
+        "input": 612908,
+        "output": 92,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:41Z",
+        "input": 613218,
+        "output": 209,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:43Z",
+        "input": 613656,
+        "output": 83,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:44Z",
+        "input": 614691,
+        "output": 82,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:46Z",
+        "input": 615114,
+        "output": 1780,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:52Z",
+        "input": 617942,
+        "output": 81,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:54Z",
+        "input": 618379,
+        "output": 176,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:23:57Z",
+        "input": 618765,
+        "output": 74,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:24:00Z",
+        "input": 619161,
+        "output": 121,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:24:03Z",
+        "input": 619338,
+        "output": 149,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:24:05Z",
+        "input": 619735,
+        "output": 157,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:24:08Z",
+        "input": 620045,
+        "output": 193,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:24:14Z",
+        "input": 620367,
+        "output": 91,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:24:17Z",
+        "input": 620514,
+        "output": 90,
+        "thinking": 0
+      },
+      {
+        "time": "2026-10-03T19:24:20Z",
+        "input": 622388,
+        "output": 429,
+        "thinking": 0
       }
     ],
     "daily_activity": {
       "2026-10-03": {
-        "input_tokens": 162552709,
-        "output_tokens": 169523,
-        "thinking_tokens": 27331,
-        "calls": 624
+        "input_tokens": 220222658,
+        "output_tokens": 190490,
+        "thinking_tokens": 32002,
+        "calls": 724
       }
     },
     "hourly_activity": {
@@ -3956,10 +4558,16 @@
         "calls": 177
       },
       "2026-10-03 16:00": {
-        "input_tokens": 12979268,
-        "output_tokens": 11551,
+        "input_tokens": 14046363,
+        "output_tokens": 12066,
         "thinking_tokens": 1761,
-        "calls": 25
+        "calls": 27
+      },
+      "2026-10-03 19:00": {
+        "input_tokens": 56602854,
+        "output_tokens": 20452,
+        "thinking_tokens": 4671,
+        "calls": 98
       }
     }
   },
@@ -3969,13 +4577,13 @@
       "title": "Python Gemini Token Tracker",
       "workspace_name": "tracker token price",
       "workspace_path": "/Users/brunoperrin/Documents/antigravity/tracker token price",
-      "last_modified": "2026-10-03 16:32:22.114453+00:00",
-      "turns": 624,
-      "context_tokens": 533066,
-      "api_input_tokens": 162552709,
-      "api_output_tokens": 169523,
-      "thinking_tokens": 27331,
-      "total_tokens": 162749563,
+      "last_modified": "2026-10-03 19:21:46.040681+00:00",
+      "turns": 724,
+      "context_tokens": 622817,
+      "api_input_tokens": 220222658,
+      "api_output_tokens": 190490,
+      "thinking_tokens": 32002,
+      "total_tokens": 220445150,
       "model_used": "gemini-3.8-flash",
       "costs": {
         "mode": "google_ai_pro",
@@ -3985,8 +4593,8 @@
         "thinking_cost_usd": 0.0,
         "total_cost_usd": 0.0,
         "total_cost_eur": 0.0,
-        "api_value_usd": 24.501019,
-        "api_value_eur": 22.540937,
+        "api_value_usd": 33.166894,
+        "api_value_eur": 30.513542,
         "model_used": "Gemini 3.8 Flash (High)",
         "rate_input_per_m": 0.15,
         "rate_output_per_m": 0.6,
@@ -3994,49 +4602,49 @@
       },
       "recent_steps": [
         {
-          "step": 1261,
+          "step": 1465,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 73,
+          "output_tokens": 157,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T16:32:10Z"
+          "time": "2026-10-03T19:24:05Z"
         },
         {
-          "step": 1264,
+          "step": 1467,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 106,
+          "output_tokens": 193,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T16:32:19Z"
+          "time": "2026-10-03T19:24:08Z"
         },
         {
-          "step": 1266,
+          "step": 1469,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 123,
+          "output_tokens": 91,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T16:32:24Z"
+          "time": "2026-10-03T19:24:14Z"
         },
         {
-          "step": 1268,
+          "step": 1471,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 92,
+          "output_tokens": 90,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T16:32:31Z"
+          "time": "2026-10-03T19:24:17Z"
         },
         {
-          "step": 1270,
+          "step": 1473,
           "type": "PLANNER_RESPONSE",
           "preview": "...",
-          "output_tokens": 97,
+          "output_tokens": 429,
           "thinking_tokens": 0,
           "tools_count": 1,
-          "time": "2026-10-03T16:32:34Z"
+          "time": "2026-10-03T19:24:20Z"
         }
       ],
       "turn_events": [
@@ -7783,14 +8391,614 @@
           "input": 532825,
           "output": 97,
           "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:32:39Z",
+          "input": 533066,
+          "output": 160,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T16:32:46Z",
+          "input": 534029,
+          "output": 355,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:05Z",
+          "input": 534541,
+          "output": 118,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:11Z",
+          "input": 534798,
+          "output": 105,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:14Z",
+          "input": 535090,
+          "output": 91,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:17Z",
+          "input": 536418,
+          "output": 90,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:20Z",
+          "input": 537867,
+          "output": 74,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:27Z",
+          "input": 538793,
+          "output": 120,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:33Z",
+          "input": 540616,
+          "output": 86,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:39Z",
+          "input": 540702,
+          "output": 85,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:44Z",
+          "input": 541776,
+          "output": 81,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:49Z",
+          "input": 542406,
+          "output": 131,
+          "thinking": 51
+        },
+        {
+          "time": "2026-10-03T19:17:53Z",
+          "input": 543655,
+          "output": 136,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:17:58Z",
+          "input": 544329,
+          "output": 87,
+          "thinking": 70
+        },
+        {
+          "time": "2026-10-03T19:18:05Z",
+          "input": 545109,
+          "output": 119,
+          "thinking": 72
+        },
+        {
+          "time": "2026-10-03T19:18:09Z",
+          "input": 545356,
+          "output": 131,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:18:13Z",
+          "input": 546028,
+          "output": 119,
+          "thinking": 75
+        },
+        {
+          "time": "2026-10-03T19:18:22Z",
+          "input": 546805,
+          "output": 177,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:18:28Z",
+          "input": 547047,
+          "output": 115,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:18:33Z",
+          "input": 548218,
+          "output": 80,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:18:35Z",
+          "input": 549379,
+          "output": 118,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:18:38Z",
+          "input": 550382,
+          "output": 86,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:18:41Z",
+          "input": 551671,
+          "output": 176,
+          "thinking": 99
+        },
+        {
+          "time": "2026-10-03T19:18:48Z",
+          "input": 552371,
+          "output": 88,
+          "thinking": 746
+        },
+        {
+          "time": "2026-10-03T19:19:01Z",
+          "input": 554226,
+          "output": 70,
+          "thinking": 151
+        },
+        {
+          "time": "2026-10-03T19:19:06Z",
+          "input": 554658,
+          "output": 70,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:19:09Z",
+          "input": 555793,
+          "output": 114,
+          "thinking": 85
+        },
+        {
+          "time": "2026-10-03T19:19:13Z",
+          "input": 556484,
+          "output": 143,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:19:17Z",
+          "input": 556683,
+          "output": 226,
+          "thinking": 61
+        },
+        {
+          "time": "2026-10-03T19:19:21Z",
+          "input": 557210,
+          "output": 199,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:19:27Z",
+          "input": 557613,
+          "output": 119,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:19:38Z",
+          "input": 559087,
+          "output": 559,
+          "thinking": 51
+        },
+        {
+          "time": "2026-10-03T19:19:45Z",
+          "input": 559870,
+          "output": 111,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:19:49Z",
+          "input": 560291,
+          "output": 177,
+          "thinking": 166
+        },
+        {
+          "time": "2026-10-03T19:19:56Z",
+          "input": 560696,
+          "output": 161,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:20:00Z",
+          "input": 561482,
+          "output": 75,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:20:06Z",
+          "input": 561557,
+          "output": 121,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:20:09Z",
+          "input": 561986,
+          "output": 89,
+          "thinking": 783
+        },
+        {
+          "time": "2026-10-03T19:20:24Z",
+          "input": 563879,
+          "output": 89,
+          "thinking": 331
+        },
+        {
+          "time": "2026-10-03T19:20:37Z",
+          "input": 565582,
+          "output": 1786,
+          "thinking": 128
+        },
+        {
+          "time": "2026-10-03T19:20:51Z",
+          "input": 569466,
+          "output": 81,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:20:54Z",
+          "input": 569547,
+          "output": 84,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:20:57Z",
+          "input": 571849,
+          "output": 84,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:08Z",
+          "input": 571933,
+          "output": 73,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:10Z",
+          "input": 572074,
+          "output": 76,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:12Z",
+          "input": 573268,
+          "output": 84,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:13Z",
+          "input": 574541,
+          "output": 89,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:16Z",
+          "input": 575709,
+          "output": 98,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:18Z",
+          "input": 576281,
+          "output": 82,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:20Z",
+          "input": 577424,
+          "output": 91,
+          "thinking": 234
+        },
+        {
+          "time": "2026-10-03T19:21:26Z",
+          "input": 578304,
+          "output": 81,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:31Z",
+          "input": 578892,
+          "output": 85,
+          "thinking": 52
+        },
+        {
+          "time": "2026-10-03T19:21:34Z",
+          "input": 579903,
+          "output": 99,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:36Z",
+          "input": 580689,
+          "output": 106,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:39Z",
+          "input": 581263,
+          "output": 161,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:42Z",
+          "input": 581849,
+          "output": 70,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:44Z",
+          "input": 581992,
+          "output": 86,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:48Z",
+          "input": 582265,
+          "output": 165,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:21:50Z",
+          "input": 582897,
+          "output": 90,
+          "thinking": 120
+        },
+        {
+          "time": "2026-10-03T19:21:55Z",
+          "input": 584518,
+          "output": 90,
+          "thinking": 378
+        },
+        {
+          "time": "2026-10-03T19:22:03Z",
+          "input": 585269,
+          "output": 91,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:22:06Z",
+          "input": 585903,
+          "output": 82,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:22:07Z",
+          "input": 587190,
+          "output": 91,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:22:11Z",
+          "input": 587711,
+          "output": 152,
+          "thinking": 90
+        },
+        {
+          "time": "2026-10-03T19:22:15Z",
+          "input": 588012,
+          "output": 209,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:22:18Z",
+          "input": 588294,
+          "output": 85,
+          "thinking": 145
+        },
+        {
+          "time": "2026-10-03T19:22:23Z",
+          "input": 589050,
+          "output": 91,
+          "thinking": 113
+        },
+        {
+          "time": "2026-10-03T19:22:27Z",
+          "input": 589393,
+          "output": 91,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:22:29Z",
+          "input": 589695,
+          "output": 87,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:22:31Z",
+          "input": 590881,
+          "output": 83,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:22:35Z",
+          "input": 591516,
+          "output": 86,
+          "thinking": 157
+        },
+        {
+          "time": "2026-10-03T19:22:41Z",
+          "input": 592600,
+          "output": 83,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:22:43Z",
+          "input": 593480,
+          "output": 91,
+          "thinking": 229
+        },
+        {
+          "time": "2026-10-03T19:22:49Z",
+          "input": 595174,
+          "output": 1577,
+          "thinking": 77
+        },
+        {
+          "time": "2026-10-03T19:22:55Z",
+          "input": 597931,
+          "output": 86,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:22:58Z",
+          "input": 598514,
+          "output": 308,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:00Z",
+          "input": 599099,
+          "output": 93,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:02Z",
+          "input": 600611,
+          "output": 92,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:05Z",
+          "input": 601139,
+          "output": 1918,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:11Z",
+          "input": 604490,
+          "output": 91,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:13Z",
+          "input": 605105,
+          "output": 86,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:17Z",
+          "input": 605661,
+          "output": 688,
+          "thinking": 69
+        },
+        {
+          "time": "2026-10-03T19:23:21Z",
+          "input": 606895,
+          "output": 88,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:24Z",
+          "input": 608348,
+          "output": 92,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:28Z",
+          "input": 609554,
+          "output": 1807,
+          "thinking": 138
+        },
+        {
+          "time": "2026-10-03T19:23:38Z",
+          "input": 612908,
+          "output": 92,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:41Z",
+          "input": 613218,
+          "output": 209,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:43Z",
+          "input": 613656,
+          "output": 83,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:44Z",
+          "input": 614691,
+          "output": 82,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:46Z",
+          "input": 615114,
+          "output": 1780,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:52Z",
+          "input": 617942,
+          "output": 81,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:54Z",
+          "input": 618379,
+          "output": 176,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:23:57Z",
+          "input": 618765,
+          "output": 74,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:24:00Z",
+          "input": 619161,
+          "output": 121,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:24:03Z",
+          "input": 619338,
+          "output": 149,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:24:05Z",
+          "input": 619735,
+          "output": 157,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:24:08Z",
+          "input": 620045,
+          "output": 193,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:24:14Z",
+          "input": 620367,
+          "output": 91,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:24:17Z",
+          "input": 620514,
+          "output": 90,
+          "thinking": 0
+        },
+        {
+          "time": "2026-10-03T19:24:20Z",
+          "input": 622388,
+          "output": 429,
+          "thinking": 0
         }
       ],
       "daily_activity": {
         "2026-10-03": {
-          "input_tokens": 162552709,
-          "output_tokens": 169523,
-          "thinking_tokens": 27331,
-          "calls": 624
+          "input_tokens": 220222658,
+          "output_tokens": 190490,
+          "thinking_tokens": 32002,
+          "calls": 724
         }
       },
       "hourly_activity": {
@@ -7813,10 +9021,16 @@
           "calls": 177
         },
         "2026-10-03 16:00": {
-          "input_tokens": 12979268,
-          "output_tokens": 11551,
+          "input_tokens": 14046363,
+          "output_tokens": 12066,
           "thinking_tokens": 1761,
-          "calls": 25
+          "calls": 27
+        },
+        "2026-10-03 19:00": {
+          "input_tokens": 56602854,
+          "output_tokens": 20452,
+          "thinking_tokens": 4671,
+          "calls": 98
         }
       }
     },
@@ -13343,14 +14557,14 @@
   ],
   "daily_trends": {
     "2026-10-03": {
-      "input_tokens": 162552709,
-      "output_tokens": 169523,
-      "thinking_tokens": 27331,
-      "calls": 624,
+      "input_tokens": 220222658,
+      "output_tokens": 190490,
+      "thinking_tokens": 32002,
+      "calls": 724,
       "cost_usd": 0.0,
       "cost_eur": 0.0,
-      "api_value_usd": 24.501019,
-      "api_value_eur": 22.540937
+      "api_value_usd": 33.166894,
+      "api_value_eur": 30.513542
     },
     "2026-09-30": {
       "input_tokens": 6920,
@@ -13407,17 +14621,17 @@
     {
       "month_key": "2026-10",
       "month_name": "Octobre 2026",
-      "calls": 624,
-      "input_tokens": 162552709,
-      "output_tokens": 169523,
-      "thinking_tokens": 27331,
-      "total_tokens": 162749563,
+      "calls": 724,
+      "input_tokens": 220222658,
+      "output_tokens": 190490,
+      "thinking_tokens": 32002,
+      "total_tokens": 220445150,
       "cost_usd": 0.0,
       "cost_eur": 0.0,
-      "api_value_usd": 24.501,
-      "api_value_eur": 22.5409,
+      "api_value_usd": 33.1669,
+      "api_value_eur": 30.5135,
       "days_count": 1,
-      "avg_tokens_per_call": 260817
+      "avg_tokens_per_call": 304482
     },
     {
       "month_key": "2026-09",

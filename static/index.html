@@ -547,7 +547,7 @@
           <div>
             <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
               Nouveautés & Historique des Versions
-              <span class="version-tag">v1.5.0</span>
+              <span class="version-tag">v1.5.1</span>
             </h3>
             <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Journal des changements, améliorations et évolutions d'Antigravity Gemini Tracker</p>
           </div>
@@ -556,9 +556,22 @@
       </div>
 
       <div class="changelog-timeline" style="max-height: 58vh; overflow-y: auto; padding-right: 8px;">
-        <!-- Version 1.5.0 (Actuelle) -->
+        <!-- Version 1.5.1 (Actuelle) -->
         <div class="changelog-item">
-          <div class="changelog-badge current">v1.5.0 • Actuelle (03 Octobre 2026)</div>
+          <div class="changelog-badge current">v1.5.1 • Actuelle (03 Octobre 2026)</div>
+          <h4 class="changelog-title">Compte à Rebours Temps Réel & Calcul Définitivement Fiable de l'Heure de Reset</h4>
+          <ul class="changelog-list">
+            <li><strong>🎯 Horodatages absolus universels (ISO UTC) :</strong> Abandon des décalages relatifs figés en secondes. Le tracker utilise désormais des cibles temporelles absolues synchronisées avec Antigravity Connect-RPC.</li>
+            <li><strong>🚫 Fin du faux décompte à 1h33 & de l'heure figée à 20h06 :</strong> L'heure de réinitialisation et le compte à rebours ne repartent plus arbitrairement lors d'un rafraîchissement ou d'une réouverture.</li>
+            <li><strong>📅 Calcul dynamique de la date de reset :</strong> Affichage adaptatif selon votre fuseau et l'horaire (ex. <code>Demain à 02:17</code> ou <code>Aujourd'hui à 02:17</code> pour le 5h, <code>Samedi 10 oct. à 15:06</code> pour le 7j).</li>
+            <li><strong>⏱️ Minuteur précis à la seconde :</strong> Le décompte s'égrène en direct chaque seconde (ex. <code>⏱️ dans 4h 53m 22s</code>).</li>
+            <li><strong>⚡ Rechargement automatique à 100% :</strong> Dès que l'heure de reset est dépassée, l'interface bascule immédiatement en <code>⏱️ Prêt (Rechargé à 100%)</code> avec la jauge pleine.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.5.0 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.5.0 (03 Octobre 2026)</div>
           <h4 class="changelog-title">Épuration En-tête, Sélecteur de Modèle dans le Simulateur & Niveaux d'Intensité Antigravity</h4>
           <ul class="changelog-list">
             <li><strong>🧹 En-tête épuré à 100% :</strong> Retrait du sélecteur de devise (fixée en Euros €) et du sélecteur de modèle du haut. Plus d'espace et lisibilité maximale.</li>
@@ -634,6 +647,6 @@
     </div>
   </div>
 
-  <script src="./js/app.js"></script>
+  <script src="./js/app.js?v=1.5.1"></script>
 </body>
 </html>
