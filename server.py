@@ -187,6 +187,7 @@ class DashboardRequestHandler(BaseHTTPRequestHandler):
             "active_session": scan["active_session"],
             "sessions": scan.get("sessions", [])[:15],
             "daily_trends": scan.get("daily_trends", {}),
+            "monthly_history": scan.get("monthly_history", []),
             "alerts": alerts
         }
 

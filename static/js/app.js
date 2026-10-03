@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initDropzoneEvents();
   initGlobalDragAndDrop();
   startLiveCountdownTicker();
+  checkAutoOpenChangelog();
 
   // 1. Test si un serveur Python tourne en local
   const hasLocalServer = await checkLocalServer();
@@ -267,6 +268,22 @@ function initEventListeners() {
   document.getElementById("closeApiKeyBtn")?.addEventListener("click", closeApiKeyModal);
   document.getElementById("cancelApiKeyBtn")?.addEventListener("click", closeApiKeyModal);
   document.getElementById("saveApiKeyBtn")?.addEventListener("click", testAndSaveApiKey);
+
+  // Modal Récapitulatif Mensuel
+  document.getElementById("btnMonthlyRecap")?.addEventListener("click", openMonthlyRecapModal);
+  document.getElementById("closeMonthlyRecapBtn")?.addEventListener("click", closeMonthlyRecapModal);
+  document.getElementById("closeMonthlyRecapBtn2")?.addEventListener("click", closeMonthlyRecapModal);
+  document.getElementById("monthlyRecapModal")?.addEventListener("click", (e) => {
+    if (e.target.id === "monthlyRecapModal") closeMonthlyRecapModal();
+  });
+
+  // Modal Nouveautés & Changelog
+  document.getElementById("btnChangelog")?.addEventListener("click", openChangelogModal);
+  document.getElementById("closeChangelogBtn")?.addEventListener("click", closeChangelogModal);
+  document.getElementById("closeChangelogBtn2")?.addEventListener("click", closeChangelogModal);
+  document.getElementById("changelogModal")?.addEventListener("click", (e) => {
+    if (e.target.id === "changelogModal") closeChangelogModal();
+  });
 
   // Recherche sessions
   document.getElementById("searchSessions")?.addEventListener("input", (e) => {
@@ -895,10 +912,64 @@ function recomputeAll() {
     },
     active_session: appState.activeSession,
     sessions: sessions,
-    daily_trends: allDailyTrends
+    daily_trends: allDailyTrends,
+    monthly_history: computeClientMonthlyHistory(allDailyTrends)
   };
 
   renderAll(renderData);
+}
+
+function computeClientMonthlyHistory(trends) {
+  const MOIS_NOMS_FULL_FR = {
+    "01": "Janvier", "02": "Février", "03": "Mars", "04": "Avril",
+    "05": "Mai", "06": "Juin", "07": "Juillet", "08": "Août",
+    "09": "Septembre", "10": "Octobre", "11": "Novembre", "12": "Décembre"
+  };
+  const mDict = {};
+  for (const [dStr, dayData] of Object.entries(trends || {})) {
+    const mKey = dStr.slice(0, 7);
+    if (!mDict[mKey]) {
+      const parts = mKey.split("-");
+      const y = parts[0];
+      const mNum = parts[1] || "01";
+      mDict[mKey] = {
+        month_key: mKey,
+        month_name: `${MOIS_NOMS_FULL_FR[mNum] || mNum} ${y}`,
+        calls: 0,
+        input_tokens: 0,
+        output_tokens: 0,
+        thinking_tokens: 0,
+        total_tokens: 0,
+        cost_eur: 0,
+        cost_usd: 0,
+        api_value_eur: 0,
+        api_value_usd: 0,
+        _days: new Set()
+      };
+    }
+    const mh = mDict[mKey];
+    const inT = dayData.input_tokens || 0;
+    const outT = dayData.output_tokens || 0;
+    const thT = dayData.thinking_tokens || 0;
+    mh.calls += dayData.calls || 0;
+    mh.input_tokens += inT;
+    mh.output_tokens += outT;
+    mh.thinking_tokens += thT;
+    mh.total_tokens += inT + outT + thT;
+    mh.cost_eur += dayData.cost_eur || 0;
+    mh.cost_usd += dayData.cost_usd || 0;
+    mh.api_value_eur += dayData.api_value_eur !== undefined ? dayData.api_value_eur : (dayData.cost_eur || 0);
+    mh.api_value_usd += dayData.api_value_usd !== undefined ? dayData.api_value_usd : (dayData.cost_usd || 0);
+    mh._days.add(dStr);
+  }
+  return Object.values(mDict)
+    .sort((a, b) => b.month_key.localeCompare(a.month_key))
+    .map(m => {
+      m.days_count = m._days.size;
+      delete m._days;
+      m.avg_tokens_per_call = m.calls > 0 ? Math.round(m.total_tokens / m.calls) : 0;
+      return m;
+    });
 }
 
 // --- FONCTIONS DE CALCUL FINANCIER GEMINI ---
@@ -979,11 +1050,20 @@ function formatDateTime(d) {
 
 // --- AFFICHAGE & RENDU DU DASHBOARD ---
 function renderAll(data) {
+  appState.latestData = data;
+  if (data.monthly_history) {
+    appState.monthlyHistory = data.monthly_history;
+  }
   renderProBanner(data.totals);
   renderKPIs(data);
   renderActiveSession(data.active_session);
   renderSessionsTable(data.sessions || []);
   renderCharts(data.daily_trends || {}, data.totals);
+
+  const recapModal = document.getElementById("monthlyRecapModal");
+  if (recapModal && (recapModal.classList.contains("active") || recapModal.style.display === "flex")) {
+    renderMonthlyRecapModal(data);
+  }
 }
 
 function renderProBanner(totals) {
@@ -1608,6 +1688,132 @@ function updateApiKeyButtonStatus() {
   } else {
     btn.className = "ctrl-btn btn-key-warning";
     btn.innerHTML = `⚠️ Configurer Clé API`;
+  }
+}
+
+// --- GESTION DU RÉCAPITULATIF MENSUEL & QUOTAS DISPONIBLES ---
+function openMonthlyRecapModal() {
+  const modal = document.getElementById("monthlyRecapModal");
+  if (!modal) return;
+  renderMonthlyRecapModal(appState.latestData);
+  modal.style.display = "flex";
+  modal.classList.add("active");
+}
+
+function closeMonthlyRecapModal() {
+  const modal = document.getElementById("monthlyRecapModal");
+  if (modal) {
+    modal.style.display = "none";
+    modal.classList.remove("active");
+  }
+}
+
+function renderMonthlyRecapModal(data) {
+  const d = data || appState.latestData || {};
+  const q5 = d.quota_5h || {};
+  const qw = d.quota_weekly || {};
+  const history = d.monthly_history || appState.monthlyHistory || [];
+
+  // 1. Quotas disponibles en temps réel
+  const recap5hPct = document.getElementById("recap5hPct");
+  const recap5hRemain = document.getElementById("recap5hRemain");
+  const recap5hReset = document.getElementById("recap5hReset");
+
+  const rem5 = q5.remaining_pct !== undefined ? q5.remaining_pct : (100 - (q5.pct_used || 0));
+  const maxCalls5h = q5.max_calls || (appConfig.pricing_mode === "google_ai_pro" ? 250 : 500);
+  const estCallsLeft5h = Math.max(0, Math.round((rem5 / 100) * maxCalls5h));
+
+  if (recap5hPct) {
+    recap5hPct.textContent = `${rem5}% restant`;
+    recap5hPct.style.color = rem5 < 20 ? "#f43f5e" : (rem5 < 50 ? "#f59e0b" : "#38bdf8");
+  }
+  if (recap5hRemain) recap5hRemain.textContent = `${formatNumber(estCallsLeft5h)} appels disponibles`;
+  if (recap5hReset) recap5hReset.textContent = `⏱️ Reset : ${q5.reset_date || "Prêt"} (${q5.reset_in || "immédiat"})`;
+
+  const recapWeeklyPct = document.getElementById("recapWeeklyPct");
+  const recapWeeklyRemain = document.getElementById("recapWeeklyRemain");
+  const recapWeeklyReset = document.getElementById("recapWeeklyReset");
+
+  const rem7 = qw.remaining_pct !== undefined ? qw.remaining_pct : (100 - (qw.pct_used || 0));
+  const maxCalls7d = qw.max_calls || (appConfig.pricing_mode === "google_ai_pro" ? 1500 : 3000);
+  const estCallsLeft7d = Math.max(0, Math.round((rem7 / 100) * maxCalls7d));
+
+  if (recapWeeklyPct) {
+    recapWeeklyPct.textContent = `${rem7}% restant`;
+    recapWeeklyPct.style.color = rem7 < 20 ? "#f43f5e" : (rem7 < 50 ? "#f59e0b" : "#34d399");
+  }
+  if (recapWeeklyRemain) recapWeeklyRemain.textContent = `${formatNumber(estCallsLeft7d)} appels disponibles`;
+  if (recapWeeklyReset) recapWeeklyReset.textContent = `📅 Reset : ${qw.reset_date || "Prêt"} (${qw.reset_in || "immédiat"})`;
+
+  // 2. Tableau historique mois par mois
+  const tbody = document.getElementById("monthlyRecapTableBody");
+  if (tbody) {
+    if (!history || history.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">Aucune donnée mensuelle enregistrée.</td></tr>`;
+    } else {
+      let totCalls = 0;
+      let totTokens = 0;
+      let totVal = 0;
+
+      tbody.innerHTML = history.map(m => {
+        totCalls += m.calls || 0;
+        totTokens += m.total_tokens || 0;
+        const outAndThink = (m.output_tokens || 0) + (m.thinking_tokens || 0);
+        const apiVal = appConfig.currency === "EUR" ? (m.api_value_eur || m.cost_eur || 0) : (m.api_value_usd || m.cost_usd || 0);
+        totVal += apiVal;
+
+        return `
+          <tr>
+            <td><strong style="color: #ffffff;">${escapeHtml(m.month_name || m.month_key)}</strong></td>
+            <td><span class="badge-tag" style="color: #38bdf8; font-weight: 600;">${formatNumber(m.calls || 0)} appels</span></td>
+            <td>${formatNumber(m.input_tokens || 0)}</td>
+            <td>${formatNumber(outAndThink)}</td>
+            <td><strong>${formatNumber(m.total_tokens || 0)}</strong></td>
+            <td>${formatNumber(m.avg_tokens_per_call || 0)} tok/app</td>
+            <td><span style="color: #34d399; font-weight: 700;">${formatCurrency(apiVal, appConfig.currency)}</span></td>
+            <td><span class="badge-tag">${m.days_count || 1} j actif${(m.days_count || 1) > 1 ? 's' : ''}</span></td>
+          </tr>
+        `;
+      }).join("");
+
+      // Totaux globaux
+      const totalsDiv = document.getElementById("monthlyRecapTotals");
+      if (totalsDiv) {
+        totalsDiv.innerHTML = `
+          <div><strong>Total Cumulé :</strong> <span style="color: #38bdf8; font-weight: 700;">${formatNumber(totCalls)} requêtes</span></div>
+          <div><strong>Volume Total :</strong> <span style="color: #c084fc; font-weight: 700;">${formatNumber(totTokens)} tokens</span></div>
+          <div><strong>Valeur API Totale :</strong> <span style="color: #34d399; font-weight: 700;">${formatCurrency(totVal, appConfig.currency)}</span></div>
+        `;
+      }
+    }
+  }
+}
+
+// --- GESTION DU CHANGELOG & NOUVEAUTÉS ---
+const CURRENT_APP_VERSION = "1.4.0";
+
+function openChangelogModal() {
+  const modal = document.getElementById("changelogModal");
+  if (!modal) return;
+  modal.style.display = "flex";
+  modal.classList.add("active");
+}
+
+function closeChangelogModal() {
+  const modal = document.getElementById("changelogModal");
+  if (modal) {
+    modal.style.display = "none";
+    modal.classList.remove("active");
+  }
+}
+
+function checkAutoOpenChangelog() {
+  const lastSeen = localStorage.getItem("tracker_last_seen_version");
+  if (!lastSeen || lastSeen !== CURRENT_APP_VERSION) {
+    setTimeout(() => {
+      openChangelogModal();
+      localStorage.setItem("tracker_last_seen_version", CURRENT_APP_VERSION);
+    }, 600);
   }
 }
 

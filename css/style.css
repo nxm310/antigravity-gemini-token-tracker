@@ -1159,3 +1159,122 @@ kbd {
   to { transform: translateY(0); opacity: 1; }
 }
 
+/* --- MODAL LARGE & RECAPITULATIF MENSUEL --- */
+.modal-box-large {
+  max-width: 860px !important;
+  width: 92% !important;
+}
+
+.quota-avail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.quota-avail-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.2s;
+}
+
+.quota-avail-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.quota-avail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.quota-avail-val {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.quota-avail-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.quota-avail-foot {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 6px;
+  margin-top: 4px;
+}
+
+/* --- CHANGELOG TIMELINE --- */
+.changelog-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.changelog-item {
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px solid rgba(255, 255, 255, 0.12);
+  transition: border-color 0.2s;
+}
+
+.changelog-item:hover {
+  border-left-color: var(--accent-cyan);
+}
+
+.changelog-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.changelog-badge.current {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.changelog-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.changelog-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.changelog-list li {
+  margin-bottom: 6px;
+}
+
+.version-tag {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  font-size: 0.72rem;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+

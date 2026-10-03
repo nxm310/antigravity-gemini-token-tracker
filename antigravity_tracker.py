@@ -424,7 +424,9 @@ def scan_all_sessions(
                     "thinking_tokens": 0,
                     "calls": 0,
                     "cost_usd": 0.0,
-                    "cost_eur": 0.0
+                    "cost_eur": 0.0,
+                    "api_value_usd": 0.0,
+                    "api_value_eur": 0.0
                 }
             all_daily_trends[d]["input_tokens"] += acts.get("input_tokens", 0)
             all_daily_trends[d]["output_tokens"] += acts.get("output_tokens", 0)
@@ -442,6 +444,8 @@ def scan_all_sessions(
             )
             all_daily_trends[d]["cost_usd"] += d_cost["total_cost_usd"]
             all_daily_trends[d]["cost_eur"] += d_cost["total_cost_eur"]
+            all_daily_trends[d]["api_value_usd"] += d_cost.get("api_value_usd", 0.0)
+            all_daily_trends[d]["api_value_eur"] += d_cost.get("api_value_eur", 0.0)
 
             if d == today_str:
                 today_input += acts.get("input_tokens", 0)
@@ -660,6 +664,56 @@ def scan_all_sessions(
     except Exception:
         pass
 
+    # Agrégation mensuelle de l'historique des tokens et appels
+    MOIS_NOMS_FR = {
+        "01": "Janvier", "02": "Février", "03": "Mars", "04": "Avril",
+        "05": "Mai", "06": "Juin", "07": "Juillet", "08": "Août",
+        "09": "Septembre", "10": "Octobre", "11": "Novembre", "12": "Décembre"
+    }
+    monthly_history_dict = {}
+    for d_str, day_data in all_daily_trends.items():
+        m_key = d_str[:7]  # "YYYY-MM"
+        if m_key not in monthly_history_dict:
+            parts = m_key.split("-")
+            y_str = parts[0]
+            m_num = parts[1] if len(parts) > 1 else "01"
+            m_name = f"{MOIS_NOMS_FR.get(m_num, m_num)} {y_str}"
+            monthly_history_dict[m_key] = {
+                "month_key": m_key,
+                "month_name": m_name,
+                "calls": 0,
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "thinking_tokens": 0,
+                "total_tokens": 0,
+                "cost_usd": 0.0,
+                "cost_eur": 0.0,
+                "api_value_usd": 0.0,
+                "api_value_eur": 0.0,
+                "active_days": set()
+            }
+        mh = monthly_history_dict[m_key]
+        in_t = day_data.get("input_tokens", 0)
+        out_t = day_data.get("output_tokens", 0)
+        th_t = day_data.get("thinking_tokens", 0)
+        mh["calls"] += day_data.get("calls", 0)
+        mh["input_tokens"] += in_t
+        mh["output_tokens"] += out_t
+        mh["thinking_tokens"] += th_t
+        mh["total_tokens"] += (in_t + out_t + th_t)
+        mh["cost_usd"] = round(mh["cost_usd"] + day_data.get("cost_usd", 0.0), 4)
+        mh["cost_eur"] = round(mh["cost_eur"] + day_data.get("cost_eur", 0.0), 4)
+        mh["api_value_usd"] = round(mh["api_value_usd"] + day_data.get("api_value_usd", 0.0), 4)
+        mh["api_value_eur"] = round(mh["api_value_eur"] + day_data.get("api_value_eur", 0.0), 4)
+        mh["active_days"].add(d_str)
+
+    monthly_history = []
+    for m_key in sorted(monthly_history_dict.keys(), reverse=True):
+        item = monthly_history_dict[m_key]
+        item["days_count"] = len(item.pop("active_days", []))
+        item["avg_tokens_per_call"] = round(item["total_tokens"] / item["calls"]) if item["calls"] > 0 else 0
+        monthly_history.append(item)
+
     # La session active est la première (la plus récemment modifiée)
     active_session = sessions[0] if sessions else None
 
@@ -692,5 +746,6 @@ def scan_all_sessions(
         "quota_weekly": quota_weekly,
         "active_session": active_session,
         "daily_trends": all_daily_trends,
+        "monthly_history": monthly_history,
         "workspace_breakdown": workspace_breakdown
     }

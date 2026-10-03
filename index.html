@@ -79,6 +79,16 @@
         <button id="apiKeyBtn" class="ctrl-btn btn-key-warning">
           🔑 Configurer Clé API
         </button>
+
+        <!-- Bouton Récapitulatif Mensuel & Quotas Disponibles -->
+        <button id="btnMonthlyRecap" class="ctrl-btn" title="Récapitulatif mensuel des tokens et quotas disponibles">
+          📊 Quotas & Mois
+        </button>
+
+        <!-- Bouton Pop-up Nouveautés & Changelog -->
+        <button id="btnChangelog" class="ctrl-btn" title="Historique des versions et changements récents">
+          ✨ Nouveautés <span class="version-tag">v1.4</span>
+        </button>
       </div>
     </header>
 
@@ -399,6 +409,181 @@
 
       <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
         <button class="btn-primary" id="gotItMacHintBtn">Compris !</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL RÉCAPITULATIF MENSUEL & QUOTAS DISPONIBLES -->
+  <div id="monthlyRecapModal" class="modal-overlay">
+    <div class="modal-box modal-box-large">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.6rem;">📊</span>
+          <div>
+            <h3 style="margin: 0;">Récapitulatif Mensuel & Quotas Disponibles</h3>
+            <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Historique complet mois par mois des tokens, appels et quotas Gemini Antigravity</p>
+          </div>
+        </div>
+        <button class="close-btn" id="closeMonthlyRecapBtn">&times;</button>
+      </div>
+
+      <!-- Section 1 : Quotas & Capacités Disponibles -->
+      <div style="margin-bottom: 24px;">
+        <h4 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-cyan); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+          ⚡ Quotas & Disponibilités en temps réel
+        </h4>
+        <div class="quota-avail-grid">
+          <!-- Carte Quota 5h -->
+          <div class="quota-avail-card">
+            <div class="quota-avail-head">
+              <span>Limite 5 Heures</span>
+              <span id="recap5hPct" class="badge-tag" style="color: #38bdf8; font-weight: 700;">-</span>
+            </div>
+            <div id="recap5hRemain" class="quota-avail-val">-</div>
+            <div class="quota-avail-sub" id="recap5hReset">-</div>
+            <div class="quota-avail-foot">Renouvellement continu toutes les 5 heures</div>
+          </div>
+
+          <!-- Carte Quota Semaine -->
+          <div class="quota-avail-card">
+            <div class="quota-avail-head">
+              <span>Limite Hebdomadaire (7j)</span>
+              <span id="recapWeeklyPct" class="badge-tag" style="color: #34d399; font-weight: 700;">-</span>
+            </div>
+            <div id="recapWeeklyRemain" class="quota-avail-val">-</div>
+            <div class="quota-avail-sub" id="recapWeeklyReset">-</div>
+            <div class="quota-avail-foot">Remise à zéro hebdomadaire exacte</div>
+          </div>
+
+          <!-- Carte Capacité Mensuelle Pro -->
+          <div class="quota-avail-card">
+            <div class="quota-avail-head">
+              <span>Capacité Mensuelle Estimée</span>
+              <span class="badge-tag" style="color: #c084fc; font-weight: 700;">Google AI Pro</span>
+            </div>
+            <div class="quota-avail-val">~6 000 requêtes / mois</div>
+            <div class="quota-avail-sub" style="color: #a5b4fc;">Contexte jusqu'à 2 000 000 tokens / requête</div>
+            <div class="quota-avail-foot">1 000 RPM • 4M TPM (Priorité maximale)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 : Tableau Historique Mois par Mois -->
+      <div>
+        <h4 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-purple); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+          📅 Historique de Consommation Mensuelle
+        </h4>
+        <div class="table-container" style="max-height: 280px; overflow-y: auto;">
+          <table class="sessions-table">
+            <thead>
+              <tr>
+                <th>Mois</th>
+                <th>Appels</th>
+                <th>Tokens Entrée</th>
+                <th>Tokens Sortie & Thinking</th>
+                <th>Total Tokens</th>
+                <th>Moyenne / Appel</th>
+                <th>Valeur API</th>
+                <th>Jours Actifs</th>
+              </tr>
+            </thead>
+            <tbody id="monthlyRecapTableBody">
+              <!-- Rempli dynamiquement -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Totaux globaux -->
+      <div id="monthlyRecapTotals" style="margin-top: 16px; padding: 12px 18px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.85rem;">
+        <div>Chargement des totaux...</div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+        <button class="btn-primary" id="closeMonthlyRecapBtn2">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL POP-UP NOUVEAUTÉS & HISTORIQUE DES VERSIONS -->
+  <div id="changelogModal" class="modal-overlay">
+    <div class="modal-box modal-box-large">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.6rem;">✨</span>
+          <div>
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
+              Nouveautés & Historique des Versions
+              <span class="version-tag">v1.4.0</span>
+            </h3>
+            <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Journal des changements, améliorations et évolutions d'Antigravity Gemini Tracker</p>
+          </div>
+        </div>
+        <button class="close-btn" id="closeChangelogBtn">&times;</button>
+      </div>
+
+      <div class="changelog-timeline" style="max-height: 58vh; overflow-y: auto; padding-right: 8px;">
+        <!-- Version 1.4.0 (Actuelle) -->
+        <div class="changelog-item">
+          <div class="changelog-badge current">v1.4.0 • Actuelle (03 Octobre 2026)</div>
+          <h4 class="changelog-title">Récapitulatif Mensuel, Pop-up Nouveautés & Disposition Sommet</h4>
+          <ul class="changelog-list">
+            <li><strong>📊 Bouton Récapitulatif Mensuel :</strong> Intégré directement dans le menu du haut avec l'historique complet mois par mois (Septembre, Octobre...) détaillant tokens totaux, nombre d'appels, valeur API et quotas restants.</li>
+            <li><strong>✨ Pop-up Nouveautés automatique :</strong> Affichage automatique des changements lors de chaque mise à jour avec historique des versions accessible à tout moment.</li>
+            <li><strong>📐 Limites 5h et 7j repositionnées en haut :</strong> Les cartes de limites glissantes sont désormais affichées en premier, juste en dessous du menu d'en-tête.</li>
+            <li><strong>🔢 Tokens Billed & Coûts juste en dessous :</strong> Placement direct des cartes de tokens facturés et de facturation sous les limites hebdomadaires.</li>
+            <li><strong>🧹 Interface épurée :</strong> Suppression de l'ancienne bannière de connexion locale pour un affichage plus fluide et rapide.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.3.0 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.3.0 (03 Octobre 2026)</div>
+          <h4 class="changelog-title">Synchronisation Live Connect-RPC Antigravity IDE</h4>
+          <ul class="changelog-list">
+            <li><strong>⚡ Connexion directe au language_server :</strong> Interrogation interne du service RPC d'Antigravity (<code>RetrieveUserQuotaSummary</code>).</li>
+            <li><strong>⏱️ Décompte dynamique à la seconde :</strong> Minuteur temps réel précis (ex. <code>⏱️ dans 3h 58m 12s</code> et <code>⏱️ dans 6j 22h 45m</code>).</li>
+            <li><strong>📅 Date et heure exacte de remise à 0 :</strong> Affichage du reset exact en français (ex. <code>Aujourd'hui à 20:06</code> et <code>Samedi 10 oct. à 15:06</code>).</li>
+            <li><strong>🎯 Pourcentages 100% fidèles :</strong> Alignement strict avec l'écran officiel des paramètres d'Antigravity IDE.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.2.0 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.2.0 (03 Octobre 2026)</div>
+          <h4 class="changelog-title">Application Web & Déploiement GitHub Pages</h4>
+          <ul class="changelog-list">
+            <li><strong>🌐 Web App en ligne :</strong> Déploiement complet hébergé sur GitHub Pages.</li>
+            <li><strong>🔄 Architecture Hybride :</strong> Chargement automatique du snapshot <code>data.json</code> et passerelle vers le démon local via Private Network Access.</li>
+            <li><strong>💻 Support PWA macOS Dock :</strong> Installation en 1 clic dans le Dock comme application native.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.1.0 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.1.0 (03 Octobre 2026)</div>
+          <h4 class="changelog-title">Forfait Google AI Pro & Simulateur Multimodal</h4>
+          <ul class="changelog-list">
+            <li><strong>👑 Google AI Pro (21,99 €/mois) :</strong> Prise en compte du forfait Google One AI Premium, calcul de rentabilité (ROI) et valeur API offerte.</li>
+            <li><strong>🖼️ Simulateur Multimodal :</strong> Prise en charge des images, documents PDF, vidéos et audio avec estimation instantanée des tokens Gemini.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.0.0 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.0.0 (03 Octobre 2026)</div>
+          <h4 class="changelog-title">Lancement Initial Antigravity Gemini Token Tracker</h4>
+          <ul class="changelog-list">
+            <li><strong>🚀 Analyseur de sessions :</strong> Lecture en continu des logs de session Antigravity (<code>transcript.jsonl</code>).</li>
+            <li><strong>💰 Grille tarifaire officielle Gemini :</strong> Prise en charge de Gemini Flash, Pro et Thinking.</li>
+            <li><strong>📈 Graphiques interactifs :</strong> Visualisations Chart.js par date et par modèle.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Antigravity Token Tracker • Google DeepMind & Antigravity Suite</span>
+        <button class="btn-primary" id="closeChangelogBtn2">C'est noté !</button>
       </div>
     </div>
   </div>
