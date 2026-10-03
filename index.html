@@ -82,96 +82,11 @@
       </div>
     </header>
 
-    <!-- BANNIÈRE DE CONNEXION AU DOSSIER LOCAL ANTIGRAVITY -->
-    <div id="connectBanner" class="connect-banner">
-      <div class="connect-left">
-        <div class="connect-icon" id="connectIcon">📂</div>
-        <div>
-          <div class="connect-title" id="connectTitle">
-            Connecter votre dossier local Antigravity
-          </div>
-          <div class="connect-sub" id="connectSubtitle">
-            Sélectionnez <code>~/.gemini/antigravity</code> pour synchroniser instantanément vos sessions et quotas en temps réel.
-          </div>
-        </div>
-      </div>
-      <div class="connect-actions">
-        <!-- Bouton principal File System API -->
-        <button id="btnPickFolder" class="btn-connect-folder">
-          📂 Sélectionner le dossier Antigravity
-        </button>
-        
-        <!-- Input dossier fallback (Safari / drag) -->
-        <input type="file" id="fallbackFolderInput" webkitdirectory directory multiple style="display: none;">
-        <button id="btnFallbackFolder" class="btn-connect-secondary" title="Importer le dossier via le sélecteur de fichiers standard">
-          📁 Importer dossier
-        </button>
-
-        <!-- Astuce macOS -->
-        <button id="btnMacHint" class="btn-connect-secondary" title="Voir l'astuce pour afficher le dossier .gemini dans le Finder">
-          🍎 Astuce Mac <kbd>Cmd+Shift+.</kbd>
-        </button>
-
-        <!-- Mode Démo -->
-        <button id="btnDemoMode" class="btn-connect-secondary" style="color: #cbd5e1;" title="Afficher un exemple avec des données de démonstration">
-          ✨ Données démo
-        </button>
-      </div>
-    </div>
-
-    <!-- ALERTS CONTAINER -->
+    <!-- ALERTS CONTAINER (si avertissements de quota/budget) -->
     <div id="alertsContainer" style="display: none;"></div>
 
-    <!-- BANNIÈRE ABONNEMENT GOOGLE AI PRO -->
-    <div id="proSubscriptionBanner" class="pro-banner">
-      <div class="pro-banner-left">
-        <div class="pro-crown-icon">👑</div>
-        <div>
-          <div class="pro-banner-title">Abonnement Google AI PRO Actif (<span id="proMonthlyPrice">21,99 €</span>/mois)</div>
-          <div class="pro-banner-sub">Vos requêtes Antigravity bénéficient des quotas prioritaires et contextes étendus jusqu'à 2M tokens.</div>
-        </div>
-      </div>
-      <div class="pro-banner-right">
-        <div class="pro-stat-group">
-          <span class="pro-stat-label">Valeur API Consommée</span>
-          <span id="proApiValueBanner" class="pro-stat-val">0,0000 €</span>
-        </div>
-        <div class="pro-stat-group">
-          <span class="pro-stat-label">Taux de Rentabilité</span>
-          <span id="proRoiBanner" class="pro-stat-val" style="color: #34d399;">0%</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- KPI CARDS GRID -->
-    <div class="kpi-grid">
-      <!-- Coût Total / Forfait Pro -->
-      <div class="kpi-card card-cost">
-        <div class="kpi-header">
-          <span id="kpiCostTitle" class="kpi-title">Facturation & Abonnement</span>
-          <div class="kpi-icon icon-purple">💰</div>
-        </div>
-        <div id="kpiTotalCost" class="kpi-value">Inclus (0,00 €)</div>
-        <div class="kpi-subtext">
-          <span id="kpiCostSubtitle" class="badge-tag">Valeur API : 0,0000 €</span>
-          <span id="kpiTodayCost" class="badge-tag">0,0000 € auj.</span>
-        </div>
-      </div>
-
-      <!-- Tokens Facturés -->
-      <div class="kpi-card card-tokens">
-        <div class="kpi-header">
-          <span class="kpi-title">Tokens Billed (API)</span>
-          <div class="kpi-icon icon-cyan">🔢</div>
-        </div>
-        <div id="kpiTotalTokens" class="kpi-value">0</div>
-        <div class="kpi-subtext">
-          <span id="kpiInTokens" class="badge-tag">0 entrée</span>
-          <span id="kpiOutTokens" class="badge-tag">0 sortie</span>
-          <span id="kpiThinkingTokens" class="badge-tag">0 thinking</span>
-        </div>
-      </div>
-
+    <!-- 1. LIMITES EN TEMPS RÉEL (5 HEURES & SEMAINE) - JUSTE EN DESSOUS DU MENU CLÉ ACTIVE -->
+    <div class="kpi-grid kpi-grid-limits">
       <!-- Limite sur 5 heures (Fenêtre glissante Antigravity) -->
       <div class="kpi-card card-5h">
         <div class="kpi-header">
@@ -209,6 +124,60 @@
         </div>
       </div>
     </div>
+
+    <!-- 2. TOKENS BILLED & FACTURATION - JUSTE EN DESSOUS DES LIMITES DE LA SEMAINE -->
+    <div class="kpi-grid kpi-grid-billed">
+      <!-- Tokens Facturés (Billed) -->
+      <div class="kpi-card card-tokens">
+        <div class="kpi-header">
+          <span class="kpi-title">Tokens Billed (API)</span>
+          <div class="kpi-icon icon-cyan">🔢</div>
+        </div>
+        <div id="kpiTotalTokens" class="kpi-value">0</div>
+        <div class="kpi-subtext">
+          <span id="kpiInTokens" class="badge-tag">0 entrée</span>
+          <span id="kpiOutTokens" class="badge-tag">0 sortie</span>
+          <span id="kpiThinkingTokens" class="badge-tag">0 thinking</span>
+        </div>
+      </div>
+
+      <!-- Coût Total / Forfait Pro (Facturation) -->
+      <div class="kpi-card card-cost">
+        <div class="kpi-header">
+          <span id="kpiCostTitle" class="kpi-title">Facturation & Abonnement</span>
+          <div class="kpi-icon icon-purple">💰</div>
+        </div>
+        <div id="kpiTotalCost" class="kpi-value">Inclus (0,00 €)</div>
+        <div class="kpi-subtext">
+          <span id="kpiCostSubtitle" class="badge-tag">Valeur API : 0,0000 €</span>
+          <span id="kpiTodayCost" class="badge-tag">0,0000 € auj.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANNIÈRE ABONNEMENT GOOGLE AI PRO -->
+    <div id="proSubscriptionBanner" class="pro-banner">
+      <div class="pro-banner-left">
+        <div class="pro-crown-icon">👑</div>
+        <div>
+          <div class="pro-banner-title">Abonnement Google AI PRO Actif (<span id="proMonthlyPrice">21,99 €</span>/mois)</div>
+          <div class="pro-banner-sub">Vos requêtes Antigravity bénéficient des quotas prioritaires et contextes étendus jusqu'à 2M tokens.</div>
+        </div>
+      </div>
+      <div class="pro-banner-right">
+        <div class="pro-stat-group">
+          <span class="pro-stat-label">Valeur API Consommée</span>
+          <span id="proApiValueBanner" class="pro-stat-val">0,0000 €</span>
+        </div>
+        <div class="pro-stat-group">
+          <span class="pro-stat-label">Taux de Rentabilité</span>
+          <span id="proRoiBanner" class="pro-stat-val" style="color: #34d399;">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden input fallback pour compatibilité interne -->
+    <input type="file" id="fallbackFolderInput" webkitdirectory directory multiple style="display: none;">
 
     <!-- HERO LIVE ACTIVE SESSION -->
     <div id="heroActiveSession" class="hero-session">
