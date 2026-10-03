@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antigravity Gemini Token & Cost Tracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2306b6d4'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+  <div class="container">
+    
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>Antigravity Gemini Tracker</h1>
+          <p>Suivi en direct des Tokens, Coûts et Quotas Google Gemini</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="live-badge">
+          <span class="pulse-dot"></span>
+          <span>Live Antigravity Watcher</span>
+        </div>
+
+        <!-- Badge Google AI Pro -->
+        <div id="proBadge" class="pro-badge">
+          👑 Google AI Pro
+        </div>
+
+        <!-- Devise -->
+        <select id="currencySelect" class="ctrl-select" title="Changer de devise">
+          <option value="EUR">🇪🇺 EUR (€)</option>
+          <option value="USD">🇺🇸 USD ($)</option>
+        </select>
+
+        <!-- Mode Tarification -->
+        <select id="modeSelect" class="ctrl-select" title="Mode de calcul">
+          <option value="google_ai_pro" selected>👑 Google AI Pro (Abonnement)</option>
+          <option value="pay_as_you_go">💳 Pay-as-you-go</option>
+          <option value="free_tier">🎁 Free Tier ($0)</option>
+        </select>
+
+        <!-- Modèle par défaut -->
+        <select id="modelSelect" class="ctrl-select" title="Modèle Gemini par défaut">
+          <option value="gemini-3.8-flash">⚡ Gemini 3.8 Flash (High)</option>
+          <option value="gemini-2.5-flash">🚀 Gemini 2.5 Flash</option>
+          <option value="gemini-2.0-flash">✨ Gemini 2.0 Flash</option>
+          <option value="gemini-2.0-flash-thinking">🧠 Gemini 2.0 Flash Thinking</option>
+          <option value="gemini-1.5-flash">💨 Gemini 1.5 Flash</option>
+          <option value="gemini-1.5-pro">👑 Gemini 1.5 Pro</option>
+        </select>
+
+        <!-- Bouton Clé API -->
+        <button id="apiKeyBtn" class="ctrl-btn btn-key-warning">
+          🔑 Configurer Clé API
+        </button>
+      </div>
+    </header>
+
+    <!-- ALERTS CONTAINER -->
+    <div id="alertsContainer" style="display: none;"></div>
+
+    <!-- BANNIÈRE ABONNEMENT GOOGLE AI PRO -->
+    <div id="proSubscriptionBanner" class="pro-banner">
+      <div class="pro-banner-left">
+        <div class="pro-crown-icon">👑</div>
+        <div>
+          <div class="pro-banner-title">Abonnement Google AI PRO Actif (<span id="proMonthlyPrice">21,99 €</span>/mois)</div>
+          <div class="pro-banner-sub">Vos requêtes Antigravity bénéficient des quotas prioritaires et contextes étendus jusqu'à 2M tokens.</div>
+        </div>
+      </div>
+      <div class="pro-banner-right">
+        <div class="pro-stat-group">
+          <span class="pro-stat-label">Valeur API Consommée</span>
+          <span id="proApiValueBanner" class="pro-stat-val">0,0000 €</span>
+        </div>
+        <div class="pro-stat-group">
+          <span class="pro-stat-label">Taux de Rentabilité</span>
+          <span id="proRoiBanner" class="pro-stat-val" style="color: #34d399;">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI CARDS GRID -->
+    <div class="kpi-grid">
+      <!-- Coût Total / Forfait Pro -->
+      <div class="kpi-card card-cost">
+        <div class="kpi-header">
+          <span id="kpiCostTitle" class="kpi-title">Facturation & Abonnement</span>
+          <div class="kpi-icon icon-purple">💰</div>
+        </div>
+        <div id="kpiTotalCost" class="kpi-value">Inclus (0,00 €)</div>
+        <div class="kpi-subtext">
+          <span id="kpiCostSubtitle" class="badge-tag">Valeur API : 0,0000 €</span>
+          <span id="kpiTodayCost" class="badge-tag">0,0000 € auj.</span>
+        </div>
+      </div>
+
+      <!-- Tokens Facturés -->
+      <div class="kpi-card card-tokens">
+        <div class="kpi-header">
+          <span class="kpi-title">Tokens Billed (API)</span>
+          <div class="kpi-icon icon-cyan">🔢</div>
+        </div>
+        <div id="kpiTotalTokens" class="kpi-value">0</div>
+        <div class="kpi-subtext">
+          <span id="kpiInTokens" class="badge-tag">0 entrée</span>
+          <span id="kpiOutTokens" class="badge-tag">0 sortie</span>
+          <span id="kpiThinkingTokens" class="badge-tag">0 thinking</span>
+        </div>
+      </div>
+
+      <!-- Limite sur 5 heures (Fenêtre glissante Antigravity) -->
+      <div class="kpi-card card-5h">
+        <div class="kpi-header">
+          <span class="kpi-title">Limite sur 5 heures (Antigravity)</span>
+          <div class="kpi-icon icon-amber">⏱️</div>
+        </div>
+        <div id="kpi5hVal" class="kpi-value" style="color: #38bdf8;">0%</div>
+        <div class="progress-bar-container">
+          <div id="kpi5hBar" class="progress-bar-fill bg-cyan" style="width: 2%;"></div>
+        </div>
+        <div class="kpi-subtext">
+          <span id="kpi5hReset" class="badge-tag">⏱️ Réinitialisation...</span>
+          <span id="kpi5hCallsText" class="badge-tag">0 / 250 appels</span>
+          <span id="kpi5hTokens" class="badge-tag">0 tokens</span>
+        </div>
+      </div>
+
+      <!-- Limite sur la semaine (Usage Hebdomadaire 7 jours) -->
+      <div class="kpi-card card-weekly">
+        <div class="kpi-header">
+          <span class="kpi-title">Limite sur la semaine (7 jours)</span>
+          <div class="kpi-icon icon-green">📅</div>
+        </div>
+        <div id="kpiWeeklyVal" class="kpi-value" style="color: #34d399;">0%</div>
+        <div class="progress-bar-container">
+          <div id="kpiWeeklyBar" class="progress-bar-fill bg-emerald" style="width: 2%;"></div>
+        </div>
+        <div class="kpi-subtext">
+          <span id="kpiWeeklyCallsText" class="badge-tag">0 / 1 500 appels</span>
+          <span id="kpiWeeklyTokens" class="badge-tag">0 tokens sur 7j</span>
+          <span id="kpiWeeklyStatus" class="badge-tag" style="color: #34d399;">Quota optimal</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO LIVE ACTIVE SESSION -->
+    <div id="heroActiveSession" class="hero-session">
+      <div class="hero-left">
+        <h2>
+          <span class="pulse-dot"></span>
+          <span id="activeTitle">Session Antigravity Détectée</span>
+        </h2>
+        <p id="activeWorkspace">Chemin du workspace...</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-label">Tokens Session</div>
+          <div id="activeSessionTokens" class="stat-val">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Coût Session</div>
+          <div id="activeCost" class="stat-val" style="color: var(--accent-purple);">0,0000 €</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAPHIQUES -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <span class="chart-title">📈 Évolution de la Consommation (Tokens par Date)</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartDaily"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <span class="chart-title">🍩 Répartition des Tokens</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartDistribution"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORIQUE DES SESSIONS ANTIGRAVITY -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">
+          <span>📁 Sessions de Code Antigravity</span>
+        </div>
+        <input type="text" id="searchSessions" class="search-input" placeholder="🔍 Rechercher un projet ou dossier...">
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Titre / Projet</th>
+              <th>Workspace</th>
+              <th>Dernière Action</th>
+              <th>Tours API</th>
+              <th>Tokens Entrée</th>
+              <th>Tokens Sortie</th>
+              <th>Coût Total</th>
+            </tr>
+          </thead>
+          <tbody id="sessionsTableBody">
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                Chargement des sessions...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SIMULATEUR DE TOKENS & PRIX MULTIMODAL (TEXTE, IMAGES, DOCUMENTS) -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">
+          <span>🧮 Simulateur de Tokens & Prix Multimodal (Texte, Images & Documents)</span>
+        </div>
+        <button id="calcClearBtn" class="action-btn" style="background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.3); color: #fda4af;">
+          🧹 Réinitialiser
+        </button>
+      </div>
+
+      <div class="calc-grid">
+        <!-- Colonne de Gauche : Saisie Texte & Dropzone -->
+        <div class="calc-input-col">
+          <textarea id="calcInput" class="calc-textarea" placeholder="Collez ici votre prompt, extrait de code ou texte accompagnant vos fichiers..."></textarea>
+          
+          <!-- Dropzone Multimodale -->
+          <div id="dropzone" class="dropzone-box">
+            <input type="file" id="fileInput" multiple accept="image/*,.pdf,.txt,.py,.js,.html,.css,.json,.csv,.md,.docx,.c,.cpp,.h,.rs,.go,.sh" style="display: none;">
+            <div class="dropzone-content">
+              <div class="dropzone-icon">📁 🖼️ 📄</div>
+              <p class="dropzone-text"><strong>Cliquez</strong> ou <strong>glissez-déposez</strong> des images et documents</p>
+              <p class="dropzone-sub">Images (PNG, JPG, WEBP...) • Documents PDF • Code & Texte</p>
+            </div>
+          </div>
+
+          <!-- Liste des fichiers déposés -->
+          <div id="uploadedFilesList" class="uploaded-files-list"></div>
+        </div>
+
+        <!-- Colonne de Droite : Résultats Détaillés & Comparatif Modèles -->
+        <div class="calc-results-col">
+          <div class="calc-hero-badge">
+            <div class="calc-hero-title">Volume Total des Tokens (Prompt + Fichiers)</div>
+            <div id="calcTokensCount" class="calc-hero-val">0 tokens</div>
+            <div id="calcBreakdownPill" class="calc-breakdown-pill">Texte: 0 tok • Fichiers: 0 tok</div>
+          </div>
+
+          <div style="margin-top: 14px;">
+            <div class="calc-subtitle">Coût unitaire estimé (Entrée) :</div>
+            <div id="calcCostEstimate" class="calc-cost-primary">0,000000 €</div>
+          </div>
+
+          <!-- Comparatif des Modèles Gemini -->
+          <div class="model-comparison-box">
+            <div class="calc-subtitle">Comparatif selon les modèles Gemini :</div>
+            <div id="modelComparisonGrid" class="model-comp-grid">
+              <div style="color: var(--text-muted); font-size: 0.78rem; padding: 6px 0;">
+                Ajoutez du texte, une image ou un PDF pour voir le coût comparé.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>Antigravity Gemini Token Tracker • Synchronisation continue avec <code>~/.gemini/antigravity</code></p>
+    </footer>
+
+  </div>
+
+  <!-- MODAL CONFIGURATION CLÉ API -->
+  <div id="apiKeyModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Configuration de la Clé API Gemini</h3>
+        <button class="close-btn" onclick="closeApiKeyModal()">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label for="apiKeyInput">Clé API Google AI Studio :</label>
+        <input type="password" id="apiKeyInput" class="form-control" placeholder="AIzaSy..." autocomplete="off">
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+          Vous pouvez générer une clé gratuite sur <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent-blue);">Google AI Studio</a>. La clé est stockée uniquement sur votre machine locale dans <code>config.json</code>.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="budgetLimitInput">Seuil d'alerte de budget quotidien :</label>
+        <input type="number" id="budgetLimitInput" class="form-control" step="0.5" min="0" value="5.0">
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+          Une alerte s'affichera sur le tableau de bord si le coût de la journée dépasse ce montant.
+        </p>
+      </div>
+
+      <div class="form-group" style="border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px;">
+        <label for="proMonthlyCostInput">👑 Coût mensuel de votre abonnement Google AI Pro :</label>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="number" id="proMonthlyCostInput" class="form-control" step="0.5" min="0" value="21.99" style="max-width: 150px;">
+          <span style="font-size: 0.85rem; color: var(--text-secondary);">€ / mois (Google One AI Premium)</span>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+          Permet de calculer automatiquement la rentabilité de votre abonnement Pro par rapport au volume de requêtes consommées.
+        </p>
+      </div>
+
+      <div id="keyStatusMsg" class="key-status-msg"></div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+        <button class="btn-secondary" onclick="closeApiKeyModal()">Annuler</button>
+        <button class="btn-primary" onclick="testAndSaveApiKey()">Tester & Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

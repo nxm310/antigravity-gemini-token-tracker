@@ -1,0 +1,3 @@
+# Dépendances optionnelles pour le comptage de tokens ultra-rapide et l'API Gemini
+tiktoken>=0.7.0
+google-generativeai>=0.8.0

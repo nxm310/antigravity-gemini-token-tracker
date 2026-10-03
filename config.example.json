@@ -1,0 +1,12 @@
+{
+  "gemini_api_key": "",
+  "default_model": "gemini-3.8-flash",
+  "currency": "EUR",
+  "pricing_mode": "google_ai_pro",
+  "google_ai_pro_active": true,
+  "pro_monthly_cost": 21.99,
+  "usd_to_eur_rate": 0.92,
+  "daily_budget_limit": 5.0,
+  "alert_threshold_pct": 80,
+  "auto_refresh_seconds": 3
+}
