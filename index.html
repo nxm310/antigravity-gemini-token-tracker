@@ -54,42 +54,132 @@
 
       <div class="header-right">
         <!-- Live status -->
-        <div id="liveStatusBadge" class="live-badge">
+        <div id="liveStatusBadge" class="live-badge" title="État de la synchronisation Antigravity">
           <span class="pulse-dot"></span>
-          <span id="liveStatusText">Watcher Antigravity Prêt</span>
+          <span id="liveStatusText">Watcher Actif</span>
         </div>
 
-        <!-- Bouton Installer dans le Dock (PWA) -->
-        <button id="pwaInstallBtn" class="btn-pwa-dock" style="display: none;" title="Installer l'application dans le Dock macOS">
-          💻 Installer dans le Dock
-        </button>
-
         <!-- Badge Google AI Pro -->
-        <div id="proBadge" class="pro-badge">
+        <div id="proBadge" class="pro-badge" title="Forfait Google AI Pro actif">
           👑 Google AI Pro
         </div>
 
-        <!-- Mode Tarification -->
-        <select id="modeSelect" class="ctrl-select" title="Mode de calcul">
-          <option value="google_ai_pro" selected>👑 Google AI Pro (Abonnement)</option>
-          <option value="pay_as_you_go">💳 Pay-as-you-go</option>
-          <option value="free_tier">🎁 Free Tier ($0)</option>
-        </select>
+        <!-- Menu Principal Unifié (3 points ⋮) -->
+        <div class="menu-dropdown-wrapper">
+          <button id="mainMenuBtn" class="menu-trigger-btn" aria-label="Menu principal" aria-haspopup="true" aria-expanded="false" title="Menu des options et outils">
+            <svg class="menu-icon-dots" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="5" r="2.2"></circle>
+              <circle cx="12" cy="12" r="2.2"></circle>
+              <circle cx="12" cy="19" r="2.2"></circle>
+            </svg>
+            <span class="menu-trigger-text">Menu</span>
+          </button>
 
-        <!-- Bouton Clé API -->
-        <button id="apiKeyBtn" class="ctrl-btn btn-key-warning">
-          🔑 Configurer Clé API
-        </button>
+          <!-- Dropdown Card -->
+          <div id="mainDropdownMenu" class="main-dropdown-menu" role="menu" aria-hidden="true">
+            <div class="menu-dropdown-inner">
 
-        <!-- Bouton Récapitulatif Mensuel & Quotas Disponibles -->
-        <button id="btnMonthlyRecap" class="ctrl-btn" title="Récapitulatif mensuel des tokens et quotas disponibles">
-          📊 Quotas & Mois
-        </button>
+              <!-- Section: Tarification -->
+              <div class="menu-group">
+                <div class="menu-group-header">MODE DE CALCUL</div>
+                <div class="menu-mode-card">
+                  <div class="menu-select-box">
+                    <select id="modeSelect" class="menu-select" title="Mode de calcul de la consommation">
+                      <option value="google_ai_pro" selected>👑 Google AI Pro (Abonnement)</option>
+                      <option value="pay_as_you_go">💳 Pay-as-you-go</option>
+                      <option value="free_tier">🎁 Free Tier ($0)</option>
+                    </select>
+                    <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+              </div>
 
-        <!-- Bouton Pop-up Nouveautés & Changelog -->
-        <button id="btnChangelog" class="ctrl-btn" title="Historique des versions et changements récents">
-          ✨ Nouveautés <span class="version-tag">v1.6.0</span>
-        </button>
+              <div class="menu-divider"></div>
+
+              <!-- Section: Données & Accès -->
+              <div class="menu-group">
+                <div class="menu-group-header">DONNÉES & QUOTAS</div>
+
+                <!-- Bouton Clé API -->
+                <button id="apiKeyBtn" class="menu-item-row" role="menuitem" title="Configurer votre clé API Google Gemini">
+                  <div class="menu-item-icon-box key-icon-box">
+                    <span class="menu-item-emoji">🔑</span>
+                  </div>
+                  <div class="menu-item-text">
+                    <div class="menu-item-name">Clé API Gemini</div>
+                    <div id="apiKeyMenuDesc" class="menu-item-sub">Configurer pour les quotas live</div>
+                  </div>
+                  <span id="apiKeyMenuBadge" class="menu-pill-badge warning">À configurer</span>
+                </button>
+
+                <!-- Bouton Récapitulatif Mensuel -->
+                <button id="btnMonthlyRecap" class="menu-item-row" role="menuitem" title="Historique mois par mois et quotas restants">
+                  <div class="menu-item-icon-box stats-icon-box">
+                    <span class="menu-item-emoji">📊</span>
+                  </div>
+                  <div class="menu-item-text">
+                    <div class="menu-item-name">Quotas & Historique Mensuel</div>
+                    <div class="menu-item-sub">Consommation & quotas par mois</div>
+                  </div>
+                  <svg class="item-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+
+                <!-- Bouton Actualiser -->
+                <button id="btnForceRefresh" class="menu-item-row" role="menuitem" title="Recharger immédiatement les données">
+                  <div class="menu-item-icon-box refresh-icon-box">
+                    <span class="menu-item-emoji">🔄</span>
+                  </div>
+                  <div class="menu-item-text">
+                    <div class="menu-item-name">Actualiser les données</div>
+                    <div class="menu-item-sub">Recharger les métriques à l'instant</div>
+                  </div>
+                </button>
+              </div>
+
+              <div class="menu-divider"></div>
+
+              <!-- Section: Application -->
+              <div class="menu-group">
+                <div class="menu-group-header">APPLICATION</div>
+
+                <!-- Bouton Nouveautés -->
+                <button id="btnChangelog" class="menu-item-row" role="menuitem" title="Voir les nouveautés et l'historique des versions">
+                  <div class="menu-item-icon-box news-icon-box">
+                    <span class="menu-item-emoji">✨</span>
+                  </div>
+                  <div class="menu-item-text">
+                    <div class="menu-item-name">Nouveautés & Versions</div>
+                    <div class="menu-item-sub">Historique des mises à jour</div>
+                  </div>
+                  <span class="menu-pill-badge version">v1.7.0</span>
+                </button>
+
+                <!-- Bouton Installer dans le Dock (PWA) -->
+                <button id="pwaInstallBtn" class="menu-item-row" role="menuitem" style="display: none;" title="Installer l'application dans le Dock macOS">
+                  <div class="menu-item-icon-box dock-icon-box">
+                    <span class="menu-item-emoji">💻</span>
+                  </div>
+                  <div class="menu-item-text">
+                    <div class="menu-item-name">Installer dans le Dock</div>
+                    <div class="menu-item-sub">Application macOS autonome</div>
+                  </div>
+                  <span class="menu-pill-badge info">Installer</span>
+                </button>
+              </div>
+
+              <!-- Footer du menu -->
+              <div class="menu-footer">
+                <span class="menu-footer-status"><span class="pulse-dot-mini"></span> Connecté Connect-RPC</span>
+                <span class="menu-footer-ver">v1.7.0</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -564,7 +654,7 @@
           <div>
             <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
               Nouveautés & Historique des Versions
-              <span class="version-tag">v1.6.0</span>
+              <span class="version-tag">v1.7.0</span>
             </h3>
             <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Journal des changements, améliorations et évolutions d'Antigravity Gemini Tracker</p>
           </div>
@@ -573,9 +663,22 @@
       </div>
 
       <div class="changelog-timeline" style="max-height: 58vh; overflow-y: auto; padding-right: 8px;">
-        <!-- Version 1.6.0 (Actuelle) -->
+        <!-- Version 1.7.0 (Actuelle) -->
         <div class="changelog-item">
-          <div class="changelog-badge current">v1.6.0 • Actuelle (04 Octobre 2026)</div>
+          <div class="changelog-badge current">v1.7.0 • Actuelle (04 Octobre 2026)</div>
+          <h4 class="changelog-title">Menu SaaS Unifié (3 Points ⋮) & Présentation Professionnelle Épurée</h4>
+          <ul class="changelog-list">
+            <li><strong>✨ Menu Déroulant Centralisé (3 points ⋮) :</strong> Tous les boutons d'en-tête (Mode de tarification, Clé API, Quotas mensuels, Nouveautés, Installation Dock PWA et Actualisation) sont désormais réunis dans un menu déroulant élégant et moderne.</li>
+            <li><strong>📱 En-tête Responsive Ultra-Propre :</strong> Fin de l'encombrement sur mobile et desktop ! L'en-tête tient sur une seule ligne parfaitement équilibrée avec le statut live et le badge d'abonnement.</li>
+            <li><strong>💎 Esthétique Dark SaaS & Glassmorphism :</strong> Cartes aux finitions soignées, flou d'arrière-plan haute fidélité, micro-interactions fluides et badges d'état en direct.</li>
+            <li><strong>🔄 Action Rapide d'Actualisation :</strong> Actualisez en un clic directement depuis le menu ou via le geste de glisser vers le bas (Pull-to-Refresh).</li>
+            <li><strong>🛡️ Clé API & Quotas Temps Réel :</strong> Indicateur dynamique de validité de votre clé API Gemini directement intégré au menu avec masquage sécurisé.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.6.0 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.6.0 (04 Octobre 2026)</div>
           <h4 class="changelog-title">Actualisation au Glisser vers le Bas (Pull to Refresh) sur Smartphone & Desktop</h4>
           <ul class="changelog-list">
             <li><strong>📱 Pull-to-Refresh natif :</strong> Tirez simplement l'écran vers le bas pour actualiser instantanément l'application web et recharger toutes les métriques de tokens et quotas.</li>
@@ -676,6 +779,6 @@
     </div>
   </div>
 
-  <script src="./js/app.js?v=1.6.0"></script>
+  <script src="./js/app.js?v=1.7.0"></script>
 </body>
 </html>

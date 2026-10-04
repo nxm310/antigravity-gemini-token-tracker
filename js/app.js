@@ -281,9 +281,10 @@ function initPWA() {
     e.preventDefault();
     appState.pwaDeferredPrompt = e;
     if (pwaBtn) {
-      pwaBtn.style.display = "inline-flex";
+      pwaBtn.style.display = "flex";
       pwaBtn.addEventListener("click", async () => {
         if (!appState.pwaDeferredPrompt) return;
+        closeMainMenu();
         appState.pwaDeferredPrompt.prompt();
         const { outcome } = await appState.pwaDeferredPrompt.userChoice;
         if (outcome === "accepted") {
@@ -549,22 +550,79 @@ function initEventListeners() {
     showToast("✨ Données de démonstration chargées");
   });
 
+  // Menu Déroulant Principal Unifié (3 points ⋮)
+  const mainMenuBtn = document.getElementById("mainMenuBtn");
+  const mainDropdownMenu = document.getElementById("mainDropdownMenu");
+
+  if (mainMenuBtn && mainDropdownMenu) {
+    mainMenuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = mainDropdownMenu.classList.contains("active");
+      if (isOpen) {
+        closeMainMenu();
+      } else {
+        openMainMenu();
+      }
+    });
+
+    // Fermeture au clic à l'extérieur
+    document.addEventListener("click", (e) => {
+      if (mainDropdownMenu.classList.contains("active")) {
+        if (!mainDropdownMenu.contains(e.target) && !mainMenuBtn.contains(e.target)) {
+          closeMainMenu();
+        }
+      }
+    });
+
+    // Fermeture avec la touche Échap
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && mainDropdownMenu.classList.contains("active")) {
+        closeMainMenu();
+      }
+    });
+  }
+
   // Modal Clé API
-  document.getElementById("apiKeyBtn")?.addEventListener("click", openApiKeyModal);
+  document.getElementById("apiKeyBtn")?.addEventListener("click", () => {
+    closeMainMenu();
+    openApiKeyModal();
+  });
   document.getElementById("closeApiKeyBtn")?.addEventListener("click", closeApiKeyModal);
   document.getElementById("cancelApiKeyBtn")?.addEventListener("click", closeApiKeyModal);
   document.getElementById("saveApiKeyBtn")?.addEventListener("click", testAndSaveApiKey);
 
   // Modal Récapitulatif Mensuel
-  document.getElementById("btnMonthlyRecap")?.addEventListener("click", openMonthlyRecapModal);
+  document.getElementById("btnMonthlyRecap")?.addEventListener("click", () => {
+    closeMainMenu();
+    openMonthlyRecapModal();
+  });
   document.getElementById("closeMonthlyRecapBtn")?.addEventListener("click", closeMonthlyRecapModal);
   document.getElementById("closeMonthlyRecapBtn2")?.addEventListener("click", closeMonthlyRecapModal);
   document.getElementById("monthlyRecapModal")?.addEventListener("click", (e) => {
     if (e.target.id === "monthlyRecapModal") closeMonthlyRecapModal();
   });
 
+  // Action Actualiser dans le Menu
+  document.getElementById("btnForceRefresh")?.addEventListener("click", async () => {
+    closeMainMenu();
+    showToast("🔄 Actualisation des données...");
+    try {
+      if (appState.mode === "server") {
+        await fetchServerDashboard();
+      } else {
+        await tryLoadDataJsonSnapshot();
+      }
+      showToast("✨ Données actualisées avec succès");
+    } catch (e) {
+      showToast("⚠️ Erreur lors de l'actualisation");
+    }
+  });
+
   // Modal Nouveautés & Changelog
-  document.getElementById("btnChangelog")?.addEventListener("click", openChangelogModal);
+  document.getElementById("btnChangelog")?.addEventListener("click", () => {
+    closeMainMenu();
+    openChangelogModal();
+  });
   document.getElementById("closeChangelogBtn")?.addEventListener("click", closeChangelogModal);
   document.getElementById("closeChangelogBtn2")?.addEventListener("click", closeChangelogModal);
   document.getElementById("changelogModal")?.addEventListener("click", (e) => {
@@ -2209,16 +2267,54 @@ async function testAndSaveApiKey() {
   }
 }
 
+// --- GESTION DU MENU PRINCIPAL UNIFIÉ (3 POINTS ⋮) ---
+function openMainMenu() {
+  const btn = document.getElementById("mainMenuBtn");
+  const menu = document.getElementById("mainDropdownMenu");
+  if (!menu) return;
+  menu.classList.add("active");
+  menu.setAttribute("aria-hidden", "false");
+  if (btn) {
+    btn.classList.add("active");
+    btn.setAttribute("aria-expanded", "true");
+  }
+}
+
+function closeMainMenu() {
+  const btn = document.getElementById("mainMenuBtn");
+  const menu = document.getElementById("mainDropdownMenu");
+  if (!menu) return;
+  menu.classList.remove("active");
+  menu.setAttribute("aria-hidden", "true");
+  if (btn) {
+    btn.classList.remove("active");
+    btn.setAttribute("aria-expanded", "false");
+  }
+}
+
 function updateApiKeyButtonStatus() {
   const btn = document.getElementById("apiKeyBtn");
+  const menuDesc = document.getElementById("apiKeyMenuDesc");
+  const menuBadge = document.getElementById("apiKeyMenuBadge");
   if (!btn) return;
+
   if (appConfig.api_key) {
     const masked = `${appConfig.api_key.substring(0, 6)}...${appConfig.api_key.substring(appConfig.api_key.length - 4)}`;
-    btn.className = "ctrl-btn btn-key-valid";
-    btn.innerHTML = `🔑 Clé Active (${masked})`;
+    btn.classList.remove("key-warning");
+    btn.classList.add("key-valid");
+    if (menuDesc) menuDesc.textContent = masked;
+    if (menuBadge) {
+      menuBadge.className = "menu-pill-badge valid";
+      menuBadge.textContent = "Active";
+    }
   } else {
-    btn.className = "ctrl-btn btn-key-warning";
-    btn.innerHTML = `⚠️ Configurer Clé API`;
+    btn.classList.remove("key-valid");
+    btn.classList.add("key-warning");
+    if (menuDesc) menuDesc.textContent = "Configurer pour les quotas live";
+    if (menuBadge) {
+      menuBadge.className = "menu-pill-badge warning";
+      menuBadge.textContent = "À configurer";
+    }
   }
 }
 
@@ -2321,7 +2417,7 @@ function renderMonthlyRecapModal(data) {
 }
 
 // --- GESTION DU CHANGELOG & NOUVEAUTÉS ---
-const CURRENT_APP_VERSION = "1.6.0";
+const CURRENT_APP_VERSION = "1.7.0";
 
 function openChangelogModal() {
   const modal = document.getElementById("changelogModal");
