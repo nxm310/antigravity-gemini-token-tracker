@@ -15,7 +15,7 @@ from config import load_config, save_config
 def main():
     parser = argparse.ArgumentParser(description="Antigravity Gemini Token & Cost Tracker")
     parser.add_argument("--port", type=int, default=5050, help="Port d'écoute du serveur HTTP (défaut: 5050)")
-    parser.add_argument("--host", type=str, default="127.0.0.1", help="Adresse d'écoute (défaut: 127.0.0.1)")
+    parser.add_argument("--host", type=str, default="0.0.0.0", help="Adresse d'écoute (défaut: 0.0.0.0 pour accès réseau local et smartphone)")
     parser.add_argument("--no-browser", action="store_true", help="Ne pas ouvrir automatiquement le navigateur")
     parser.add_argument("--api-key", type=str, default=None, help="Définir la clé API Gemini")
     parser.add_argument("--model", type=str, default=None, help="Modèle Gemini par défaut")
@@ -31,12 +31,25 @@ def main():
         save_config(updates)
 
     cfg = load_config()
-    url = f"http://{args.host}:{args.port}"
+
+    import socket
+    local_ip = "127.0.0.1"
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        local_ip = s.getsockname()[0]
+        s.close()
+    except Exception:
+        pass
+
+    url_browser = f"http://localhost:{args.port}"
+    url_mobile = f"http://{local_ip}:{args.port}"
 
     print("=" * 65)
     print(" 🚀 ANTIGRAVITY GEMINI TOKEN & COST TRACKER")
     print("=" * 65)
-    print(f" • Dashboard URL       : {url}")
+    print(f" • Dashboard Local     : {url_browser}")
+    print(f" • Dashboard Smartphone: {url_mobile} (Wi-Fi)")
     print(f" • Surveillance active : ~/.gemini/antigravity")
     print(f" • Modèle configuré    : {cfg.get('default_model', 'gemini-3.8-flash')}")
     print(f" • Mode tarification   : {cfg.get('pricing_mode', 'pay_as_you_go')}")

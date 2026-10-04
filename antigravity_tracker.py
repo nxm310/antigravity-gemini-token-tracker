@@ -667,6 +667,8 @@ def scan_all_sessions(
                         if diff_sec <= 0 or rem_pct >= 100.0:
                             r_str = "Prêt (100% disponible)"
                             r_date_str = "Prêt"
+                            diff_sec = 0
+                            reset_iso = ""
                         elif d_cnt > 0:
                             r_str = f"dans {d_cnt}j {h_cnt}h"
                         elif h_cnt > 0:

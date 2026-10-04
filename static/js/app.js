@@ -1468,9 +1468,20 @@ function renderKPIs(data) {
   if (kpiOutTokens) kpiOutTokens.textContent = `${formatNumber(totals.output_tokens)} sortie`;
   if (kpiThinkingTokens) kpiThinkingTokens.textContent = `${formatNumber(totals.thinking_tokens)} thinking`;
 
+  // KPI 3 : Limite 5 heures (%)
+  const kpi5hVal = document.getElementById("kpi5hVal");
+  const kpi5hBar = document.getElementById("kpi5hBar");
+  const kpi5hReset = document.getElementById("kpi5hReset");
+  const kpi5hExactDate = document.getElementById("kpi5hExactDate");
+  const kpi5hCalls = document.getElementById("kpi5hCallsText");
+  const kpi5hTokens = document.getElementById("kpi5hTokens");
+
+  const rem5 = q5h.remaining_pct !== undefined ? q5h.remaining_pct : (100 - (q5h.pct_used || 0));
+  const used5 = q5h.used_pct !== undefined ? q5h.used_pct : (q5h.pct_used || 0);
+
   // Enregistrement des cibles de réinitialisation pour le compte à rebours dynamique
   let resetDate5hStr = q5h.reset_date || "Prêt";
-  if (q5h.reset_time_iso) {
+  if (rem5 < 100.0 && q5h.reset_time_iso) {
     const target5 = new Date(q5h.reset_time_iso).getTime();
     if (!isNaN(target5) && target5 > Date.now()) {
       appState.resetTime5h = target5;
@@ -1487,14 +1498,28 @@ function renderKPIs(data) {
       q5h.remaining_pct = 100;
       q5h.used_pct = 0;
     }
-  } else if (q5h.reset_seconds !== undefined && q5h.reset_seconds > 0) {
+  } else if (rem5 < 100.0 && q5h.reset_seconds !== undefined && q5h.reset_seconds > 0) {
     appState.resetTime5h = Date.now() + (q5h.reset_seconds * 1000);
   } else {
     appState.resetTime5h = null;
+    resetDate5hStr = "Prêt";
+    q5h.reset_in = "Prêt (100% disponible)";
   }
 
+  // KPI 4 : Limite sur la semaine (%)
+  const kpiWeeklyVal = document.getElementById("kpiWeeklyVal");
+  const kpiWeeklyBar = document.getElementById("kpiWeeklyBar");
+  const kpiWeeklyReset = document.getElementById("kpiWeeklyReset");
+  const kpiWeeklyExactDate = document.getElementById("kpiWeeklyExactDate");
+  const kpiWeeklyCalls = document.getElementById("kpiWeeklyCallsText");
+  const kpiWeeklyTokens = document.getElementById("kpiWeeklyTokens");
+  const kpiWeeklyStatus = document.getElementById("kpiWeeklyStatus");
+
+  const rem7 = q7d.remaining_pct !== undefined ? q7d.remaining_pct : (100 - (q7d.pct_used || 0));
+  const used7 = q7d.used_pct !== undefined ? q7d.used_pct : (q7d.pct_used || 0);
+
   let resetDate7dStr = q7d.reset_date || "Prêt";
-  if (q7d.reset_time_iso) {
+  if (rem7 < 100.0 && q7d.reset_time_iso) {
     const target7 = new Date(q7d.reset_time_iso).getTime();
     if (!isNaN(target7) && target7 > Date.now()) {
       appState.resetTime7d = target7;
@@ -1518,22 +1543,13 @@ function renderKPIs(data) {
       q7d.remaining_pct = 100;
       q7d.used_pct = 0;
     }
-  } else if (q7d.reset_seconds !== undefined && q7d.reset_seconds > 0) {
+  } else if (rem7 < 100.0 && q7d.reset_seconds !== undefined && q7d.reset_seconds > 0) {
     appState.resetTime7d = Date.now() + (q7d.reset_seconds * 1000);
   } else {
     appState.resetTime7d = null;
+    resetDate7dStr = "Prêt";
+    q7d.reset_in = "Prêt (100% disponible)";
   }
-
-  // KPI 3 : Limite 5 heures (%)
-  const kpi5hVal = document.getElementById("kpi5hVal");
-  const kpi5hBar = document.getElementById("kpi5hBar");
-  const kpi5hReset = document.getElementById("kpi5hReset");
-  const kpi5hExactDate = document.getElementById("kpi5hExactDate");
-  const kpi5hCalls = document.getElementById("kpi5hCallsText");
-  const kpi5hTokens = document.getElementById("kpi5hTokens");
-
-  const rem5 = q5h.remaining_pct !== undefined ? q5h.remaining_pct : (100 - (q5h.pct_used || 0));
-  const used5 = q5h.used_pct !== undefined ? q5h.used_pct : (q5h.pct_used || 0);
 
   if (kpi5hVal) {
     kpi5hVal.innerHTML = `${rem5}% <span style="font-size: 0.5em; font-weight: normal; opacity: 0.85;">restant</span>`;
@@ -1553,18 +1569,6 @@ function renderKPIs(data) {
     }
   }
   if (kpi5hTokens) kpi5hTokens.textContent = `${formatNumber(q5h.tokens || 0)} tokens`;
-
-  // KPI 4 : Limite sur la semaine (%)
-  const kpiWeeklyVal = document.getElementById("kpiWeeklyVal");
-  const kpiWeeklyBar = document.getElementById("kpiWeeklyBar");
-  const kpiWeeklyReset = document.getElementById("kpiWeeklyReset");
-  const kpiWeeklyExactDate = document.getElementById("kpiWeeklyExactDate");
-  const kpiWeeklyCalls = document.getElementById("kpiWeeklyCallsText");
-  const kpiWeeklyTokens = document.getElementById("kpiWeeklyTokens");
-  const kpiWeeklyStatus = document.getElementById("kpiWeeklyStatus");
-
-  const rem7 = q7d.remaining_pct !== undefined ? q7d.remaining_pct : (100 - (q7d.pct_used || 0));
-  const used7 = q7d.used_pct !== undefined ? q7d.used_pct : (q7d.pct_used || 0);
 
   if (kpiWeeklyVal) {
     kpiWeeklyVal.innerHTML = `${rem7}% <span style="font-size: 0.5em; font-weight: normal; opacity: 0.85;">restant</span>`;
