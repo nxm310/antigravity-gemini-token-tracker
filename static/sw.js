@@ -1,5 +1,5 @@
 // sw.js - Service Worker pour Antigravity Gemini Token Tracker
-const CACHE_NAME = 'antigravity-tracker-v1.2';
+const CACHE_NAME = 'antigravity-tracker-v1.7.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

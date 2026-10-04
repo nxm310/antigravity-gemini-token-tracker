@@ -75,7 +75,7 @@ body {
   justify-content: center;
   align-items: center;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 25000;
   transform: translateY(-100%);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
   opacity: 0;
@@ -159,6 +159,8 @@ body {
 
 /* --- HEADER --- */
 .header {
+  position: relative;
+  z-index: 500;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -261,6 +263,7 @@ body {
   position: relative;
   display: inline-flex;
   align-items: center;
+  z-index: 501;
 }
 
 .menu-trigger-btn {
@@ -324,7 +327,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 16px;
   box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), 0 8px 24px rgba(56, 189, 248, 0.08);
-  z-index: 1000;
+  z-index: 9999;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -1493,7 +1496,7 @@ tbody td {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 20000;
 }
 
 .modal-overlay.active {
@@ -1757,7 +1760,7 @@ kbd {
   padding: 12px 20px;
   border-radius: var(--radius-md);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  z-index: 9999;
+  z-index: 30000;
   font-size: 0.88rem;
   display: flex;
   align-items: center;

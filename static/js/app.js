@@ -175,7 +175,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, 450);
   }
 
-  // 1. Test si un serveur Python tourne en local
+  // 1. Charger immédiatement le snapshot data.json pour affichage instantané
+  const loadedSnapshot = await tryLoadDataJsonSnapshot();
+
+  // 2. Test si un serveur Python tourne en local
   const hasLocalServer = await checkLocalServer();
   if (hasLocalServer) {
     appState.mode = "server";
@@ -184,15 +187,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     setInterval(fetchServerDashboard, 3500);
   } else {
     appState.mode = "browser";
-    // 2. Tenter de restaurer la connexion IndexedDB au dossier Antigravity
+    // 3. Tenter de restaurer la connexion IndexedDB au dossier Antigravity
     const restored = await tryRestoreDirectoryAccess();
-    if (!restored) {
-      // 3. Charger le snapshot réel data.json s'il existe !
-      const loadedRealSnapshot = await tryLoadDataJsonSnapshot();
-      if (!loadedRealSnapshot) {
-        // En dernier recours, données d'exemple
-        loadDemoData();
-      }
+    if (!restored && !loadedSnapshot) {
+      loadDemoData();
     }
   }
 });
@@ -691,7 +689,7 @@ async function tryLoadDataJsonSnapshot() {
     const res = await fetch("./data.json?t=" + Date.now(), { cache: "no-store" });
     if (!res.ok) return false;
     const data = await res.json();
-    if (data && data.quota_5h && data.totals) {
+    if (data && (data.quota_5h || data.totals)) {
       if (data.config) {
         appConfig = { ...appConfig, ...data.config };
         initUIFromConfig();
