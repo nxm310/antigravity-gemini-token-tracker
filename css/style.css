@@ -178,33 +178,27 @@ body {
 .header-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
-.logo-icon {
-  width: 42px;
-  height: 42px;
-  background: linear-gradient(135deg, #4f46e5, #06b6d4);
-  border-radius: var(--radius-md);
+.app-brand-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+  gap: 6px;
+  white-space: nowrap;
+  user-select: none;
 }
 
-.logo-text h1 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  background: linear-gradient(90deg, #ffffff, #cbd5e1);
+.brand-highlight {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-.logo-text p {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
+  filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.45));
 }
 
 .header-right {
@@ -1917,33 +1911,14 @@ kbd {
     flex: 1;
     min-width: 0;
     justify-content: flex-start;
-    gap: 10px;
   }
 
-  .logo-icon {
-    width: 34px;
-    height: 34px;
-    flex-shrink: 0;
-  }
-
-  .logo-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .logo-text {
-    min-width: 0;
-  }
-
-  .logo-text h1 {
-    font-size: 0.95rem;
+  .app-brand-title {
+    font-size: 1.15rem;
+    gap: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .logo-text p {
-    display: none;
   }
 
   .header-right {
@@ -1956,9 +1931,13 @@ kbd {
   }
 
   .live-badge {
-    padding: 4px 8px;
+    padding: 5px 8px;
     font-size: 0.72rem;
     gap: 5px;
+  }
+
+  .live-badge #liveStatusText {
+    display: none;
   }
 
   .pro-badge {

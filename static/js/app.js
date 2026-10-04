@@ -1532,12 +1532,27 @@ function renderKPIs(data) {
   const kpi5hCalls = document.getElementById("kpi5hCallsText");
   const kpi5hTokens = document.getElementById("kpi5hTokens");
 
-  const rem5 = q5h.remaining_pct !== undefined ? q5h.remaining_pct : (100 - (q5h.pct_used || 0));
-  const used5 = q5h.used_pct !== undefined ? q5h.used_pct : (q5h.pct_used || 0);
+  let rem5 = q5h.remaining_pct !== undefined ? q5h.remaining_pct : (100 - (q5h.pct_used || 0));
+  let used5 = q5h.used_pct !== undefined ? q5h.used_pct : (q5h.pct_used || 0);
 
   // Enregistrement des cibles de réinitialisation pour le compte à rebours dynamique
   let resetDate5hStr = q5h.reset_date || "Prêt";
-  if (rem5 < 100.0 && q5h.reset_time_iso) {
+
+  // Si le statut est marqué Prêt, ou reset <= 0, ou rem5 >= 100
+  const isReady5h = rem5 >= 100.0 ||
+                    (q5h.reset_in && q5h.reset_in.includes("Prêt")) ||
+                    q5h.reset_date === "Prêt" ||
+                    (q5h.reset_seconds !== undefined && q5h.reset_seconds <= 0);
+
+  if (isReady5h) {
+    rem5 = 100.0;
+    used5 = 0.0;
+    q5h.remaining_pct = 100;
+    q5h.used_pct = 0;
+    q5h.reset_in = "Prêt (100% disponible)";
+    resetDate5hStr = "Prêt";
+    appState.resetTime5h = null;
+  } else if (q5h.reset_time_iso) {
     const target5 = new Date(q5h.reset_time_iso).getTime();
     if (!isNaN(target5) && target5 > Date.now()) {
       appState.resetTime5h = target5;
@@ -1548,18 +1563,24 @@ function renderKPIs(data) {
       const s5 = diff5 % 60;
       q5h.reset_in = h5 > 0 ? `dans ${h5}h ${m5}m ${s5}s` : `dans ${m5}m ${s5}s`;
     } else {
+      rem5 = 100.0;
+      used5 = 0.0;
       appState.resetTime5h = null;
       resetDate5hStr = "Prêt";
       q5h.reset_in = "Prêt (100% disponible)";
       q5h.remaining_pct = 100;
       q5h.used_pct = 0;
     }
-  } else if (rem5 < 100.0 && q5h.reset_seconds !== undefined && q5h.reset_seconds > 0) {
+  } else if (q5h.reset_seconds !== undefined && q5h.reset_seconds > 0) {
     appState.resetTime5h = Date.now() + (q5h.reset_seconds * 1000);
   } else {
+    rem5 = 100.0;
+    used5 = 0.0;
     appState.resetTime5h = null;
     resetDate5hStr = "Prêt";
     q5h.reset_in = "Prêt (100% disponible)";
+    q5h.remaining_pct = 100;
+    q5h.used_pct = 0;
   }
 
   // KPI 4 : Limite sur la semaine (%)
@@ -1571,11 +1592,25 @@ function renderKPIs(data) {
   const kpiWeeklyTokens = document.getElementById("kpiWeeklyTokens");
   const kpiWeeklyStatus = document.getElementById("kpiWeeklyStatus");
 
-  const rem7 = q7d.remaining_pct !== undefined ? q7d.remaining_pct : (100 - (q7d.pct_used || 0));
-  const used7 = q7d.used_pct !== undefined ? q7d.used_pct : (q7d.pct_used || 0);
+  let rem7 = q7d.remaining_pct !== undefined ? q7d.remaining_pct : (100 - (q7d.pct_used || 0));
+  let used7 = q7d.used_pct !== undefined ? q7d.used_pct : (q7d.pct_used || 0);
 
   let resetDate7dStr = q7d.reset_date || "Prêt";
-  if (rem7 < 100.0 && q7d.reset_time_iso) {
+
+  const isReady7d = rem7 >= 100.0 ||
+                    (q7d.reset_in && q7d.reset_in.includes("Prêt")) ||
+                    q7d.reset_date === "Prêt" ||
+                    (q7d.reset_seconds !== undefined && q7d.reset_seconds <= 0);
+
+  if (isReady7d) {
+    rem7 = 100.0;
+    used7 = 0.0;
+    q7d.remaining_pct = 100;
+    q7d.used_pct = 0;
+    q7d.reset_in = "Prêt (100% disponible)";
+    resetDate7dStr = "Prêt";
+    appState.resetTime7d = null;
+  } else if (q7d.reset_time_iso) {
     const target7 = new Date(q7d.reset_time_iso).getTime();
     if (!isNaN(target7) && target7 > Date.now()) {
       appState.resetTime7d = target7;
@@ -1593,18 +1628,24 @@ function renderKPIs(data) {
         q7d.reset_in = `dans ${m7}m ${s7}s`;
       }
     } else {
+      rem7 = 100.0;
+      used7 = 0.0;
       appState.resetTime7d = null;
       resetDate7dStr = "Prêt";
       q7d.reset_in = "Prêt (100% disponible)";
       q7d.remaining_pct = 100;
       q7d.used_pct = 0;
     }
-  } else if (rem7 < 100.0 && q7d.reset_seconds !== undefined && q7d.reset_seconds > 0) {
+  } else if (q7d.reset_seconds !== undefined && q7d.reset_seconds > 0) {
     appState.resetTime7d = Date.now() + (q7d.reset_seconds * 1000);
   } else {
+    rem7 = 100.0;
+    used7 = 0.0;
     appState.resetTime7d = null;
     resetDate7dStr = "Prêt";
     q7d.reset_in = "Prêt (100% disponible)";
+    q7d.remaining_pct = 100;
+    q7d.used_pct = 0;
   }
 
   if (kpi5hVal) {
@@ -1618,7 +1659,9 @@ function renderKPIs(data) {
   if (kpi5hReset) kpi5hReset.textContent = `⏱️ ${q5h.reset_in || "Prêt"}`;
   if (kpi5hExactDate) kpi5hExactDate.textContent = `📅 Reset : ${resetDate5hStr}`;
   if (kpi5hCalls) {
-    if (q5h.is_live_rpc) {
+    if (rem5 >= 100.0 || used5 <= 0) {
+      kpi5hCalls.textContent = "0% consommé • Quota rechargé à 100%";
+    } else if (q5h.is_live_rpc) {
       kpi5hCalls.textContent = `${used5}% consommé (${formatNumber(q5h.calls || 0)} appels)`;
     } else {
       kpi5hCalls.textContent = `${used5}% consommé • ${formatNumber(q5h.calls || 0)} / ${formatNumber(q5h.max_calls || 250)} appels`;
@@ -1637,7 +1680,9 @@ function renderKPIs(data) {
   if (kpiWeeklyReset) kpiWeeklyReset.textContent = `⏱️ ${q7d.reset_in || "Prêt"}`;
   if (kpiWeeklyExactDate) kpiWeeklyExactDate.textContent = `📅 Remise à 0 : ${resetDate7dStr}`;
   if (kpiWeeklyCalls) {
-    if (q7d.is_live_rpc) {
+    if (rem7 >= 100.0 || used7 <= 0) {
+      kpiWeeklyCalls.textContent = "0% consommé • Quota rechargé à 100%";
+    } else if (q7d.is_live_rpc) {
       kpiWeeklyCalls.textContent = `${used7}% consommé (${formatNumber(q7d.calls || 0)} appels)`;
     } else {
       kpiWeeklyCalls.textContent = `${used7}% consommé • ${formatNumber(q7d.calls || 0)} / ${formatNumber(q7d.max_calls || 1500)} appels`;
@@ -2344,7 +2389,9 @@ function renderMonthlyRecapModal(data) {
   const recap5hRemain = document.getElementById("recap5hRemain");
   const recap5hReset = document.getElementById("recap5hReset");
 
-  const rem5 = q5.remaining_pct !== undefined ? q5.remaining_pct : (100 - (q5.pct_used || 0));
+  let rem5 = q5.remaining_pct !== undefined ? q5.remaining_pct : (100 - (q5.pct_used || 0));
+  const isReady5h = rem5 >= 100.0 || (q5.reset_in && q5.reset_in.includes("Prêt")) || q5.reset_date === "Prêt";
+  if (isReady5h) rem5 = 100.0;
   const maxCalls5h = q5.max_calls || (appConfig.pricing_mode === "google_ai_pro" ? 250 : 500);
   const estCallsLeft5h = Math.max(0, Math.round((rem5 / 100) * maxCalls5h));
 
@@ -2353,13 +2400,15 @@ function renderMonthlyRecapModal(data) {
     recap5hPct.style.color = rem5 < 20 ? "#f43f5e" : (rem5 < 50 ? "#f59e0b" : "#38bdf8");
   }
   if (recap5hRemain) recap5hRemain.textContent = `${formatNumber(estCallsLeft5h)} appels disponibles`;
-  if (recap5hReset) recap5hReset.textContent = `⏱️ Reset : ${q5.reset_date || "Prêt"} (${q5.reset_in || "immédiat"})`;
+  if (recap5hReset) recap5hReset.textContent = `⏱️ Reset : ${isReady5h ? "Prêt" : (q5.reset_date || "Prêt")} (${isReady5h ? "100% disponible" : (q5.reset_in || "immédiat")})`;
 
   const recapWeeklyPct = document.getElementById("recapWeeklyPct");
   const recapWeeklyRemain = document.getElementById("recapWeeklyRemain");
   const recapWeeklyReset = document.getElementById("recapWeeklyReset");
 
-  const rem7 = qw.remaining_pct !== undefined ? qw.remaining_pct : (100 - (qw.pct_used || 0));
+  let rem7 = qw.remaining_pct !== undefined ? qw.remaining_pct : (100 - (qw.pct_used || 0));
+  const isReady7d = rem7 >= 100.0 || (qw.reset_in && qw.reset_in.includes("Prêt")) || qw.reset_date === "Prêt";
+  if (isReady7d) rem7 = 100.0;
   const maxCalls7d = qw.max_calls || (appConfig.pricing_mode === "google_ai_pro" ? 1500 : 3000);
   const estCallsLeft7d = Math.max(0, Math.round((rem7 / 100) * maxCalls7d));
 
@@ -2368,7 +2417,7 @@ function renderMonthlyRecapModal(data) {
     recapWeeklyPct.style.color = rem7 < 20 ? "#f43f5e" : (rem7 < 50 ? "#f59e0b" : "#34d399");
   }
   if (recapWeeklyRemain) recapWeeklyRemain.textContent = `${formatNumber(estCallsLeft7d)} appels disponibles`;
-  if (recapWeeklyReset) recapWeeklyReset.textContent = `📅 Reset : ${qw.reset_date || "Prêt"} (${qw.reset_in || "immédiat"})`;
+  if (recapWeeklyReset) recapWeeklyReset.textContent = `📅 Reset : ${isReady7d ? "Prêt" : (qw.reset_date || "Prêt")} (${isReady7d ? "100% disponible" : (qw.reset_in || "immédiat")})`;
 
   // 2. Tableau historique mois par mois
   const tbody = document.getElementById("monthlyRecapTableBody");
@@ -2415,7 +2464,7 @@ function renderMonthlyRecapModal(data) {
 }
 
 // --- GESTION DU CHANGELOG & NOUVEAUTÉS ---
-const CURRENT_APP_VERSION = "1.7.0";
+const CURRENT_APP_VERSION = "1.7.1";
 
 function openChangelogModal() {
   const modal = document.getElementById("changelogModal");

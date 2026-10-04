@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Antigravity Gemini Token Tracker</title>
+  <title>Antigravity Pulse • Suivi Tokens & Quotas Gemini</title>
   
   <!-- PWA & Mobile Meta Tags -->
   <meta name="description" content="Suivi en direct des Tokens, Coûts et Quotas Google Gemini pour Google Antigravity. Compatible Web App et macOS Dock.">
   <meta name="theme-color" content="#0a0e17">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Token Tracker">
+  <meta name="apple-mobile-web-app-title" content="Antigravity Pulse">
   
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
@@ -41,14 +41,8 @@
     <!-- HEADER -->
     <header class="header">
       <div class="header-left">
-        <div class="logo-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-        </div>
         <div class="logo-text">
-          <h1>Antigravity Gemini Tracker</h1>
-          <p>Suivi en direct des Tokens, Coûts et Quotas Google Gemini</p>
+          <h1 class="app-brand-title">Antigravity <span class="brand-highlight">Pulse</span></h1>
         </div>
       </div>
 
@@ -654,25 +648,34 @@
           <div>
             <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
               Nouveautés & Historique des Versions
-              <span class="version-tag">v1.7.0</span>
+              <span class="version-tag">v1.7.1</span>
             </h3>
-            <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Journal des changements, améliorations et évolutions d'Antigravity Gemini Tracker</p>
+            <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Journal des changements, améliorations et évolutions d'Antigravity Pulse</p>
           </div>
         </div>
         <button class="close-btn" id="closeChangelogBtn">&times;</button>
       </div>
 
       <div class="changelog-timeline" style="max-height: 58vh; overflow-y: auto; padding-right: 8px;">
-        <!-- Version 1.7.0 (Actuelle) -->
+        <!-- Version 1.7.1 (Actuelle) -->
         <div class="changelog-item">
-          <div class="changelog-badge current">v1.7.0 • Actuelle (04 Octobre 2026)</div>
+          <div class="changelog-badge current">v1.7.1 • Actuelle (04 Octobre 2026)</div>
+          <h4 class="changelog-title">Nouveau Nom « Antigravity Pulse », En-tête Épuré & Correction 100% Quota</h4>
+          <ul class="changelog-list">
+            <li><strong>🎯 Synchronisation 100% Garantie :</strong> Correction du décalage où la jauge restait figée à 67.9% alors que le statut indiquait <em>Prêt (100% disponible)</em>. Dès que le temps de reset est atteint, la jauge et le grand chiffre basculent instantanément à 100%.</li>
+            <li><strong>💎 Titre Unique & Épuré : Antigravity Pulse :</strong> Retrait de l'icône superflue pour une identité forte, sobre et moderne avec typographie mise en valeur.</li>
+            <li><strong>📱 Optimisation Header Smartphone :</strong> Affichage ultra-compact du statut live avec point lumineux et respiration maximale pour le titre et les badges.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.7.0 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.7.0 (04 Octobre 2026)</div>
           <h4 class="changelog-title">Menu SaaS Unifié (3 Points ⋮) & Présentation Professionnelle Épurée</h4>
           <ul class="changelog-list">
             <li><strong>✨ Menu Déroulant Centralisé (3 points ⋮) :</strong> Tous les boutons d'en-tête (Mode de tarification, Clé API, Quotas mensuels, Nouveautés, Installation Dock PWA et Actualisation) sont désormais réunis dans un menu déroulant élégant et moderne.</li>
             <li><strong>📱 En-tête Responsive Ultra-Propre :</strong> Fin de l'encombrement sur mobile et desktop ! L'en-tête tient sur une seule ligne parfaitement équilibrée avec le statut live et le badge d'abonnement.</li>
             <li><strong>💎 Esthétique Dark SaaS & Glassmorphism :</strong> Cartes aux finitions soignées, flou d'arrière-plan haute fidélité, micro-interactions fluides et badges d'état en direct.</li>
-            <li><strong>🔄 Action Rapide d'Actualisation :</strong> Actualisez en un clic directement depuis le menu ou via le geste de glisser vers le bas (Pull-to-Refresh).</li>
-            <li><strong>🛡️ Clé API & Quotas Temps Réel :</strong> Indicateur dynamique de validité de votre clé API Gemini directement intégré au menu avec masquage sécurisé.</li>
           </ul>
         </div>
 
@@ -779,6 +782,6 @@
     </div>
   </div>
 
-  <script src="./js/app.js?v=1.7.0"></script>
+  <script src="./js/app.js?v=1.7.1"></script>
 </body>
 </html>

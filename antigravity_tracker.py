@@ -669,6 +669,8 @@ def scan_all_sessions(
                             r_date_str = "Prêt"
                             diff_sec = 0
                             reset_iso = ""
+                            rem_pct = 100.0
+                            used_pct = 0.0
                         elif d_cnt > 0:
                             r_str = f"dans {d_cnt}j {h_cnt}h"
                         elif h_cnt > 0:

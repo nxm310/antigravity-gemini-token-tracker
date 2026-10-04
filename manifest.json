@@ -1,7 +1,7 @@
 {
-  "id": "antigravity-gemini-token-tracker",
-  "name": "Antigravity Gemini Token Tracker",
-  "short_name": "Token Tracker",
+  "id": "antigravity-pulse",
+  "name": "Antigravity Pulse",
+  "short_name": "Pulse",
   "description": "Suivi en direct des tokens, quotas (5h et semaine) et coûts Google Gemini pour Antigravity.",
   "start_url": "./index.html",
   "scope": "./",
