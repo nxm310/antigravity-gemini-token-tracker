@@ -153,7 +153,6 @@ const GEMINI_MODELS = {
 };
 
 let chartDaily = null;
-let chartDistribution = null;
 
 // --- INITIALISATION AU CHARGEMENT ---
 document.addEventListener("DOMContentLoaded", async () => {
@@ -1828,35 +1827,6 @@ function renderCharts(dailyTrends, totals) {
       }
     });
   }
-
-  // Graphique Répartition (Doughnut)
-  const ctxDist = document.getElementById("chartDistribution")?.getContext("2d");
-  if (ctxDist) {
-    if (chartDistribution) chartDistribution.destroy();
-    chartDistribution = new Chart(ctxDist, {
-      type: "doughnut",
-      data: {
-        labels: ["Tokens Entrée", "Tokens Sortie", "Thinking (CoT)"],
-        datasets: [{
-          data: [
-            totals.input_tokens || 1,
-            totals.output_tokens || 1,
-            totals.thinking_tokens || 0
-          ],
-          backgroundColor: ["#06b6d4", "#8b5cf6", "#f59e0b"],
-          borderWidth: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: "right", labels: { color: "#9ca3af", font: { size: 11 } } }
-        },
-        cutout: "68%"
-      }
-    });
-  }
 }
 
 // --- SIMULATEUR DE TOKENS MULTIMODAL (TEXTE, IMAGES, PDF) ---
@@ -2464,7 +2434,7 @@ function renderMonthlyRecapModal(data) {
 }
 
 // --- GESTION DU CHANGELOG & NOUVEAUTÉS ---
-const CURRENT_APP_VERSION = "1.7.1";
+const CURRENT_APP_VERSION = "1.7.2";
 
 function openChangelogModal() {
   const modal = document.getElementById("changelogModal");

@@ -305,15 +305,6 @@
           <canvas id="chartDaily"></canvas>
         </div>
       </div>
-
-      <div class="chart-card">
-        <div class="chart-header">
-          <span class="chart-title">🍩 Répartition des Tokens</span>
-        </div>
-        <div class="chart-container">
-          <canvas id="chartDistribution"></canvas>
-        </div>
-      </div>
     </div>
 
     <!-- HISTORIQUE DES SESSIONS ANTIGRAVITY -->
@@ -648,7 +639,7 @@
           <div>
             <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
               Nouveautés & Historique des Versions
-              <span class="version-tag">v1.7.1</span>
+              <span class="version-tag">v1.7.2</span>
             </h3>
             <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Journal des changements, améliorations et évolutions d'Antigravity Pulse</p>
           </div>
@@ -657,9 +648,19 @@
       </div>
 
       <div class="changelog-timeline" style="max-height: 58vh; overflow-y: auto; padding-right: 8px;">
-        <!-- Version 1.7.1 (Actuelle) -->
+        <!-- Version 1.7.2 (Actuelle) -->
         <div class="changelog-item">
-          <div class="changelog-badge current">v1.7.1 • Actuelle (04 Octobre 2026)</div>
+          <div class="changelog-badge current">v1.7.2 • Actuelle (04 Octobre 2026)</div>
+          <h4 class="changelog-title">Suppression du Donut de Répartition & Pleine Largeur pour l'Évolution Temporelle</h4>
+          <ul class="changelog-list">
+            <li><strong>📈 Graphique d'Évolution Pleine Largeur :</strong> Le graphique d'évolution quotidienne des tokens occupe désormais toute la largeur disponible pour une lecture temporelle beaucoup plus claire et détaillée.</li>
+            <li><strong>🧹 Épuration Visuelle :</strong> Retrait du graphique circulaire « Répartition des tokens », rendu inutile par le ratio disproportionné entre les tokens d'entrée et de sortie.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.7.1 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.7.1 (04 Octobre 2026)</div>
           <h4 class="changelog-title">Nouveau Nom « Antigravity Pulse », En-tête Épuré & Correction 100% Quota</h4>
           <ul class="changelog-list">
             <li><strong>🎯 Synchronisation 100% Garantie :</strong> Correction du décalage où la jauge restait figée à 67.9% alors que le statut indiquait <em>Prêt (100% disponible)</em>. Dès que le temps de reset est atteint, la jauge et le grand chiffre basculent instantanément à 100%.</li>
@@ -782,6 +783,6 @@
     </div>
   </div>
 
-  <script src="./js/app.js?v=1.7.1"></script>
+  <script src="./js/app.js?v=1.7.2"></script>
 </body>
 </html>
