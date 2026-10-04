@@ -19,6 +19,23 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <!-- PULL TO REFRESH (GLISSER VERS LE BAS POUR ACTUALISER) -->
+  <div id="pullToRefresh" class="pull-to-refresh" aria-live="polite">
+    <div class="ptr-content">
+      <div class="ptr-icon-wrapper">
+        <svg class="ptr-arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+        <svg class="ptr-spinner" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-opacity="0.25"></circle>
+          <path d="M12 3a9 9 0 0 1 9 9" stroke="currentColor" stroke-linecap="round"></path>
+        </svg>
+      </div>
+      <span class="ptr-label">Tirez pour actualiser</span>
+    </div>
+  </div>
+
   <div class="container">
     
     <!-- HEADER -->
@@ -71,7 +88,7 @@
 
         <!-- Bouton Pop-up Nouveautés & Changelog -->
         <button id="btnChangelog" class="ctrl-btn" title="Historique des versions et changements récents">
-          ✨ Nouveautés <span class="version-tag">v1.5</span>
+          ✨ Nouveautés <span class="version-tag">v1.6.0</span>
         </button>
       </div>
     </header>
@@ -547,7 +564,7 @@
           <div>
             <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
               Nouveautés & Historique des Versions
-              <span class="version-tag">v1.5.1</span>
+              <span class="version-tag">v1.6.0</span>
             </h3>
             <p style="margin: 0; font-size: 0.82rem; color: var(--text-secondary);">Journal des changements, améliorations et évolutions d'Antigravity Gemini Tracker</p>
           </div>
@@ -556,9 +573,21 @@
       </div>
 
       <div class="changelog-timeline" style="max-height: 58vh; overflow-y: auto; padding-right: 8px;">
-        <!-- Version 1.5.1 (Actuelle) -->
+        <!-- Version 1.6.0 (Actuelle) -->
         <div class="changelog-item">
-          <div class="changelog-badge current">v1.5.1 • Actuelle (03 Octobre 2026)</div>
+          <div class="changelog-badge current">v1.6.0 • Actuelle (04 Octobre 2026)</div>
+          <h4 class="changelog-title">Actualisation au Glisser vers le Bas (Pull to Refresh) sur Smartphone & Desktop</h4>
+          <ul class="changelog-list">
+            <li><strong>📱 Pull-to-Refresh natif :</strong> Tirez simplement l'écran vers le bas pour actualiser instantanément l'application web et recharger toutes les métriques de tokens et quotas.</li>
+            <li><strong>📲 Idéal pour PWA & Écran d'accueil :</strong> Fonctionne parfaitement en mode application plein écran (PWA) sur iPhone et Android, où la barre d'adresse et le bouton rafraîchir natif sont masqués.</li>
+            <li><strong>✨ Indicateur visuel & Haptique :</strong> Badge flottant avec flèche pivotante, résistance élastique fluide, retour tactile par vibration et spinner animé.</li>
+            <li><strong>🎉 Confirmation visuelle :</strong> Notification toast « Page actualisée avec succès » après chaque rafraîchissement.</li>
+          </ul>
+        </div>
+
+        <!-- Version 1.5.1 -->
+        <div class="changelog-item">
+          <div class="changelog-badge">v1.5.1 (03 Octobre 2026)</div>
           <h4 class="changelog-title">Compte à Rebours Temps Réel & Calcul Définitivement Fiable de l'Heure de Reset</h4>
           <ul class="changelog-list">
             <li><strong>🎯 Horodatages absolus universels (ISO UTC) :</strong> Abandon des décalages relatifs figés en secondes. Le tracker utilise désormais des cibles temporelles absolues synchronisées avec Antigravity Connect-RPC.</li>
@@ -647,6 +676,6 @@
     </div>
   </div>
 
-  <script src="./js/app.js?v=1.5.1"></script>
+  <script src="./js/app.js?v=1.6.0"></script>
 </body>
 </html>

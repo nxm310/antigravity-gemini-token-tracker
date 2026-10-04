@@ -160,10 +160,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   initUIFromConfig();
   initEventListeners();
   initPWA();
+  initPullToRefresh();
   initDropzoneEvents();
   initGlobalDragAndDrop();
   startLiveCountdownTicker();
   checkAutoOpenChangelog();
+
+  // Notification de confirmation après un pull-to-refresh
+  const justRefreshed = sessionStorage.getItem("just_pulled_refresh");
+  if (justRefreshed) {
+    sessionStorage.removeItem("just_pulled_refresh");
+    setTimeout(() => {
+      showToast("✨ Page actualisée avec succès");
+    }, 450);
+  }
 
   // 1. Test si un serveur Python tourne en local
   const hasLocalServer = await checkLocalServer();
@@ -289,6 +299,167 @@ function initPWA() {
     if (pwaBtn) pwaBtn.style.display = "none";
     showToast("✨ Antigravity Token Tracker installé avec succès");
   });
+}
+
+// --- ACTUALISATION AU GLISSER VERS LE BAS (PULL TO REFRESH) ---
+function initPullToRefresh() {
+  const ptrElem = document.getElementById("pullToRefresh");
+  const ptrLabel = document.querySelector("#pullToRefresh .ptr-label");
+  const containerElem = document.querySelector(".container");
+
+  if (!ptrElem || !containerElem) return;
+
+  let startY = 0;
+  let startX = 0;
+  let currentY = 0;
+  let isTracking = false;
+  let isPulling = false;
+  let isRefreshing = false;
+  const threshold = 70;
+  const maxPull = 120;
+  let hasVibrated = false;
+
+  const onStart = (e) => {
+    if (isRefreshing) return;
+    // Ne pas déclencher si un modal ou pop-up est ouvert
+    if (document.querySelector(".modal-overlay.active, .modal-overlay[style*='flex']")) return;
+    // Ne pas interférer avec les contrôles de formulaire, boutons ou liens
+    if (e.target.closest("button, select, input, textarea, a, .intensity-btn, .modal-box, table")) return;
+    // Uniquement tout en haut de la page
+    if (window.scrollY > 4 || document.documentElement.scrollTop > 4) return;
+
+    const touch = e.touches ? e.touches[0] : e;
+    startY = touch.clientY;
+    startX = touch.clientX;
+    isTracking = true;
+    isPulling = false;
+    hasVibrated = false;
+  };
+
+  const onMove = (e) => {
+    if (!isTracking || isRefreshing) return;
+
+    const touch = e.touches ? e.touches[0] : e;
+    currentY = touch.clientY;
+    const currentX = touch.clientX;
+    const deltaY = currentY - startY;
+    const deltaX = currentX - startX;
+
+    // Si l'utilisateur scroll vers le bas dans la page
+    if (window.scrollY > 4 || document.documentElement.scrollTop > 4) {
+      if (isPulling) resetPull();
+      isTracking = false;
+      return;
+    }
+
+    // Si le geste est principalement horizontal (ex: scroll tableau ou carrousel)
+    if (!isPulling && Math.abs(deltaX) > Math.abs(deltaY)) {
+      isTracking = false;
+      return;
+    }
+
+    if (deltaY > 8) {
+      if (!isPulling) {
+        isPulling = true;
+        ptrElem.classList.add("ptr-pulling");
+        containerElem.classList.add("ptr-moving");
+      }
+
+      // Empêcher l'overscroll natif du navigateur
+      if (e.cancelable) e.preventDefault();
+
+      // Résistance élastique progressive (effet rubber-band naturel)
+      const pullDistance = Math.min(maxPull, Math.pow(deltaY, 0.82) * 1.8);
+
+      ptrElem.style.transform = `translateY(${pullDistance}px)`;
+      containerElem.style.transform = `translateY(${pullDistance * 0.42}px)`;
+
+      if (pullDistance >= threshold) {
+        if (!ptrElem.classList.contains("ptr-release")) {
+          ptrElem.classList.add("ptr-release");
+          if (ptrLabel) ptrLabel.textContent = "Relâchez pour actualiser";
+          if (!hasVibrated && navigator.vibrate) {
+            navigator.vibrate(15);
+            hasVibrated = true;
+          }
+        }
+      } else {
+        if (ptrElem.classList.contains("ptr-release")) {
+          ptrElem.classList.remove("ptr-release");
+          if (ptrLabel) ptrLabel.textContent = "Tirez pour actualiser";
+          hasVibrated = false;
+        }
+      }
+    } else if (isPulling && deltaY <= 0) {
+      resetPull();
+    }
+  };
+
+  const onEnd = async () => {
+    if (!isTracking) return;
+    isTracking = false;
+
+    if (!isPulling || isRefreshing) {
+      resetPull();
+      return;
+    }
+
+    const deltaY = currentY - startY;
+    const pullDistance = Math.min(maxPull, Math.pow(Math.max(0, deltaY), 0.82) * 1.8);
+
+    if (pullDistance >= threshold) {
+      isRefreshing = true;
+      ptrElem.classList.remove("ptr-pulling", "ptr-release");
+      ptrElem.classList.add("ptr-refreshing");
+      if (ptrLabel) ptrLabel.textContent = "Actualisation de la page...";
+      ptrElem.style.transform = "translateY(55px)";
+      containerElem.style.transform = "translateY(45px)";
+      containerElem.classList.remove("ptr-moving");
+
+      if (navigator.vibrate) navigator.vibrate([15, 35]);
+
+      // Mettre à jour les données en mémoire immédiatement
+      try {
+        if (appState.mode === "server") {
+          await fetchServerDashboard();
+        } else {
+          await tryLoadDataJsonSnapshot();
+        }
+      } catch (err) {
+        console.warn("Échec refresh direct :", err);
+      }
+
+      // Marqueur pour afficher le toast de confirmation après rechargement
+      sessionStorage.setItem("just_pulled_refresh", "1");
+
+      // Rechargement propre et complet de la page
+      setTimeout(() => {
+        window.location.reload();
+      }, 380);
+    } else {
+      resetPull();
+    }
+  };
+
+  const resetPull = () => {
+    isPulling = false;
+    ptrElem.classList.remove("ptr-pulling", "ptr-release");
+    ptrElem.style.transform = "";
+    containerElem.classList.remove("ptr-moving");
+    containerElem.style.transform = "";
+    if (ptrLabel) ptrLabel.textContent = "Tirez pour actualiser";
+  };
+
+  // Événements tactiles (Smartphones & Tablettes)
+  window.addEventListener("touchstart", onStart, { passive: true });
+  window.addEventListener("touchmove", onMove, { passive: false });
+  window.addEventListener("touchend", onEnd);
+  window.addEventListener("touchcancel", resetPull);
+
+  // Événements souris pour tests sur Desktop
+  window.addEventListener("mousedown", onStart);
+  window.addEventListener("mousemove", onMove);
+  window.addEventListener("mouseup", onEnd);
 }
 
 // --- INITIALISATION UI & CONFIG ---
@@ -2146,7 +2317,7 @@ function renderMonthlyRecapModal(data) {
 }
 
 // --- GESTION DU CHANGELOG & NOUVEAUTÉS ---
-const CURRENT_APP_VERSION = "1.5.1";
+const CURRENT_APP_VERSION = "1.6.0";
 
 function openChangelogModal() {
   const modal = document.getElementById("changelogModal");

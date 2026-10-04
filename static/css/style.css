@@ -35,6 +35,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overscroll-behavior-y: contain;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--bg-primary);
@@ -53,6 +57,104 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   padding: 24px 32px 64px 32px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.container.ptr-moving {
+  transition: none;
+}
+
+/* --- PULL TO REFRESH COMPONENT --- */
+.pull-to-refresh {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translateY(-100%);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  opacity: 0;
+  padding-top: 14px;
+}
+
+.pull-to-refresh.ptr-pulling {
+  transition: none;
+  opacity: 1;
+}
+
+.pull-to-refresh.ptr-refreshing {
+  transform: translateY(16px) !important;
+  opacity: 1;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.ptr-content {
+  background: rgba(17, 24, 39, 0.92);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 8px 18px 8px 14px;
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.ptr-icon-wrapper {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+}
+
+.ptr-arrow {
+  display: block;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.ptr-spinner {
+  display: none;
+  animation: ptrSpin 0.75s linear infinite;
+  color: var(--accent-cyan);
+}
+
+.pull-to-refresh.ptr-refreshing .ptr-arrow {
+  display: none;
+}
+
+.pull-to-refresh.ptr-refreshing .ptr-spinner {
+  display: block;
+}
+
+.pull-to-refresh.ptr-release .ptr-arrow {
+  transform: rotate(180deg);
+  color: var(--accent-emerald);
+}
+
+.pull-to-refresh.ptr-release .ptr-content {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.ptr-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+@keyframes ptrSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* --- HEADER --- */
