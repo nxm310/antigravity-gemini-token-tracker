@@ -171,41 +171,43 @@ body {
   border-radius: var(--radius-lg);
   margin-bottom: 24px;
   box-shadow: var(--shadow-md);
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 16px;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
 .app-brand-title {
-  font-size: 1.35rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.6rem, 3.8vw, 2.45rem);
+  font-weight: 850;
+  letter-spacing: -0.035em;
   color: #ffffff;
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   white-space: nowrap;
   user-select: none;
+  line-height: 1.15;
 }
 
 .brand-highlight {
   background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.45));
+  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.5));
 }
 
 .header-right {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
 /* Status Pulse Badge */
@@ -1914,8 +1916,8 @@ kbd {
   }
 
   .app-brand-title {
-    font-size: 1.15rem;
-    gap: 4px;
+    font-size: clamp(1.35rem, 6vw, 1.85rem);
+    gap: 6px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

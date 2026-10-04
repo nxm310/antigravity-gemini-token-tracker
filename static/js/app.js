@@ -2434,7 +2434,7 @@ function renderMonthlyRecapModal(data) {
 }
 
 // --- GESTION DU CHANGELOG & NOUVEAUTÉS ---
-const CURRENT_APP_VERSION = "1.7.2";
+const CURRENT_APP_VERSION = "1.7.3";
 
 function openChangelogModal() {
   const modal = document.getElementById("changelogModal");
