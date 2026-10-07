@@ -12,6 +12,54 @@ import threading
 from server import run_server
 from config import load_config, save_config
 
+def background_sync_worker():
+    """
+    Surveille en arrière-plan les métriques Antigravity et met à jour automatiquement
+    data.json, static/data.json et synchronise sur GitHub Pages pour que la version web
+    reste toujours parfaitement alignée avec la version locale.
+    """
+    import subprocess
+    import os
+    import json
+    from antigravity_tracker import scan_all_sessions
+    from config import load_config
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    last_pushed_rem5 = None
+    last_push_time = 0
+
+    while True:
+        try:
+            time.sleep(20)
+            cfg = load_config()
+            scan = scan_all_sessions(
+                antigravity_dir=cfg["antigravity_dir"],
+                selected_model=cfg.get("default_model"),
+                pricing_mode=cfg.get("pricing_mode", "google_ai_pro"),
+                usd_to_eur=cfg.get("usd_to_eur_rate", 0.92)
+            )
+            q5 = scan.get("quota_5h", {})
+            curr_rem5 = q5.get("remaining_pct")
+
+            now = time.time()
+            if curr_rem5 is not None and curr_rem5 != last_pushed_rem5 and (now - last_push_time >= 60):
+                last_pushed_rem5 = curr_rem5
+                last_push_time = now
+                subprocess.run(
+                    ["git", "add", "data.json", "static/data.json"],
+                    cwd=base_dir, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                )
+                subprocess.run(
+                    ["git", "commit", "-m", f"chore(sync): auto-sync quota snapshot ({curr_rem5}%)"],
+                    cwd=base_dir, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                )
+                subprocess.run(
+                    ["git", "push", "origin", "main"],
+                    cwd=base_dir, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                )
+        except Exception:
+            pass
+
 def main():
     parser = argparse.ArgumentParser(description="Antigravity Gemini Token & Cost Tracker")
     parser.add_argument("--port", type=int, default=5050, help="Port d'écoute du serveur HTTP (défaut: 5050)")
@@ -75,6 +123,9 @@ def main():
             time.sleep(0.6)
             webbrowser.open(url)
         threading.Thread(target=open_browser, daemon=True).start()
+
+    # Démarrage de la synchronisation automatique en arrière-plan vers GitHub Pages
+    threading.Thread(target=background_sync_worker, daemon=True).start()
 
     try:
         httpd.serve_forever()
