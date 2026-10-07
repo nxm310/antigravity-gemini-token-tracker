@@ -1,3 +1,5 @@
-# Dépendances optionnelles pour le comptage de tokens ultra-rapide et l'API Gemini
+# Dépendances pour Antigravity Pulse (Backend Flask & Gemini API)
+flask>=3.0.0
+flask-cors>=4.0.0
 tiktoken>=0.7.0
 google-generativeai>=0.8.0
