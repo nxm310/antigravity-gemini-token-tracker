@@ -192,7 +192,52 @@ document.addEventListener("DOMContentLoaded", async () => {
       loadDemoData();
     }
   }
+
+  // Affichage dynamique de la bannière Cloud sur GitHub Pages
+  updateCloudBannerVisibility();
+
+  // Polling continu de reconnexion en arrière-plan si le serveur démarre
+  setInterval(async () => {
+    if (appState.mode !== "server") {
+      const serverFound = await checkLocalServer();
+      if (serverFound) {
+        appState.mode = "server";
+        updateLiveBadge("Serveur Python Connecté", "#10b981");
+        updateCloudBannerVisibility();
+        fetchServerDashboard();
+        setInterval(fetchServerDashboard, 3500);
+      }
+    }
+  }, 4000);
+
+  // Rafraîchissement instantané au retour sur l'onglet
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      if (appState.mode === "server") {
+        fetchServerDashboard();
+      } else {
+        tryLoadDataJsonSnapshot();
+      }
+    }
+  });
+
+  window.addEventListener("focus", () => {
+    if (appState.mode === "server") {
+      fetchServerDashboard();
+    }
+  });
 });
+
+function updateCloudBannerVisibility() {
+  const banner = document.getElementById("cloudSnapshotNotice");
+  if (!banner) return;
+  const isCloudHost = window.location.hostname.includes("github.io") || window.location.protocol === "https:";
+  if (isCloudHost && appState.mode !== "server") {
+    banner.style.display = "block";
+  } else {
+    banner.style.display = "none";
+  }
+}
 
 // --- COMPTE À REBOURS DYNAMIQUE EN TEMPS RÉEL (1s) ---
 function startLiveCountdownTicker() {
@@ -2434,7 +2479,7 @@ function renderMonthlyRecapModal(data) {
 }
 
 // --- GESTION DU CHANGELOG & NOUVEAUTÉS ---
-const CURRENT_APP_VERSION = "1.7.3";
+const CURRENT_APP_VERSION = "1.7.4";
 
 function openChangelogModal() {
   const modal = document.getElementById("changelogModal");
