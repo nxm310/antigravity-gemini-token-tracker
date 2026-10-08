@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuration d'Antigravity Pulse",
+        "description": "Indiquez l'URL de votre flux data.json (par défaut : votre dépôt GitHub public raw sans dépendre de votre Mac).",
+        "data": {
+          "url": "URL du fichier data.json",
+          "scan_interval": "Fréquence de rafraîchissement (secondes)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossible de joindre l'URL spécifiée ou réponse invalide.",
+      "invalid_data_format": "Le contenu JSON ne contient pas les données de quota Antigravity attendues."
+    },
+    "abort": {
+      "already_configured": "Cette intégration est déjà configurée."
+    }
+  }
+}

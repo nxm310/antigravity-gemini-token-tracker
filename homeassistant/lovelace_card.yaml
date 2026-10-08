@@ -1,0 +1,52 @@
+# ==============================================================================
+# CARTE LOVELACE POUR DASHBOARD HOME ASSISTANT
+# ==============================================================================
+# Copiez-collez ce code dans une carte "Manuel" (YAML) de votre tableau de bord.
+# ==============================================================================
+
+type: vertical-stack
+title: ⚡ Antigravity Pulse (Gemini)
+cards:
+  # 1. Jauges des quotas 5 heures et Semaine
+  - type: horizontal-stack
+    cards:
+      - type: gauge
+        entity: sensor.antigravity_quota_5h
+        name: Quota 5 Heures
+        unit: "%"
+        min: 0
+        max: 100
+        needle: true
+        severity:
+          red: 0
+          yellow: 25
+          green: 50
+
+      - type: gauge
+        entity: sensor.antigravity_quota_semaine
+        name: Quota Semaine
+        unit: "%"
+        min: 0
+        max: 100
+        needle: true
+        severity:
+          red: 0
+          yellow: 20
+          green: 45
+
+  # 2. Informations détaillées et Reset
+  - type: entities
+    show_header_toggle: false
+    entities:
+      - entity: sensor.antigravity_reset_5h_libelle
+        name: "Prochain Reset 5h"
+        icon: mdi:clock-start
+      - entity: sensor.antigravity_reset_semaine_libelle
+        name: "Prochain Reset Semaine"
+        icon: mdi:calendar-clock
+      - entity: sensor.antigravity_tokens_aujourd_hui
+        name: "Volume Tokens du Jour"
+        icon: mdi:counter
+      - entity: sensor.antigravity_valeur_economisee
+        name: "Valeur API Économisée (Pro)"
+        icon: mdi:currency-eur

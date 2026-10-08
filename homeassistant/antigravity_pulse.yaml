@@ -1,0 +1,126 @@
+# ==============================================================================
+# ANTIGRAVITY PULSE - INTÉGRATION HOME ASSISTANT (AUTONOME VIA CLOUD GITHUB)
+# ==============================================================================
+# Ce package Home Assistant récupère automatiquement l'état de vos quotas Gemini
+# directement depuis votre dépôt GitHub (data.json).
+#
+# AVANTAGES :
+# - Aucun serveur à laisser tourner sur votre Mac.
+# - Fonctionne 24h/24 même si votre Mac est éteint ou en veille.
+# - Calcul dynamique du Reset : repasse automatiquement à 100% une fois l'heure
+#   de reset dépassée, sans attendre que le Mac se rallume.
+# ==============================================================================
+
+rest:
+  - resource: "https://raw.githubusercontent.com/nxm310/antigravity-gemini-token-tracker/main/data.json"
+    scan_interval: 120 # Actualisation automatique toutes les 2 minutes
+    headers:
+      User-Agent: "HomeAssistant-AntigravityPulse"
+      Cache-Control: "no-cache"
+
+    sensor:
+      # --- CAPTEUR : QUOTA 5 HEURES (%) ---
+      - name: "Antigravity Quota 5h"
+        unique_id: "antigravity_quota_5h"
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: "mdi:timer-sand"
+        value_template: >-
+          {% set q = value_json.quota_5h %}
+          {% if q is defined and q %}
+            {% if q.reset_time_iso is defined and q.reset_time_iso and as_datetime(q.reset_time_iso) <= now() %}
+              100.0
+            {% else %}
+              {{ q.remaining_pct | float(100.0) }}
+            {% endif %}
+          {% else %}
+            100.0
+          {% endif %}
+        json_attributes_path: "$.quota_5h"
+        json_attributes:
+          - "reset_in"
+          - "reset_date"
+          - "reset_time_iso"
+          - "calls"
+          - "tokens"
+          - "used_pct"
+          - "is_live_rpc"
+
+      # --- CAPTEUR : QUOTA SEMAINE (%) ---
+      - name: "Antigravity Quota Semaine"
+        unique_id: "antigravity_quota_semaine"
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: "mdi:calendar-week"
+        value_template: >-
+          {% set qw = value_json.quota_weekly %}
+          {% if qw is defined and qw %}
+            {% if qw.reset_time_iso is defined and qw.reset_time_iso and as_datetime(qw.reset_time_iso) <= now() %}
+              100.0
+            {% else %}
+              {{ qw.remaining_pct | float(100.0) }}
+            {% endif %}
+          {% else %}
+            100.0
+          {% endif %}
+        json_attributes_path: "$.quota_weekly"
+        json_attributes:
+          - "reset_in"
+          - "reset_date"
+          - "reset_time_iso"
+          - "calls"
+          - "tokens"
+          - "used_pct"
+
+      # --- CAPTEUR : TOKENS DU JOUR ---
+      - name: "Antigravity Tokens Aujourd'hui"
+        unique_id: "antigravity_tokens_today"
+        unit_of_measurement: "tok"
+        state_class: total
+        icon: "mdi:counter"
+        value_template: "{{ value_json.today.total_tokens | int(0) if value_json.today is defined else 0 }}"
+        json_attributes_path: "$.today"
+        json_attributes:
+          - "calls"
+          - "cost_eur"
+          - "api_value_eur"
+
+      # --- CAPTEUR : VALEUR API ÉCONOMISÉE (€) ---
+      - name: "Antigravity Valeur Économisée"
+        unique_id: "antigravity_valeur_economisee"
+        unit_of_measurement: "€"
+        device_class: monetary
+        icon: "mdi:currency-eur"
+        value_template: "{{ value_json.today.api_value_eur | float(0.0) | round(2) if value_json.today is defined else 0.0 }}"
+
+      # --- CAPTEUR : PROCHAIN RESET 5H (TEXTE) ---
+      - name: "Antigravity Reset 5h Libellé"
+        unique_id: "antigravity_reset_5h_libelle"
+        icon: "mdi:clock-start"
+        value_template: >-
+          {% set q = value_json.quota_5h %}
+          {% if q is defined and q %}
+            {% if q.reset_time_iso is defined and q.reset_time_iso and as_datetime(q.reset_time_iso) <= now() %}
+              Prêt (100%)
+            {% else %}
+              {{ q.reset_date | default(q.reset_in, true) | default('Prêt', true) }}
+            {% endif %}
+          {% else %}
+            Prêt
+          {% endif %}
+
+      # --- CAPTEUR : PROCHAIN RESET SEMAINE (TEXTE) ---
+      - name: "Antigravity Reset Semaine Libellé"
+        unique_id: "antigravity_reset_semaine_libelle"
+        icon: "mdi:calendar-clock"
+        value_template: >-
+          {% set qw = value_json.quota_weekly %}
+          {% if qw is defined and qw %}
+            {% if qw.reset_time_iso is defined and qw.reset_time_iso and as_datetime(qw.reset_time_iso) <= now() %}
+              Prêt (100%)
+            {% else %}
+              {{ qw.reset_date | default(qw.reset_in, true) | default('Prêt', true) }}
+            {% endif %}
+          {% else %}
+            Prêt
+          {% endif %}

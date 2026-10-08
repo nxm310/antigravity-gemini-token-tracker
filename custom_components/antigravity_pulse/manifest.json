@@ -1,0 +1,11 @@
+{
+  "domain": "antigravity_pulse",
+  "name": "Antigravity Pulse",
+  "codeowners": ["@nxm310"],
+  "config_flow": true,
+  "documentation": "https://github.com/nxm310/antigravity-gemini-token-tracker",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/nxm310/antigravity-gemini-token-tracker/issues",
+  "version": "1.0.0"
+}
