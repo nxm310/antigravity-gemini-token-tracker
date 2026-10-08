@@ -17,6 +17,7 @@ import argparse
 import threading
 import webbrowser
 import subprocess
+import urllib.request
 from typing import Dict, Any
 
 from flask import Flask, request, jsonify, send_from_directory
@@ -49,11 +50,57 @@ def add_cors_and_security_headers(response):
 # --- THREAD DE SYNCHRONISATION EN ARRIÈRE-PLAN ---
 _SYNC_THREAD_STARTED = False
 
+def sync_to_homeassistant(scan: Dict[str, Any]):
+    """Synchronise directement les métriques avec Home Assistant si configuré."""
+    try:
+        cfg_path = os.path.expanduser("~/.gemini/config/mcp_config.json")
+        host = "http://192.168.50.5:8123"
+        token = ""
+        if os.path.exists(cfg_path):
+            with open(cfg_path, "r", encoding="utf-8") as f:
+                d = json.load(f)
+                ha = d.get("mcpServers", {}).get("homeassistant", {}).get("env", {})
+                host = ha.get("HASS_HOST", host)
+                token = ha.get("HASS_TOKEN", token)
+        if not token:
+            return
+
+        q5 = scan.get("quota_5h", {})
+        qw = scan.get("quota_weekly", {})
+        rem5 = q5.get("remaining_pct")
+        remw = qw.get("remaining_pct")
+        reset5 = q5.get("reset_date")
+        resetw = qw.get("reset_date")
+
+        def send_ha(endpoint, payload):
+            req = urllib.request.Request(
+                f"{host}/api/services/{endpoint}",
+                data=json.dumps(payload).encode("utf-8"),
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json"
+                },
+                method="POST"
+            )
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                pass
+
+        if rem5 is not None:
+            send_ha("input_number/set_value", {"entity_id": "input_number.antigravity_quota_5h_restant", "value": float(rem5)})
+        if remw is not None:
+            send_ha("input_number/set_value", {"entity_id": "input_number.antigravity_quota_semaine_restant", "value": float(remw)})
+        if reset5:
+            send_ha("input_text/set_value", {"entity_id": "input_text.antigravity_prochain_reset_5h", "value": str(reset5)})
+        if resetw:
+            send_ha("input_text/set_value", {"entity_id": "input_text.antigravity_reset_semaine", "value": str(resetw)})
+    except Exception:
+        pass
+
 def background_sync_worker():
     """
     Surveille en continu les métriques d'Antigravity IDE en arrière-plan,
     écrit data.json / static/data.json et synchronise automatiquement
-    sur GitHub Pages dès qu'un changement de quota est détecté.
+    sur GitHub Pages et Home Assistant dès qu'un changement de quota est détecté.
     """
     last_pushed_rem5 = None
     last_push_time = 0
@@ -68,6 +115,10 @@ def background_sync_worker():
                 pricing_mode=cfg.get("pricing_mode", "google_ai_pro"),
                 usd_to_eur=cfg.get("usd_to_eur_rate", 0.92)
             )
+
+            # Synchronisation directe Home Assistant
+            sync_to_homeassistant(scan)
+
             q5 = scan.get("quota_5h", {})
             curr_rem5 = q5.get("remaining_pct")
 
